@@ -1,54 +1,113 @@
-/* Reset and basic styling */
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Base styling */
 body {
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Lora', serif;
+  background-color: #fdfaf3;
+  color: #333;
   line-height: 1.6;
-  background: linear-gradient(45deg, #e2c290, #a67c52);
-  color: #3b2e1e;
-  background-attachment: fixed;
 }
 
-/* Header & Navigation */
+/* Header */
 header {
-  background: linear-gradient(45deg, #8B4513, #CD853F);
-  color: #fff;
-  padding: 1.5rem 0;
+  background: #e8e3d3;
+  padding: 20px 0;
+  border-bottom: 1px solid #ccc;
   text-align: center;
-  border-bottom: 3px solid #654321;
 }
 
 header h1 {
-  font-family: 'Garamond', serif;
   font-size: 2.5rem;
-  text-shadow: 1px 1px 2px #4d342f;
-  margin-bottom: 0.5rem;
+  font-weight: 400;
+  color: #2c2c2c;
+  margin-bottom: 10px;
 }
 
-.nav-links {
+/* Navigation */
+nav ul {
   list-style: none;
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
+  display: inline-flex;
+  gap: 20px;
+  padding: 10px 0;
 }
 
-.nav-links li {
-  margin: 0 1rem;
-  position: relative;
-}
-
-.nav-links a {
+nav ul li a {
   text-decoration: none;
-  color: #f0e6d2;
-  font-weight: bold;
+  color: #555;
   font-size: 1.1rem;
-  padding: 0.5rem;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
+  padding: 8px 12px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.nav-links a
+nav ul li a:hover,
+nav ul li a.active {
+  background-color: #c5bfa0;
+  color: #fff;
+  border-radius: 4px;
+}
+
+/* Main Content */
+main {
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Sections */
+section {
+  margin-bottom: 40px;
+}
+
+section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2c2c2c;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+/* Subsections for Work page */
+.subsection {
+  margin-bottom: 30px;
+}
+
+.subsection h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #2c2c2c;
+  border-left: 4px solid #c5bfa0;
+  padding-left: 10px;
+}
+
+.subsection ul {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.subsection ul li {
+  margin-bottom: 8px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background: #e8e3d3;
+  border-top: 1px solid #ccc;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
