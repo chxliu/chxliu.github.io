@@ -1,0 +1,2230 @@
+\documentclass{ctexart}%ctex自带中文包,不用再增加CJK
+
+\usepackage{graphicx}
+\usepackage{amsmath,amsthm}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xypic}
+
+% ----------------------------------------------------------------
+% AMS-LaTeX Paper ************************************************
+% **** -----------------------------------------------------------
+% ----------------------------------------------------------------
+\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+\hfuzz2pt % Don't report over-full h-boxes if over-edge is small
+% THEOREMS -------------------------------------------------------
+
+%\theoremstyle{plain}
+\newtheorem*{exercise}{习题}
+\newtheorem*{solution}{答}
+\newtheorem{theorem}{定理}
+\theoremstyle{definition}
+\newtheorem{definition}{定义}
+\theoremstyle{remark}
+\newtheorem{remark}{注}
+
+\setcounter{subsection}{-1}
+
+\let\oldsolution\solution
+\renewcommand{\solution}{\oldsolution\normalfont}
+
+\newcommand{\Conv}{\mathop{\scalebox{1.5}{\raisebox{-0.2ex}{$\ast$}}}}%
+
+%\newtheorem{thm}{Theorem}[section]
+%\newtheorem{cor}[thm]{Corollary}
+%\newtheorem{lem}[thm]{Lemma}
+%\newtheorem{prop}[thm]{Proposition}
+%\theoremstyle{definition}
+%\newtheorem{defn}[thm]{Definition}
+%\theoremstyle{remark}
+%\newtheorem{rem}[thm]{Remark}
+%\numberwithin{equation}{section}
+% MATH -----------------------------------------------------------
+%\newcommand{\norm}[1]{\left\Vert#1\right\Vert}
+%\newcommand{\abs}[1]{\left\vert#1\right\vert}
+%\newcommand{\set}[1]{\left\{#1\right\}}
+%\newcommand{\Real}{\mathbb R}
+%\newcommand{\eps}{\varepsilon}
+%\newcommand{\To}{\longrightarrow}
+%\newcommand{\BX}{\mathbf{B}(X)}
+%\newcommand{\A}{\mathcal{A}}
+% ----------------------------------------------------------------
+
+\begin{document} 
+
+\title{Topology}
+
+\maketitle
+
+\tableofcontents
+
+\section{点集拓扑习题作答}
+
+
+\subsection{预备知识}
+
+注, 以下预备知识是在后面的证明中经常用到的一些结论, 是进行到一定程度后回来补充整理的, 故对这些结论不要掉以轻心. 
+
+集合的运算: 交运算, 并运算各自都满足交换律与结合律. 交与并有分配律: $$B\cup(\cap_{\lambda\in \Lambda}
+A_\lambda)=\cap_{\lambda\in \Lambda}(B\cup A_\lambda), \quad\text{以及}\quad B\cap(\cup_{\lambda\in \Lambda} A_\lambda)=\cup_{\lambda\in \Lambda}(B\cap A_\lambda),$$ 进而可以推出: $(\cap_{\mu\in M} B_\mu)\cup(\cap_{\lambda\in\Lambda} A_\lambda)=\cap_{\mu\in M, \lambda\in \Lambda} (B_\mu\cup A_\lambda)$, 等等.  我们有De Morgan 公式:
+$$B\backslash (\cup_{\lambda\in \Lambda} A_\lambda)=\cap_{\lambda\in \Lambda} (B\backslash A_\lambda),
+\quad \text{以及}\quad B\backslash (\cap_{\lambda\in \Lambda} A_\lambda)=\cup_{\lambda\in \Lambda}(B\backslash A_\lambda).$$
+
+一个小命题: $X$为全集, $A$, $B$为$X$的子集, 则$A\cap B=\emptyset \Longleftrightarrow A^c\cup B^c= X$. 这是因为$A\cap B=\emptyset \Longleftrightarrow A\subset B^c \Longleftrightarrow A^c\cup B^c= X$. 
+
+映射: $f:X\rightarrow Y$, 满的, 单的, 一一对应(略). 注意, 即使逆映射不存在, 也可以定义原像: 若$B\subset Y$, 则$f^{-1}(B)\equiv \{x\in X|f(x)\in B\}$. 这时可能$B$中有点没有原像, 但$f^{-1}(B)$是有意义的. 映射的像与原像有如下规律: 
+
+(1)$f^{-1}(\cup B_\lambda)=\cup f^{-1}(B_\lambda)$, $f^{-1}(\cap B_\lambda)=\cap f^{-1}(B_\lambda)$, $f^{-1}(B^c)=(f^{-1}(B))^c$, $f^{-1}(B\backslash D)=f^{-1}(B)\backslash f^{-1}(D)$, 即逆映射的运算可提到括号外;
+
+(2) $f(\cup A_\lambda)=\cup f(A_\lambda)$, $f(\cap A_\lambda)\subset \cap f(A_\lambda)$, 当$f$为单时相等. [这是因为如果$f$不是单射时, 可能有$x_1\in A_1$, $x_2\in A_2$, $x_1\neq x_2$, $f(x_1)=f(x_2)$, 单$x_1$, $x_2$不一定在左边.] $f^{-1}(f(A))\supset A$, 当$f$为单时相等. $f(f^{-1}(B))\subset B$, 当$f$为满时相等[若不满, 则$B$中有一部分无法由$f$映到.] $f^{-1}(f(A))\supset A$, 当$f$为单时相等[这时因为$f$为单时, $f: A\rightarrow f(A)$是一一的]. 
+
+(3) 等价关系: 集合$X$上的一个关系$R$是$X\times X$的一个子集, $X$的一个关系$R$称为等价关系(记为$\sim$), 如果满足自反省, 对称性, 传递性. 可把$X$分成若干子集, 每个都为等价类(记为$\langle x\rangle$), 称$X\slash \sim =\{ \langle x\rangle|x\in X\}$为$X$关于$x$的商集. 
+
+\subsection{拓扑空间}
+
+\begin{exercise}1. 写出集合$X=\{a,b\}$的所有拓扑.
+\end{exercise}
+\begin{solution}
+拓扑空间定义: $X$是一个非空集合, 其子集族$\tau$(以$X$的一部分子集为成员的集合)称为$X$的一个拓扑, 如果满足1). $X$和$\emptyset$都在$\tau$中; 2). $\tau$中任意多个成员的并仍在$\tau$中; 3). $\tau$中有限多个成员的交仍在$\tau$中.集合$X$和它的一个拓扑$\tau$称为一个拓扑空间, 记为$(X,\tau)$, $\tau$中的成员称为拓扑空间的开集. 
+
+所以本题$X$的拓扑为(只需指明$\tau$): $\tau=\{X,\emptyset\}$, $\tau=\{X,\emptyset,\{a\}\}$, $\tau=\{X,\emptyset,\{b\}\}$.
+\end{solution}
+
+
+\begin{exercise}2. 
+\end{exercise}
+\begin{solution}
+注意$\tau$有任意多成员的并和有限多成员的交都要在其中. 所以: (1): 已是拓扑; (2): 还需添加后两成员的交$\{x\}$; (3) 还需添加后三成员任两的交:  $\{x\},\{y\},\{z\}$.
+\end{solution}
+
+\begin{exercise}3. 规定实数集$R$上的子集族$\tau=\{(-\infty,a)|-\infty\leq a\leq +\infty\}$($a=-\infty$,
+则$(-\infty,a)$表示$\emptyset$; $a=+\infty$则$(-\infty,a)=R$), 证明$\tau$是$R$上的一个拓扑.
+\end{exercise}
+\begin{solution}
+显然令$a=\pm\infty$得到$\mathbb{R}$本身和$\emptyset$; 任意多集合的并(可写为$(-\infty, a_\alpha),\alpha\in \mathscr{A}$, 可令$a=\sup\limits_{\alpha\in \mathscr{A}}\{a_\alpha\}$, 则这些集合的并就是$(-\infty, a)$. 显然任意集合都在其中; 且任意$(-\infty, a)$中的点, 总存在一个集合包含它. 注: 这是分析中的内容, 不能肯定对, 应该再落实一下. )和有限多(可写为$(-\infty,a_i),i=1,\cdots,n$)的交显然都在里面故$\tau$为$\mathbb{R}$上的一个拓扑. 
+\end{solution}
+
+
+\begin{exercise}4. 设$\tau$是$X$上的拓扑, $A$是$X$的一个子集, 规定$\tau'=\{A\cup U|U\in \tau\}\cup \{\emptyset\}$, 证明$\tau'$也是$X$上的拓扑. 
+\end{exercise}
+\begin{solution} 显然拓扑的第一条满足($X$已在$\tau$故也在$\tau'$中). 对$\tau'$中若干个成员的并: 每个成员都可写成$A\cup U_\alpha$的形式, $\alpha\in \mathscr{A}$, $U_\alpha\in \tau$, 故这些的并$=A\cup\left(\cup_{\alpha\in \mathscr{A}} U_\alpha\right)$显然也在$\tau'$中, 第二条成立. 第三条: 这些成员的交$=\cap_{\alpha=1}^n\left(A\cup U_{\alpha}\right)=
+A\cup\left(\cap_{\alpha=1}^n U_\alpha\right)$, $\cap_{\alpha=1}^n U_\alpha$在$\tau$中故这些成员的交在$\tau'$中, 第三条成立. 注意, 证明第三条用到了交与并的分配律, 见教材第8页. 
+\end{solution}
+
+\begin{exercise}5. 设$\tau_1,\tau_2$是$X$上的拓扑, 证明$\tau_1\cap\tau_2$也是$X$上的拓扑.
+\end{exercise}
+\begin{solution}$\tau_1\cap\tau_2$中每个成员都可写为$U^1\cap U^2$的形式, 前者属于$\tau_1$, 后者属于$\tau_2$. 任意$n$个的交$=\cap^{n}_{\alpha=1}\left(U^1_\alpha \cap U^2_\alpha\right)=\left(\cap^{n}_{\alpha=1}U^1_\alpha\right)\cap\left(\cap^{n}_{\alpha=1}U^2_\alpha\right)$, 属于$\tau_1\cap\tau_2$; 任意多个的并$=
+\cup_{\alpha\in \mathscr{A}}\left(U^1_\alpha \cap U^2_\alpha\right)=\left(\cup_{\alpha\in \mathscr{A}}U^1_\alpha\right)\cap\left(\cup_{\alpha\in \mathscr{A}}U^2_\alpha\right)$,
+故属于$\tau_1\cap\tau_2$. 注: 以上用
+到交并运算各自满足分配与结合律.
+\end{solution}
+
+\begin{exercise}6.
+\end{exercise}
+\begin{solution}上加一横线是闭包. 定义: $A$是拓扑空间$X$的子集, $x\in X$, 若存在开集$U$(其定义源于拓扑空间定义!)使$x\in U \subset A$, 则称$x$是$A$的一个内点, $A$是$x$的一个邻域. 
+
+设$A$是拓扑空间$X$的子集, $x\in X$. 如果$x$的每个邻域都含有$A\backslash \{x\}$中的点, 则称$x$为$A$的聚点; $A$的所有聚点的集合称为$A$的导集, 记为$A'$; 称$\overline{A}\equiv A\cup A'$为$A$的闭包. 可推出, \textbf{$x\in \overline{A}$等价于$x$的任意邻域与$A$都有交点}(证明: 若$x\in \overline{A}=A\cup a'$, 当$x\in A$, 显然$x$的任意邻域都至少与$A$交于$x$; 当$x\notin A$, 则必有$x\in A'$, 注意这时$A\backslash \{x\}=A$, 再根据导集定义即证. 另一方面, 若$x\in X$的任意邻域与$A$都有交点, 则类似地, 也有要么$x\in A$ 要么$x \notin A$ 但$x\in A'$. 得证.)
+
+该题似乎没有提$\tau$是什么. 事实上有定义: 集合$X$上规定度量$d$后称为度量空间, 记为$(X,d)$. 欧氏空间: $E^n=(R^n,d)$, $B(x_0,\varepsilon)\equiv\{x\in X|d(x_0,x)<\varepsilon\}$定义为球形邻域. 可证: $(X,d)$任意两个球形邻域交集是若干球形邻域的并集, 从而规定$X$的子集族$\tau_d=\{U|U\text{是若干球形邻域的并集}\}$, 再可证$\tau_d$是$X$上一个拓扑. $\tau_d$称为度量拓扑, 是度量空间的自然拓扑. 
+
+对本题: $\overline{A}=A\cup B, B\equiv \{(0,y)|y\in [-1,1]\}$. 可证对任意$p\in B$和邻域$B(p,\varepsilon)$, 都存在$x$ 使$x$小于某一值时$A\cap B(p,\varepsilon)\neq \emptyset$. 从而 $A\cup B \subset \overline{A}$. 再证任何之外的区域都存在一个邻域, 使其中无$A$的点. 故$\overline{A}=A\cup B$. 
+\end{solution}
+
+\begin{exercise}7. $R$上规定第3题中的拓扑, 子集$A=\{0\}$, 求$\overline{A}$.
+\end{exercise}
+\begin{solution}再次重复相关定义: 开集定义$U$源于拓扑空间$X$的定义(每个$\tau$中的元素称为$X$的开集); $B$是$X$的子集, 对任意一点$x\in X$, 若存在开集$U$使$x\in U\subset B$则$x$是$B$的一个内点, $B$是$x$的一个邻域. 
+
+回到原题, 对$R$中任意一点$x$, 显然任何集合$(-\infty, a)\cup B$, $a>x$($B$是任意$R$的子集)都是$x$的邻域. 再求$A$的所有聚点: 对本题, 当$x<0$时,显然存在至少一个$x$的邻域, 其不含$A\backslash\{x\}=A=\{0\}$中的点, 故不是$A$的聚点; 当$x=0$, $A\backslash \{0\}=\emptyset$没有元素, 则显然$x$的每个邻域都''含有'' $A\backslash \{0\}=\emptyset$中的点. 当$x>0$时, 显然也成立. 从而$A$的所有聚点的集合, 也就是导集为$A'=[0,+\infty)$, 故$\overline{A}\equiv A\cup A'=[0,+\infty)$. 
+
+注: 开集的定义就是拓扑空间$(X,\tau)$中的$\tau$的元素. 按定义, 本题$A$无内点, $A$也不是其元素$0$的邻域.
+\end{solution}
+
+\begin{exercise}8. 度量空间中记$B[x_0,\varepsilon]=\{x\in X|d(x,x_0)\leq \varepsilon\}$. 证明: $B[x_0,\varepsilon]$是闭集. 举例说明$\overline{B(x_0,\varepsilon)}=B[x_0,\varepsilon]$不一定成立. 
+\end{exercise}
+\begin{solution}定义: 拓扑空间$X$的一个子集$A$称为闭集, 如果$A^c$是开集. 离散拓扑空间中: 任何子集都是开集(按开集定义), 从而任何子集也都是闭集(开集定义也符合闭集定义). 
+
+定义: $A$是拓扑空间$X$的一个子集, 点$x\in A$, 若存在开集$U$使$x\in U \subset A$则称$x$是$A$的一个内点(该定义前已有述), 并称$A$为$x$的一个邻域. $A$的所有内点的集合称为$A$的内部, 记为$A^\circ$.
+
+命题: (1)若 $A\subset B$, 则$A^\circ\subset B^\circ$. (证明: 任意$x \in A^\circ$, 存在开集使$x\in U\subset A\subset B$ 可见$x \in B^\circ$.) (2) $A^\circ$是包含在$A$中的所有开集的并集, 因此是包含在$A$中的最大开集. (证明: 对任意$A$中的开集$U$, 都有$U\subset A$, 故$U$中的任何一点$x$都$\in A^\circ$, 从而$U\subset A^\circ$. 由$U$的任意性, 知 $A^\circ$包含[在$A$中的所有开集的并集]; 另一方面, 对任意$x\in A^\circ$, 存在某个开集$U$使$x\in U\in A$故$x$属于[在$A$中的所有开集的并集]. 从而$A^\circ$恰是[在$A$中的所有开集的并集]. ) (3) $A^\circ=A \Longleftrightarrow A$是开集. (证明: ``$\Longrightarrow$'': 由(2)知$A^\circ$是开集, 故成立. ``$\Longleftarrow$'': 由(2)知$A^\circ$已是包含于$A$中的最大开集, 故当$A$是开集时$A^\circ$ 就是$A$本身, 故成立.)
+
+ 回到本题: 要证明$B[x_0,\varepsilon]$是闭集, 按闭集定义, 只需要证明$(B[x_0,\varepsilon])^c$为开集. 按命题(3), 只需要证明$ ((B[x_0,\varepsilon])^c)^\circ=(B[x_0,\varepsilon])^c$. 注意到$(B[x_0,\varepsilon])^c=\{x\in X|d(x,x_0)>\varepsilon\}$. 按命题(2), 只需证明$A^\circ \supset A$. 这是因为对任意$x\in (B[x_0,\varepsilon])^c$, 存在$\varepsilon'$使$x \in B(x,\varepsilon')\subset \{x\in X|d(x,x_0)>\varepsilon\}=(B[x_0,\varepsilon])^c$, 从而$x\in ((B[x_0,\varepsilon])^c)^\circ$. 故$B[x_0,\varepsilon]$是闭集.
+ 
+ 一个感觉就是在$E^n$中只用大于或小于号规定的区域是开集, 反之则是闭集. 用''$\overline{A}=A$等价于$A$是闭集'', ``$A^\circ=A$等价于$A$是开集''即可对具体情况具体证明. 
+ 
+再看反例. 直观来看在$E^n$中似乎总有$\overline{B(x_0,\varepsilon)}=B[x_0,\varepsilon]$. 找反例应当在特殊的拓扑空间中找. 例如$Z^2$, 取度量拓扑, 以及$\varepsilon=1$, $x_0=(0,0)$, 则$B[x_0,\varepsilon]=\{(0,0),(0,\pm1),(\pm1, 0)\}$, $B(x_0,\varepsilon)=\{(0,0)\}$. 按聚点定义, $B(x_0,\varepsilon)$无聚点, 故导集为空, 闭包$\overline{B(x_0,\varepsilon)}=B(x_0,\varepsilon)=\{(0,0)\}$. 此即反例.
+\end{solution}
+
+\begin{exercise}9. 设$A$和$B$都是拓扑空间$X$的子集, 并且$A$是开集. 证明$A\cap\overline{B}\subset \overline{A\cap B}$.
+\end{exercise}
+\begin{solution}注意, 只需证明对任意$x\in A\cap\overline{B}$, $x$的任意邻域与$A\cap B$都有交点. 由于$x\in A\cap\overline{B}$ 故 $x\in \cap\overline{B}$, 故$x$的任意邻域与$B$都有交点; 且$x\in A$, 故对任意$x$的邻域$U$, $U\cap A$也是$x$的邻域(拓扑空间定义: 开集的交仍是开集), 从而$U\cap A$与$B$的交非空, 等价地$U$与$A\cap B$的交非空, 从而由$U$的任意性, $x\in (A\cap B)'$. 本题得证.
+
+注, 再次强调定义: 内点, 邻域, 聚点, 导集, 闭包. 对于任意拓扑空间$X$的子集$A$, $x\in A$, 若存在开集$U$使$x \in U\subset A$, 则$x$称为$A$的内点, $A$称为$x$的邻域. 对拓扑空间$X$, 子集$A$, 及任一点$x\in X$, 若对任意$x$的邻域$U$, $U$与$A\backslash \{x\}$之交都不空, 则$x$称为$A$的聚点; $A$的所有聚点的集合称为$A$的导集, 记为$A'$; 称$\overline{A}\equiv A\cup A'$为$A$的闭包. 证明题常用的是: $x\in \overline{A} \Longleftrightarrow x$的任意邻域与$A$都有交点. 
+\end{solution}
+
+\begin{exercise}10. 设$A_1,A_2,\cdots, A_n$都是$X$的闭集, 且$X=\cup_{i=1}^nA_i$. 证明: $B\subset X$是$X$的闭集 $\Longleftrightarrow B\cap A_i$是$A_i(i=1,2,\cdots, n)$的闭集.
+\end{exercise}
+\begin{solution}
+定义: 设$A$是拓扑空间$(X,\tau)$的一个非空子集, 规定$A$的子集族$\tau_A\equiv \{U\cap A|U\in\tau\}$. 易证$\tau_A$是$A$上的一个拓扑, 称为$\tau$导出的$A$上的子空间拓扑$(A,\tau_A)$, 称其为$(X,\tau)$的子空间. 相对于子空间和原来的空间, 开集, 闭集, 邻域, 内点, 聚点, 闭包等概念都是相对概念. 
+
+命题: $X$是拓扑空间, $C\subset A\subset X$, 则$C$是$A$的闭集$\Longleftrightarrow C$是$A$与[$X$的一个闭集]的交集. (证明: $C$是$A$的闭集, 则$A\backslash C$是$A$的开集, 则存在$X$中开集$U$使$A\backslash C=U\cap A$, 则存在$X$中开集$U$使$C=U^c \cap A$, 则 $C$是[$X$中一个闭集]与$A$之交集, 以上步步可逆, 故得证.) 
+
+回到原题. 先证''$\Longleftarrow$''. $B\cap A_i $是$A_i$的闭集, 则$A_i\backslash (B\cap A_i)$ 是$A_i$的开集, 从而存在$X$的开集$U_i\subset X$, 使$A_i\backslash (B\cap A_i)=U_i\cap A_i$, 故$B\cap A_i=U_i^c\cap A_i$, 故$\cup_{i=1}^n(B\cap A_i)=\cup_{i=1}^n(U_i^c\cap A_i)$, $B\cap(\cup_{i=1}^nA_i)=(\cup_{i=1}^nU^c_i)\cap(\cup_{i=1}^nA_i)$, $B=\cup_{i=1}^nU^c_i$是闭集(因有限多闭集的并是闭集; 任意多闭集的交是闭集). 再证''$\Longrightarrow$''. $B\subset X$ 为$X$的闭集, $B^c$ 为$X$的开集, $B^c\cap A_i$ 为$A_i$的开集, 故$B\cap A_i=A_i\backslash(B^c\cap A_i)$为$A_i$的开集. 
+\textbf{问: 为什么证明没有用到$A_i$为闭集这个条件?}
+\end{solution}
+
+\begin{exercise}11. 设$Y$是拓扑空间$X$的子空间, $A\subset Y$, $X\in Y$. 证明: 在$X$中, $x$是$A$的聚点
+$\Longleftrightarrow$在$Y$中, $x$是$A$的聚点. 
+\end{exercise}
+\begin{solution} 聚点定义: $A$为$X$的子集, $x\in X$, 若$x$的每个邻域都有$A\backslash\{x\}$的点, 则称$x$为$A$的聚点. 现在来说明, 可以把定义中的邻域改为开邻域(即邻域定义中的$A$为开集):  先说明, 若$x$的每个开邻域都含有$A\backslash\{x\}$的点, 则$x$的每个邻域都含有$A\backslash\{x\}$的点: 对于$x$的邻域$B$, 按邻域定义存在开集$U$使$x\in U\subset B$, 且$U$符合开邻域定义, 而开邻域都含有$A\backslash\{x\}$的点, 故邻域$B\supset U$含有$A\backslash\{x\}$的点. 反之, 若$x$的每个邻域都含有$A\backslash\{x\}$的点(注意到开邻域这个概念是邻域的子概念), 则显然$x$的每个子邻域都含有$A\backslash\{x\}$中的点. 从而, 可以把聚点定义中的邻域改为子开邻域. 
+
+下面, 再来证原题. ``$\Longleftarrow$'': 若$x$是$Y$的聚点, 则$x$的每个$Y$-开邻域都有$A\backslash\{x\}$的点. 注意到$x$的每个$X$-开邻域与$Y$的交集都是$Y$中的开集($Y$中开集定义), 且可进一步证明这个交集为$x$的$Y$-开邻域(这是因为: 这个交集是$Y$中开集且$x$属于它), 从而这个交集中有$A\backslash\{x\}$的点, 从而$x$的每个$X$-开邻域都有$A\backslash\{x\}$的点, 从而$x$为$X$的聚点. ``$\Longrightarrow$'': 若$x$是$X$的聚点, 则$x$的每个$X$-开邻域都有$A\backslash\{x\}$的点. 由书命题1.7知, 每个$Y$的开集都是$X$的开集, 从而每个$Y$的开邻域都是$X$的开邻域(按定义即证), 从而每个$x$的$Y$-开邻域都含有$A\backslash\{x\}$的点. 成立.  
+
+ 这个题有一点绕, 首先要证明把聚点定义中的邻域换为开邻域, 得到的定义是与原聚点定义等价的.  事实上本题说明了这么一个问题: $Y$为$X$的拓扑子空间, 则$x$的$Y$-开邻域也是$x$的$X$-开邻域, $x$的$X$开邻域与$Y$的交也是$x$的$Y$-开邻域.
+\end{solution}
+
+\begin{exercise}12. 设$X$是拓扑空间, $B\subset A\subset X$, 记$\overline{B}_A$, $\B^\circ_A$分别为$B$在$A$中的闭包和内部, $\overline{B}$和$B^\circ$分别为$B$在$X$中的闭包和内部, 证明 (1)$\overline{B}_A
+=A\cap \overline{B}$; (2)$B^\circ_A=A\backslash (\overline{A\backslash B})$; (3) 如果$A$ 是$X$的开集, 则$\overline{B}^\circ_A=B^\circ$. 
+\end{exercise}
+\begin{solution}
+命题1.4: 若拓扑空间$X$的子集$A$和$B$互为余集, 则$\overline{A}$与$B^\circ$互为余集. (证明: 由于$x\in\overline{A}$等价于$x$的任意邻域与$A$相交, 故$x\in \overline{A}^c$等价于$x$有邻域与$A$不想交, 等价于$x$有邻域包含在$B$中, 等价于$x$为$B$的内点. 得证.)
+
+(1) 由于按定义有$\overline{B}_A=B\cup B'_A$, 而此题让证$\overline{B}_A=A\cap B\cup B'$, 故只需证明$ B'_A=A\cap B'$, 而这正是上一题的结论(的符号表达). (2)内部的定义见前. 按命题1.4, 只需要证明$B_A$与$A\backslash B$ 在$A$中互为余集, 这是显然的.  (3) 利用命题1.3(2): 
+%$B_A^\circ$是包含在$B$中的最大的$A$的开集; 然而$A$的开集都是$B$的开集(因为$A$也是开集), 故$B_A^\circ$是包含在$B$中的$X$的开集, 从而$B_A^\circ\subset B^\circ$. 
+由于$B^\circ$是包含在$B$中的最大的$X$的开集, 它也必定是包含在$B$中的最大的$A$开集(显然$B^\circ$是$A$的开集; 假设它不是最大的, 即不是$B^\circ_A$, 则两者的交是$A$中的开集, 而$A$为$X$的开集, 故两者之交也是$X$的开集(命题1.7(2)), 从而$B^\circ_A$是包含在$B$中的最大的$X$的开集, 矛盾), 从而$B^\circ=B^\circ_A$.  
+\end{solution}
+
+\begin{exercise}13. 设$\{x_n\}$是$(R,\tau_c)$中的一个序列. 证明$x_n\rightarrow x\Longleftrightarrow$存在正整数$N$, 使$n>N$时, $x_n=x$.
+\end{exercise}
+\begin{solution}
+17页的例如, 证明一下: 对这个拓扑, $A$的聚点可枚举求出. 按定义显然$a$不是聚点. 按定义, $b$和$c$的邻域都只有$X$, 包含$a$, 故$b$和$c$都是$A$的聚点. 
+
+定义: 拓扑空间$X$的子集$A$称为稠密的, 如果$\overline{A}=X$. 若$X$有可数的稠密子集, 则称$X$是可分拓扑空间. 
+
+定义: 离散拓扑, 平凡拓扑, 余有限拓扑$\tau_f=\{A^c|A\text{是}X\text{的有限子集}\}\cup\emptyset$, 余可数拓扑$\tau_c=\{A^c|A\text{是}X\text{的可数子集}\}\cup\emptyset$, 欧式拓扑, 度量拓扑(度量空间自然地看成有度量拓扑的拓扑空间).  
+
+定义: 设$\{x_n\}$是拓扑空间$X$中点的序列, 如果$x_0\in X$的任意邻域$U$都包含$\{x_n\}$的几乎所有项(即只有有限个$x_n$不再$U$中, 或存在正整数$N$使当$n>N$时$x_n\in U$), 则说$\{x_n\}$收敛到$x_0$.
+
+回到原题: 作可数集$A=\{x_n|x_n\neq x\}$, 则$A^c$含有$x$, 且$A^c$为$x$的邻域, 故当$x_n\rightarrow x$, 按定义, 存在$N$, 当$n>N$时$x_n \in A^c$, 只能有$x_n=x$. 反之, 若几乎对所有$n$有$x_n=x$, 则显然$x$的任意邻域$U$都包含$\{x_n\}$的所有项, 从而$x_n\rightarrow x$. 得证.
+
+在余可数拓扑$\tau_c$下, 设$A$是一个不可数真子集, 故$A$是$(R,\tau_c)$的开集, 由命题1.5(2)知, $\overline{A}$是闭集, 但$(R,\tau_c)$的闭集只能是可数子集或$R$本身, 故只能$\overline{A}=R$, 取$x\notin A$, 则$x$是$A$的聚点, 但$A$中任意序列不可能收敛到$x$(这是因为, 由刚刚证明的定理, 若$A$中存在一序列收敛到$x$则数列从某个$N$开始后面项都是$x$, 这不可能). 
+\end{solution}
+
+\begin{exercise}14. $\tau$是第3题的拓扑, 证明$(R,\tau)$是可分的.
+\end{exercise}
+\begin{solution}
+取子集$A=\{x_n|x_n=-n\}$, 则$\overline{A}=R$, $A$可数. 
+\end{solution}
+
+\begin{exercise}15. 证明: $A$是拓扑空间$X$的稠密子集$\Longleftrightarrow X$的每个非空开集与$A$相交非空. 
+\end{exercise}
+\begin{solution}
+``$\Longrightarrow$'': (注意到$\overline{A}$是所有这样的点的集合, 其任意邻域与$A$相交不空. 假设存在一个$X$的非空开集$B$与$A$相交为空, 则对$x\in B$, 其开邻域与$A$不交, 与$\overline{A}=X$矛盾. ``$\Longleftarrow$'': 则对任意$x\in X$, 其任意开邻域与$A$相交不空, 从而$\overline{A}= X$. 
+\end{solution}
+
+\begin{exercise}16. 若$A$是$X$的稠密子集, $B$是$A$的稠密子集, 则$B$也是$X$的稠密子集.
+\end{exercise}
+\begin{solution}由上一题知$X$的每个非空开集$U$与$A$相交非空, 而且$A$的每个非空开集$U\cap A$与$B$相交非空, 从而每个$U$与$B$相交都非空, 再用一次上一题的结论即得本题结论. 
+\end{solution}
+
+\begin{exercise}17. 若$A$和$B$都是$X$的稠密子集, 并且$A$是开集, 则$A\cap B$也是$X$的稠密子集.
+\end{exercise}
+\begin{solution}对任意$X$的非空开集$U$, $U\cap B$非空,注意到$U\cap A$也是$X$的开集(因为$A$是开集), 故$U\cap A\cap B$非空. 由$U$的任意性即证. 
+\end{solution}
+
+\subsection{连续映射与同胚映射}
+
+回顾上一节: 引入了拓扑空间的概念, 是一个集合$X$和它的某个子集族$\tau\subset 2^X$, 满足$\tau$中的元素的有限交及有限并也都是$\tau$的元素. $\tau$中的元素叫开集, 故开集使指定的. 开集的余集称为闭集. 除此之外有邻域的概念(存在一个$x$的开集完全含在$A$中, 则$A$为$x$的邻域), 聚点的概念($x$的每个邻域都含有$A\backslash\{x\}$的点), 导集的概念, 闭包的概念($A$与其导集的并). 一个很重要的论断是:$x\in \overline{A}\Longleftrightarrow x$的任意邻域都与$A$有交点. 
+
+闭包与闭集是两个不同的概念(习题8). 对开集与闭集, 有一些等价论断, 例如$A^\circ$是包含在$A$中的最大开集, $\overline{A}$是包含$A$的最小的闭集, 等等, 见命题1.3-1.5. 还介绍了拓扑子空间的概念, 开集, 闭集, 邻域等概念都要指明是对原拓扑空间还是拓扑子空间. 此外, 还介绍了稠密($\overline{A}=X$)的概念, 可分拓扑空间的概念($X$有可数稠密子集), 收敛的概念. 注意, 聚点并非一定是收敛点. 
+
+\begin{exercise}1. 设$f:X\rightarrow Y$是映射, 证明下列条件互相等价: (1)$f$是连续映射; (2)对$X$的任何子集$A$, $f(\overline{A})\subset\overline{f(A)}$; (3)对$Y$的任何子集$B$, $\overline{f^{-1}(B)}\subset f^{-1}(\overline{B})$. 
+\end{exercise}
+\begin{solution}
+定义: 设$X$和$Y$都是拓扑空间, $f:X\rightarrow Y$是一个映射, $x\in X$. 如果对于$Y$中$f(x)$的任意邻域$V$, $f^{-1}(V)$总是$x$的邻域, 则说$f$在$x$处连续. 可以把该定义中的邻域条件改为开邻域条件, 进而该定义等价于''对包含$f(x)$的每个开集$V$, 必存在包含$x$的开集$U$, 使$f(U)\subset V$.''
+
+命题: 设$f: X\rightarrow Y$是一映射, $A$是$X$的子集, $x\in A$. 记$f_A=f|A:A\rightarrow Y$是$f$在$A$上的限制, 则(1)如果$f$在$x$连续, 则$f_A$在$x$也连续(证明: 设$V$是$f_A(x)=f(x)$的邻域, 则$f^{-1}(V)$是$x$在$X$中的邻域, 即存在开集$U$使$x\in U\subset f^{-1}(V)$, 而$f^{-1}_A(V)=A\cap f^{-1}(V)\supset A\cap U$, $A\cap U$是$A$的包含$x$的开集, 得证.)(2)若$A$是$x$的邻域, 则当$f_A$在$x$连续时, $f$在$x$也连续. (证明: 设$V$是$f(x)$的邻域,由于存在$A$中开集使$x\in U_A\subset f^{-1}_A(V)=A\cap f^{-1}(V)$, 设$U_A=U\cap A$, 其中$U$是$X$的开集, 则$U\cap A^\circ$也是$X$的开集, 且$x\in U\cap A^\circ \subset U_A\subset f^{-1}(V)$($x\in U_A\subset U\cap A^\circ$). 故$f$在$x$连续. 得证)
+
+定义: 如果映射$f: X\rightarrow Y$在任一点$x\in X$都连续, 则称$f$为连续映射.
+
+定理: 设$f: X\rightarrow Y$是映射, 则(1)-(3)等价: (1) $f$是连续映射; (2)$Y$的任意开集在$f$下的原像是$X$的开集; (3)$Y$的任意闭集在$f$下的原像是$X$的闭集. (证明: (1)推(2): 设$V$是$Y$的开集, $U=f^{-1}(V)$, 对任意$x\in U$, $V$是$f(x)$的邻域(注意$\subset$符号包含相等的情形), $U$是$x$的邻域, 故$x$为$U$的内点, 由$x$的任意性有$U\subset U^\circ$, 从而$U=U^\circ$为开集. (2)推(3): $f^{-1}=(f^{-1}(F^c))^c$, 细节略. (3)推(1): 设$V$是$f(x)$的邻域, $U=f^{-1}(V)$. 由$f^{-1}(V^\circ)=(f^{-1}((V^\circ)^c))^c$是开集, 且由于$V$是$f(x)$的邻域故$f(x)\in V^\circ$, 故$x\in f^{-1}(V^\circ)\subset U$, 从而$U$是$x$的邻域, 成立.)
+
+回到原题. (1)推(2): $y\in \overline{f(A)}$等价于任意$y$的开邻域都与$f(A)$有交点. 若$y\in f(\overline{A})$, 则存在$x\in\overline{A}$ 使 $f(x)=y$, 由于$f$是连续映射, 故任意$y$的开邻域$V$, $f^{-1}(V)$都是$x$的开邻域. 由于$x\in \overline{A}$, 故任意$x$的开邻域都与$A$有交点, 从而对任意$y$的开邻域$V$, $f^{-1}(V)$与$A$有交点, 从而$V$与$f(A)$有交点(只需设$f^{-1}(V)$与$A$交于$x'$即证), 从而$y\in \overline{f(A)}$. (2)推(3): 对任意$Y$的子集$B$, 取$A=f^{-1}(B)$, 由(2)有$f(\overline{f^{-1}(B)}\subset\overline{B}$, 同时用$f^{-1}$作用得(3)成立. (3)推(1): 令$B$为闭集, 则$\overline{B}=B$, 有$\overline{f^{-1}(B)}\subset f^{-1}(B)\subset  \overline{f^{-1}(B)}$, 从而$\overline{f^{-1}(B)}= f^{-1}(B)$即闭集的原像也为闭集, 从而由上方定理(3), $f$为连续映射. 
+\end{solution}
+
+\begin{exercise}2. 设$B$是$Y$的子集, $i:B\rightarrow Y$是包含映射, $f:X\rightarrow B$是一映射, 证明: $f$连续$\Longleftrightarrow i\circ f: X\rightarrow Y$连续.
+\end{exercise}
+\begin{solution}
+几个常见的连续映射: 恒同映射, 包含映射(当$U$是$X$的开集时, $i^{-1}(U)=A\cap U$是$A$的开集), 常值映射. 如果$X$是离散拓扑空间($\tau=2^X$), 则$f:X\rightarrow Y$一定是连续的(因任何$Y$的子集$V$的原像为$X$的开集). 
+
+命题1.9: 设$X,Y$和$Z$都是拓扑空间, 映射$f:X\rightarrow Y$在$x$处连续, $g: Y\rightarrow Z$在$f(x)$处连续, 则符合映射$g\circ f:X\rightarrow Z$在$x$处连续(证略). 
+
+回到原题. ``$\Longrightarrow$'': 用上方命题. 这里再证一下: 若$f$是连续映射, 则对任意$x\in X$,$f(x)$的任一$B$-邻域的原像为$x$的邻域; $i$为连续映射, 故任一$i\circ f(x)$的$Y$-邻域$U$, 有$V=i^{-1}(U)$为$f(x)$的$B$-邻域, 从而再由$f$的连续性得到$f^{-1}(V)$为$x$的邻域, 故$i\circ f$为连续映射. ``$\Longleftarrow$'': 由于$i^{-1}$连续性未知故不能再用上方命题. 设$U$为$B$的任一开集, 则存在$Y$的开集$V$使$U=V\cap B$, $U=i^{-1}(V)$, 由$i\circ f$连续故$f^{-1}(U)=f^{-1}(i^{-1}(V))=(i\circ f)^{-1}(V)$为$X$的开集, 故由定理1.1知$f$连续.
+\end{solution}
+
+\begin{exercise}3. 若$f:X\rightarrow Y$是同胚映射, $A\subset X$, 则$f|A:A\rightarrow Y$是嵌入映射. 
+\end{exercise}
+\begin{solution}
+定义: 如果$f:X\rightarrow Y$是一一对应(=bijection=one-to-one+onto), 且$f$及其逆$f^{-1}:Y\rightarrow X$都是连续的, 则称$f$是一个同胚映射. 当存在$X$到$Y$的同胚映射时, 就称$X$与$Y$同胚, 及作$X\cong Y$. 如果$f:X\rightarrow Y$是单的连续映射, 并且$f: X\rightarrow f(X)$是同胚映射, 就称$f: X\rightarrow Y$是嵌入映射.
+
+回到原题. $f|A$显然为单的. 对于任意$Y$中开集$V$, 由于$f$连续, 故$U=f^{-1}(V)$为$X$中开集, 故$(f|A)^{-1}(V)=U\cap A$为$A$中开集, 故$f|A$连续. 设$V$为$A$中开集, 则存在$X$中开集$U$使$V=U\cap A$, 由于$f$为同胚映射, 故$f(U)$为$Y$中开集, 则$ ((f|A)^{-1})^{-1}(V)=f|A(V)=f|A(U\cap A)=f(U)\cap f(A)$也是$f(A)$中的开集, 从而$f|A$是也是同胚映射, 从而$f|A$是嵌入映射.  
+\end{solution}
+
+\begin{exercise}4.
+\end{exercise}
+\begin{solution}(1)与(2)同胚: 可构造映射$f: (\rho,\theta)\mapsto (\ln \rho, \theta)$, 显然映射可逆. 连续性: 欧式空间函数的连续性符合拓扑连续性的定义, 故直接用分析学中的结论即可. (2)与(3)同胚: $x$, $y$保持不变, $z$相应改变, 是同胚.
+\end{solution}
+
+\begin{exercise}5. $X$的覆盖$\mathscr{C}$称为局部有限的, 如果对任意$x\in X$有邻域只与$\mathscr{C}$中有限个成员相交. 设$\mathscr{C}$是$X$的一个局部有限闭覆盖, 映射$f: X\rightarrow Y$在每个$C\in \mathscr{C}$上的限制$f_C$连续, 则$f$连续. 
+\end{exercise}
+\begin{solution}
+定义: 设$\mathscr{C} \subset 2^X$是拓扑空间$X$的子集族, 称$\mathscr{C}$是$X$的一个覆盖, 如果$\cup_{C\in \mathscr{C}}C=X$. 如果覆盖$\mathscr{C}$的成员都是开(闭)集, 则称$\mathscr{C}$开(闭)覆盖; 只包含有限成员时称其有限覆盖. 
+
+定理(粘接定理): 设$\{A_1,\cdots,A_n\}$为$X$的一个有限闭覆盖. 如果映射$f: X\rightarrow Y$在每个$A_i$上的限制都是连续的, 则$f$是连续映射. (证明: 只要验证$Y$的每个闭集的原像是闭集. 设$B$是$Y$的闭集, 记$f_{A_i}$为$f$在$A_i$上的限制, 则$f^{-1}(B)=\cup_{i=1}^n(f^{-1}(B)\cap A_i)=\cap_{i=1}^nf^{-1}_{A_i}(B)$, 由$f_{A_i}$的连续性知$f^{-1}_{A_i}(B)$是$A_i$的闭集, 而$A_i$是$X$的闭集, 故$f^{-1}_{A_i}(B)$也是$X$的闭集, 故$f^{-1}(B)$也是闭集.)
+
+回到原题. 对任意$x\in X$, 存在$x$的某邻域$U_x$只与有限多个成员相交, 进而只被有限多个成员覆盖, 由粘接定理, $f$在$U_x$上的限制连续. 再由命题1.8(2)知$f$在$x$也连续. (注: 命题1.8的证明: 对任意$x\in X$, $f(x)$的任意邻域$V$的原像($X$中)为$x$的邻域, 故存在含$x$的开集$U$是其子集. 而$f^{-1}_A(V)=f^{-1}(V)\cap U$包含$A\cap U$(这是$A$中的开集), (1)得证. $f_A$在$x$连续, 故对任意$f_A(x)=f(x)$的邻域$V$(注意$A$和$X$上的拓扑与$Y$上的无挂, 故邻域$V$与对$A$还是对$X$来说无关), $f^{-1}_A(V)$都是$A$中邻域, 故存在$A$中开集$U_A$, 使$x\in U_A\subset f^{-1}_A(V)=A\cap f^{-1}(V)$. 只需再证$U_A$中含有$X$的开集(从而$f^{-1}(V)$是$x$的$X$-邻域): 注意到存在$X$的开集$U$使$U_A=U\cap A$, 则要找的$X$的开集为$U\cap A^\circ\subset U_A$.)
+\end{solution}
+
+\begin{exercise}6. 设$f: X\rightarrow Y$在$x\in X$处连续, 序列$x_n\rightarrow x$, 则 $f(x_n)\rightarrow
+f(x)$.
+\end{exercise}
+\begin{solution}$x_n\rightarrow x$, 则存在$N$使$n>N$时, $x_n$属于$x$的任意邻域, 由于$f$连续, 故$f(x)$的任意邻域的原像都是$x$的邻域, 都包含所有$n>N$的$x_n$, 从而$f(x)$的任意邻域都包含所有$n>N$的$f(x)$, 从而$f(x_n)\rightarrow f(x)$, 得证. 
+
+注: 若$f:X\rightarrow Y$是单映射, 其中$X$是具有余可数拓扑的不可数空间, , $Y$是离散拓扑空间, 故当$X$中序列$x_n\rightarrow x$时, 对充分大的$n$有$x_n=x$(证明见上一节13题. 具体方法: 构造可数子集$\{x_n|x_n\neq x\}$, 则其余集是$x$的邻域, 当$n$充分大后$x_n$都在该余集中, 故只能有$n$充分大时$x_n=x$), 从而$f(x_n)\rightarrow f(x)$, 但$f$在$x$并不连续($Y$是离散拓扑空间, 故$\{f(x)\}$是$f(x)$的邻域, 由$f$为单的, 其原像为$\{x\}$不是可数集的余集故不是$x$的邻域). 这说明拓扑空间中函数的连续性不能用该题的结论刻画. 
+\end{solution}
+
+\begin{exercise}7. 设$f: X\rightarrow Y$是满的连续映射, 其中$X$是可分的, 证明$Y$也是可分的. 
+\end{exercise}
+\begin{solution}定义: 拓扑空间$X$的子集$A$称为稠密的, 如果$\overline{A}=X$, 如果$X$有可数的稠密子集, 则称$X$是可分拓扑空间. 
+
+回到原题. 由于$X$是可分的, 故$X$有可数的子集$A$, 使$\overline{A}=X$. $f(A)$是$Y$的可数子集. 由于$f$是满的连续映射,  故$f(\overline{A})=f(X)=Y$. 由第一题结论(2), 知$\overline{f(A)}=Y$, 从而$f(A)$是稠密的. 从而$f(A)$是$Y$的可数的稠密子集. 得证.
+\end{solution}
+
+\begin{exercise}8. 证明恒同映射$\text{id}: (R,\tau_c)\rightarrow(R,\tau_f)$是连续映射, 但不是同胚映射. 
+\end{exercise}
+\begin{solution}由于是恒同映射, 要证$f$连续, 只需证$(R,\tau_f)$的开集也都是$(R,\tau_c)$的开集, 也即证$\tau_f\subset \tau_c$, 这是显然的. 假设恒同映射的逆也连续, 则必有$\tau_f \supset \tau_c$, 矛盾. 故不是同胚映射. 得证. 
+\end{solution}
+
+\begin{exercise}9.
+\end{exercise}
+\begin{solution}首先注意, 欧式拓扑为$\tau_d=\{U|U\text{是若干个球形邻域的并集}\}$, 允许无限个! 从而例如$(-\infty,0,5)$是开集, 从而其余集$[0.5,+\infty)$是闭集. 显然, $E^1\backslash [0,1)$可写成两个闭集: $(-\infty,0]$和$[1,+\infty)$的有限闭覆盖, 且显然在每个上都连续, 由粘接引理, $f$连续. 证$f$不为同胚映射只需证$f^{-1}$不为连续映射: $[1,2)$是$E^1\backslash[0,1)$的开集, 但$(f^{-1})^{-1}([1,2))=[0,1)$不是$E^1$的开集(例如可证明其内部不等于其本身). 得证.  
+\end{solution}
+
+\begin{exercise}10.
+\end{exercise}
+\begin{solution}包含映射$i: (0,1)\rightarrow E^1$, $(0,1)$任意开集$A$, 存在$A$(当做$E^1$的开集)使$A$为$E^1$的开集, 故为开映射. $(0,0.5]$显然为前者的闭集, 但不是$E^1$的闭集(其闭包不等于其自身). 映射$r:E^1\rightarrow [-1,1]$, 满足$r(x>1)=1$, $r(x<-1)=-1$, $r(x)=x$对其他$x$, 选$(-2,2)$, 映到$[-1,1]$显然不是开映射; 另外注意$r(A)=A\cap [-1,1]$(注意对任意拓扑空间$X$, $X$与$\emptyset$都既是开集又是闭集!), 故把闭集映到闭集.  
+\end{solution}
+
+\begin{exercise}11. 如果$f: X\rightarrow Y$是一一对应, 则$f$是开映射$\Longleftrightarrow f$是闭映射
+$\Longleftrightarrow f^{-1}$ 连续.
+\end{exercise}
+\begin{solution}由定理1.1 即证. 注意: 一一对应的条件是用来保证: 若$Y=f(X)$, 则有$X=f^{-1}(Y)$, 
+\end{solution}
+
+\begin{exercise}12. 
+\end{exercise}
+\begin{solution}现在$f:X\rightarrow Y$, $X$,$Y$都是欧式空间, 故$\varepsilon-\delta$法则判函数连续性凑效, 也就是说, 我们先证明$\varepsilon-\delta$与拓扑的函数连续性的定义的等价性. 拓扑函数连续性定义: 对任意$x\in X$, $f(x)$的任何开邻域的原像是$x$的开邻域, 蕴含着$f(x)$的任何开球邻域的原像是$x$的开球邻域; 反之, 对任意$f(x)$的开邻域$V$, 存在其所包含的开球, 而$f(x)$的任何开球邻域的原像是$x$的开球邻域, 从而$V$的原像包含这个$x$的开球邻域, 从而$V$的原像也是开邻域,从而政令了拓扑连续性中的开邻域可进一步换为开球邻域; 这也就是, 对任意$x_0\in X$, 对任意$\varepsilon$, 满足$d(f(x)-f(x_0))<\varepsilon$的$x$都存在于某个$\delta$所限定的$d(x,x_0)<\delta$中, 而这也就是$\varepsilon-\delta$定义的函数连续性. 
+
+回到原题. 用$|\cdot|$(绝对值)表示$E^1$中的度量. 有: 对任意$x_0$, 有$|f(x)-f(x_0)|
+=|d(x,A)-d(x_0,A)|=|d(x,a_x)-d(x_0,a_{x_0})|$, 这里$a_x$是使$d(x,a_x)$取到下界的$A$中的点, $a_{x_0}$是使$d(x_0,a_{x_0})$取到下界的$A$中的点. 不妨设$d(x,a_x)>d(x_0,a_{x_0})$, 则有
+$|f(x)-f(x_0)| \leq d(x,a_{x_0})-d(x_0,a_{x_0}) <d(x,x_0)$, 可见对任意$x$属于$d(x,x_0)<\varepsilon$, 有$|f(x)-f(x_0)|<\varepsilon$, 可见满足$|f(x)-f(x_0)|<\varepsilon$的$x$的区域包含$d(x,x_0)<\varepsilon$的区域(而这个区域是$x_0$的一个开集/开邻域), 从而满足$|f(x)-f(x_0)|<\varepsilon$的$f(x)$的原像是$x_0$的邻域. 按定义, $f$连续. 
+
+当$f(x)=0$, 按度量的正定性的第一条(等于零当且仅当两个槽相同)推出$x\in A$; 当$x\in A$显然有$f(x)=0$. 此题得证.
+\end{solution}
+
+\begin{exercise}13. 设$(R,\tau)$是上一节第三题的拓扑空间, $f:(R,\tau)\rightarrow E^1$连续, 则$f$是常值映射. 
+\end{exercise}
+\begin{solution}$(R,\tau)$的任一开集只能是形如$(-\infty, a)$的集合. 若$f$连续, 则$f^{-1}$把开集映到开集. 假设$f(R)$不为常数, 则它至少有两个不同的非空且不交的开集$A$和$B$(由于$f(R)$不为常数, 则必存在两不同点$x$和$y$, 在$E^1$中找两个不交开集使$x\in B_x$, $y\in B_y$, 则$B_x \cap f(R)$和$B_y\cap f(R)$为$f(R)$的不交非空开集), 则$f^{-1}(A)$和$f^{-1}(B)$也应为非空不交开集, 这与$(R,\tau)$的开集的形状矛盾! 故得证.
+\end{solution}
+
+\subsection{乘积空间与拓扑基}
+
+上一节回顾: 映射$f:X\rightarrow Y$在$x$连续是指对于任意$f(x)$在$Y$中的邻域$V$, $f^{-1}(V)$都总是$x$的邻域, 若$f$在每一点$x\in X$都连续, 则$f$是连续映射. 连续映射有多种等价定义方式, 例如$Y$的任一开(闭)集的原像为开(闭)集. 同胚映射的概念: $f:X\rightarrow Y$是一一对应, 且$f$和$f^{-1}$都连续. 注意, $f$连续并不能得到$f^{-1}$连续(例如第9题, $f$连续是因$Y$的开集的原像总是$X$的开集(由拓扑子空间的定义得到), 但$X$的开集在$f^{-1}$下的原像并不一定为$Y$的开集, 例如$[0,1)$.再如书24页下方的例子, 关键是说明$1$在$Y$中不为内点, 这是因为f的像集就是整个$S^1$, 不存在$S^1$的开集使$1$属于这个开集, 且这个开集包含于上半圆周, 从而$1$不是内点, 故$f^{-1}$不连续.)
+
+粘接引理是证明同胚的有效工具, 见上节例题. 最后, 定义: 拓扑空间在同胚映射下保持不变的概念称为拓扑概念, 在同胚映射下保持不变的性质叫拓扑性质. 我们从连续的等价定义可以看到, 开集, 闭集都是拓扑概念, 从而邻域, 内点, 闭包等都是拓扑概念. 用开集或其派生的拓扑概念都是拓扑性质, 例如可分性(第7题). 事实上, 只要在连续映射$f:X\rightarrow Y$下能从一个($X$或$Y$)具有这个性质推出另一个($Y$或$X$)也具有这个性质, 则这个性质就是拓扑性质. 
+
+\begin{exercise}设$A,B$分别是$X,Y$的闭集, 证明$A\times B$是乘积空间$X\times Y$的闭集.
+\end{exercise}
+\begin{solution}
+定义: 设$\mathscr{B}$是$X$的一个子集族, 规定新的子集族$\overline{\mathscr{B}}\equiv \{U\subset X|U\text{是}\mathscr{B}\text{若干成员的并集}\}=\{U\subset X|\text{对任意}x\in U,\text{存在}B\in \mathscr{B}, \text{使得}x\in B\subset U\}$(两个定义的等价性是易证的), 称$\overline{\mathscr{B}}$为$\mathscr{B}$所生成的子集族. 显然$\mathscr{B}\subset \overline{\mathscr{B}}$, $\emptyset\in \overline{\mathscr{B}}$. 
+
+定义: 设$X_1$和$X_2$是连个集合, 记$X_1\times X_2$是它们的笛卡尔积: $X_1\times X_2=\{(x_1,x_2)|x_i\in
+ X_i\}$, 规定$j_i: X_1\times X_2 \rightarrow X_i$为$j_i(x_1,x_2)=x_i(i=1,2)$, 称$j_i$为$X_1\times X_2$到$X_i$的投射. 如果$A_i\subset X_i$, 则$A_1\times A_2\subset X_1\times X_2$, 容易验证, 当$A_i\subset X_i$, $B_i\subset X_i$时, $(A_1\times A_2)\cap (B_1\times B_2)=(A_1\cap B_1)\times(A_2\cap B_2)$(按笛卡尔积的定义即证), 对于并集也有这样的不等式成立.
+ 
+现在, 要在笛卡尔积$X_1\times X_2$上规定一个拓扑$\tau$, 要求使$j_i$连续, 且是满足此要求的最小拓扑. 对任意$U_i\in \tau_i$, 由于$j_i$连续, 故j$^{-1}_i(U_i)\in \tau$, 有$U_1\times U_2=(U_1\times X_2)\cap (X_1\times U_2)=j^{-1}_1(U_1)\times j^{-1}_2(U_2)\in \tau$, 构造$X_1\times X_2$的子集族$\mathscr{B}=\{U_1\times U_2|U_i\in \tau_i\}$, 则所需要构造的拓扑$\tau$包含$\mathscr{B}$. 有拓扑公理($\tau$中任意多成员的并, 有限多成员的交都在$\tau$中), 则$\tau\supset \overline{\mathscr{B}}$. 只要证明$\overline{\mathscr{B}}$是$X_1\times X_2$上的一个拓扑, 它就是最小拓扑. (证明其为一个拓扑: 只需证$X,\emptyset$包含其中, 以及$\tau$中任意多成员的并, 有限多成员的交都在$\tau$中. 第一, 二条是显然的. 第三条: 对任意$\overline{\mathscr{B}}$中的$W, W'$, 对任意$(x_1,x_2)\in W\cap W'$, 则$(x_1,x_2)\in W$, 故存在$U_i\in \tau_i$使$(x_1,x_2)\in U_1\times U_2 \subset W$. 同理对$W'$. 故 $(x_1,x_2)\in (U_1\times U_2)\cap(U'_1\times U'_2)\subset W\cap W'$, 且$(U_1\times U_2)\cap (U'_1\times U'_2)=(U_1\cap U'_1)\times (U_2\cap U'_2) \in \mathscr{B}$, 故$W\cap W' \in \overline{\mathscr{B}}$. 得证.) 从而, 称$\overline{\mathscr{B}}$为$X_1\times X_2$上的乘积拓扑, 称$(X_1\times X_2,\overline{\mathscr{B}})$为$(X_1,\tau_1)$和$(X_2,\tau_2)$的乘积空间. 类似的方法可以构造有限个拓扑空间的乘积空间, 其拓扑仿上来构造. 
+
+作为介绍(习题只讨论有限乘积空间): 无穷多个拓扑空间$\{(X_\lambda,\tau_\lambda):\lambda\in \Lambda\}$的笛卡尔积规定为($\bigsqcup$表无交并):
+$$\prod\limits_{\lambda\in \Lambda} X_\lambda \equiv \{f: \Lambda \rightarrow \bigsqcup\limits_{\lambda\in \Lambda} X_\lambda|f(\lambda) \in X_\lambda, \forall \lambda \in \Lambda\}.$$其上拓扑有两种, 分别由$\mathscr{B}_1=\{\prod_{\lambda\in \Lambda} U_\lambda|U_\lambda\in \tau_\lambda\}$和$\mathscr{B}_2=\{\prod_{\lambda\in \Lambda} U_\lambda|U_\lambda\in \tau_\lambda, \text{且除有限个}\lambda\text{外} U_\lambda = X_\lambda\}$生成. 第二种称为乘积拓扑.
+
+回到原题. $X\times Y\backslash (A\times B)= (X\times (Y\backslash B) \cup((X\backslash A)\times Y)$, 这可以用定义验证: $(x,y)\in  X\times Y\backslash (A\times B)$等价于 $x\notin A$或$y\notin B$, 等价于$x\in X\backslash A$ 或$y\in Y\backslash B$, 等价于$(x,y)\in  (X\times (Y\backslash B) \cup((X\backslash A)\times Y)$. 而$A$, $B$是各自中闭集, 故$X\backslash A$和$Y\backslash B$为各自中开集, 故$(X\times (Y\backslash B)$为乘积空间中开集. 得证. 
+\end{solution}
+
+\begin{exercise}2. 设$A\subset X$, $B\subset Y$, 证明在乘积空间$X\times Y$中: (1)$\overline{A\times B}
+=\overline{A}\times \overline{B}$; (2)$(A\times B)^\circ=A^\circ \times B^\circ$. 
+\end{exercise}
+\begin{solution}
+(1). 若$(x,y)\in \overline{A\times B}$, 则任意$(x,y)$的邻域都与$A\times B$相交.
+对$x$的任意邻域$U$, 存在$A$的开集$U'$使$x\in U' \subset U$, 对$y$的任意邻域$V$, 存在$B$的开集$V'$使$y\in V'\subset V$, 从而由$(x,y)\in U'\times V'\subset U\times V$, 而$U'\times V'$是$X\times Y$中的开集, 从而$U\times V$是$(x,y)$在$X\times Y$中的邻域, 由于$(x,y)\in \overline{A\times B}$, 故任意$(x,y)$的邻域都与$A\times B$相交, 从而$U\times V$与$A\times B$相交, 设$(x_0,y_0)\in (U\times V)\cap (A\times B)=(U\cap A)\times (V\cap B)$, 则$x_0\in U\cap A$ 且$y_0\in V\cap B$, 从而$x\in \overline{A}$, $y\in \overline{B}$, 从而$(x,y)\in \overline{A}\times\overline{B}$. 反之, 如果$(x,y)\in \overline{A}\times\overline{B}$, 则任意$x$($y$)的邻域都与$A$($B$)相交. 对$(x,y)$的任意邻域$Z$, 存在开集$Z'$使$(x,y)\in Z'\subset Z$, 由于$Z'\in \overline{\mathscr{B}}$, 故按定义对$(x,y)$, 存在$B'\in\mathscr{B}$使$(x,y)\in B\subset Z'$, 由$\mathscr{B}$的定义, 知$B'$必能写成$B=U\times V$, 其中$U$和$V$分别为$X$和$Y$的开集, 故$x\in U$, $y\in V$, $U$($V$)也是$x$($y$)的邻域, 从而与$A$($B$)相交, 可见$B'$与$A\times B$相交, 从而$Z$与$A\times B$相交, 从而$(x,y)\in \overline{A\times B}$. 得证. 
+
+(2)若$(x,y)\in (A\times B)^\circ$, 则存在开集$Z'$使$(x,y)\in Z'\subset (A\times B)$. 仿(1)中后半部分的证明知存在开集$x\in U$, $y\in V$,且$(U\times V)\subset Z'\subset (A\times B)$, 故$(A\times B)^\circ \subset A^\circ\times B^\circ$. 反之, 若$(x,y)\in A^\circ\times B^\circ$, 则$x\in A^\circ$, $y\in B^\circ$, 则存在开集$U$, $V$, 使$x\in U\subset A$, $y\in V\subset B$, 故$(x,y)\in (U\times V)\subset A\times B$, 由于$U\times V$也是乘积空间$X\times Y$的拓扑, 故$(x,y)\in (A\times B)^\circ$. 得证.  
+\end{solution}
+
+\begin{exercise}3. 证明投射$j_i: X_1\times X_2\rightarrow X_i (i=1,2)$是开映射.
+\end{exercise}
+\begin{solution}
+乘积空间的开集等价于$\overline{\mathscr{B}}$的元素. 任意其开集$Z$都可写成若干个$\mathscr{B}$中成员的并, 即$Z=\cup_\alpha Z_\alpha$, $Z_\alpha\in \mathscr{B}$, 每个成员都形如$U_\alpha\times V_\alpha$, 其中$U$和$V$分别为$X_1$和$X_2$的开集. 按定义, $j_1(U_\alpha \times V_\alpha)=U_\alpha$为开集, 且可以验证 
+$j_1(Z)=j_1(\cup_\alpha U_\alpha \times V_\alpha)=\cup_\alpha U_\alpha$. 注意到$\cup_\alpha U_\alpha$为$X_1$的开集, 从而$j_1$为开映射. 得证. 
+\end{solution}
+
+\begin{exercise}4.设$f:X\rightarrow Y$是连续映射, 规定$F:X\rightarrow X\times Y$为$F(x)=(x,f(x))$, $\forall x\in X$. 证明$F$是嵌入映射.
+\end{exercise}
+\begin{solution}嵌入映射定义: $f:X\rightarrow Y$是单的连续映射, 且$f:X\rightarrow f(X)$是同胚映射, 则$f$为嵌入映射.
+
+定义: $f:Y\rightarrow X_1\times X_2$是一映射, 称$f_i=j_i\circ f:Y\rightarrow X_i$为$f$的两个分量. 
+
+定理: 对任何拓扑空间$Y$和映射$f: Y\rightarrow X_1\times X_2$, $f$连续$\Longleftrightarrow f$的分量都连续. (证明: 由命题1.9, 连续映射的复合也为连续映射, 故''$\Longrightarrow$'' 成立. 对''$\Longleftarrow$'': 
+设$f_i$连续, 则对任意$y\in Y$, $f_i(y)$的任一邻域的原像为$y$的邻域. 对$f(y)$的任一邻域, 存在其中的开集$Z$使包含$f(y)$, 由开集定义, 存在$U\times V\subset Z$使$U$($V$)为$j_1\circ f(y)$($j_2\circ f(y)$)的开集(也即邻域),  由于$f_i$连续故$f^{-1}_1(U)$和$f^{-1}_2(V)$都是$y$的开集, 故$f^{-1}_1(U)\cap f^{-1}_2(V)$也是$y$的开集, 而$f^{-1}_1(U)\cap f^{-1}_2(V)= f^{-1}\circ j_1^{-1} (U) \cap f^{-1}\circ j_2^{-1}\circ f(V)\subset f^{-1} (Z)\cap f^{-1}(Z)=f^{-1}(Z)$, 可见$f(y)$的邻域的原像包含$Y$中的开集$f^{-1}_1(U)\cap f^{-1}_2(V)$, 故$f$连续.) [另: 书中对''$\Longleftarrow$''的证法: 设$U_i\in \tau_i(i=1,2)$, 则$f^{-1}_i(U_i)$都是$Y$的开集, 容易看出$f(y)\in U_1\times U_2\Longleftrightarrow f_i(y)\in U_i$, 因此 $f^{-1}(U_1\times U_2)=f^{-1}_1(U_1)\cap f^{-1}_2(U_2)$, 它是$Y$的开集. 对于一般开集$W$, 有$W= \cup_{\alpha\in \mathscr{A}} U_{1,\alpha}\times U_{2,\alpha}$, 其中$U_{i,\alpha}\in \tau_i$, $\forall \mathscr{A}$. 故 $f^{-1}(W)=\cup_{\alpha\in \mathscr{A}} f^{-1}(U_{1,\alpha}\times U_{2,\alpha})$也是$Y$的开集, 故$f$连续.]
+
+
+回到原题: $F$显然为单射(反证即得). $f$是连续映射, 故对任意$x$, $f(x)$的任意邻域$V$的原像都是$x$的邻域, 对$(x,f(x))$的任意邻域$Z$, 由乘积空间的定义, 其都包含$U\times V$, 使$U$是$x$的邻域, $V$是$f(x)$的邻域, 故$Z$的原像包含$U\times V$的原像, 也即包含$U\cup f^{-1}(V)$, 由于$U$和$f^{-1}(V)$都是$x$的邻域, 故其交也是$x$的邻域(按定义可证), 从而$F: X\rightarrow X\times Y$是连续映射. [注: 也可以直接从定理1.3推出$F: X\rightarrow X\times Y$是连续映射.] 再由上一节习题2知$F:X\rightarrow F(X)$是连续映射. 再证$F^{-1}: F(X)\rightarrow X$连续. 
+由于$F^{-1}: F(X)\rightarrow X$是$j_X:X\times Y\rightarrow X$在$\{(x,f(x))|x\in X\}$上的限制, 故有命题1.8, 由$j_X$连续, $F^{-1}$也连续. 此题得证.
+\end{solution}
+
+\begin{exercise}5. 证明: $X$与$Y$都是可分空间, 则$X\times Y$也是可分的.
+\end{exercise}
+\begin{solution}
+$X$存在可数稠密子集$A$, $\overline{A}=X$, $Y$存在可数稠密子集$B$, $\overline{B}=Y$, $A\times B$是可数的(如按$(a_1,b_1),(a_2,b_1),(a_1,b_2),(a_3,b_1),\cdots$的顺序来记数), 再由第二题(1)知有$\overline{A\times B}=X\times Y$. 得证.
+\end{solution}
+
+\begin{exercise}6. 设$A_i\subset X_i(i=1,2)$, 证明$A_1\times A_2$作为$X_1\times X_2$子空间的拓扑就是$A_1$与$A_2$乘积空间的拓扑.
+\end{exercise}
+\begin{solution}
+对任意$A_1\times A_2$的开集$Z$, 存在$X_1\times X_2$的开集$U$使$Z=U\cap(A_1\times A_2)$, 而$U\in \overline{\mathscr{B}}$, 从而$U$可以写成$\mathscr{B}$中若干成员的并集, 而$\mathscr{B}=\{U_1\times U_2|U_i\in\tau_i\}$, 从而存在集合$\mathscr{A}$, 使$U=\cup_{\alpha\in \mathscr{A}}(U_{1,\alpha}\times U_{2,\alpha})$, 其中$U_{i,\alpha}\in \tau_i,\forall \alpha\in \mathscr{A}$($i=1,2$).  从而$Z=\left(\cup_{\alpha\in \mathscr{A}}(U_{1,\alpha}\times U_{2,\alpha})\right)\cap (A_1\times A_2)=
+\left( (\cup_{\alpha\in \mathscr{A}} U_{1,\alpha})\cap A_1\right)\times 
+\left( (\cup_{\alpha\in \mathscr{A}} U_{2,\alpha})\cap A_2\right)$, 而$\cup_{\alpha\in \mathscr{A}} U_{i,\alpha} \in \tau_i,$ 故$\cup_{\alpha\in \mathscr{A}} U_{i,\alpha} \cap A_i$是$A_i$的开集, 从而$\left( (\cup_{\alpha\in \mathscr{A}} U_{1,\alpha})\cap A_1\right)\times 
+\left( (\cup_{\alpha\in \mathscr{A}} U_{2,\alpha})\cap A_2\right)$是$A_1\times A_2$的开集. 反之, 对任一个$A_1\times A_2$的开集$V$, 一定存在集合$\mathscr{A}$, 使$V=\cup_{\alpha\in \mathscr{A}}(V_{1,\alpha}\times V_{2,\alpha})$, 其中$V_{i,\alpha},\forall \alpha\in \mathscr{A}$是$A_i$的开集,$i=1,2$, 从而一定可写为$V_{i,\alpha}=U_{i,\alpha}\cap A$, $U_{i,\alpha}\in \tau
+_i$, $\forall \alpha \in \mathscr{A}$, $i=1,2$. 从而$V= \cup_{\alpha\in\mathscr{A}}(U_{1,\alpha}\cap A_1)\times (U_{2,\alpha}\cap A_2)=\left(\cup_{\alpha\in \mathscr{A}} (U_{1,\alpha}\times U_{2,\alpha})\right)\cap(A_1\times A_2)$, 而$\cup_{\alpha\in \mathscr{A}} (U_{1,\alpha}\times U_{2,\alpha})$是$X_1\times X_2$的开集, 从而$V$是$A_1\times A_2$作为$X_1\times X_2$子空间的拓扑. 证毕.
+
+其实, 本题可以用拓扑基很简单地证出. 这之前先介绍完乘积空间的性质: 有推论: 对任意$b\in X_2$, 由$x\mapsto (x,b)$规定的映射$j_b:X_1\rightarrow X_1\times X_2$是嵌入映射. (证明: $j_b$显然是单的. 显然$X_1\times X_2$中开集(可写成定理1.3中后边所说的那种形式)在$j_b$下的原像(取并的所有第一分量)是开集, 故$j_b$是连续的. 为证嵌入, 只需证$i_b: X_1\rightarrow j_b(X_1)=X_1\times \{b\}$是同胚. $j^{-1}_b$是分量映射$j_1: X_1\times X_2\rightarrow X_1$在$X_1\times \{b\}$上的限制, 由命题1.8(1)知在$X_1\times\{b\}$上是连续的. 而$i_b$的两个分量都连续, 故由定理1.3知$i_b$连续. 得证.) 这个推论与习题1.4的证明很像, 具体来说, 逆映射都是分量映射$i_1:X\times Y\rightarrow X$在$F(X)$上的限制, 而正映射的每个分量映射都是连续的, 故都可以用定理1.3得到正映射是连续的. 
+
+定义: 称集合$X$的子集族$\mathscr{B}$为集合$X$的拓扑基, 如果$\overline{\mathscr{B}}$是$X$的一个拓扑; 称拓扑空间$(X,\tau)$的子集族$\mathscr{B}$为这个拓扑空间的拓扑基, 如果$\overline{\mathscr{B}}=\tau$.
+(再回顾一下$\mathscr{B}$和$\overline{\mathscr{B}}$的关系: 设$\mathscr{B}$是$X$的一个子集族, 规定$\overline{\mathscr{B}}=\{U\subset X|U\text{是}\mathscr{B}\text{若干成员的并集}\}$.) 
+
+可见, 对同一个$X$, 如果拓扑基$\mathscr{B}_1=\mathscr{B}_2$, 则它们生成的拓扑也就一样. 对原题, $X_1\times X_2$ 的拓扑基$\mathscr{B}=\{U_1\times U_2| U_i\in \tau_i\}$, $A_1\times A_2$作为$X_1\times X_2$的子空间的拓扑基为$\{(U_1\times U_2)\cap(A_1\times A_2)| U_i\in \tau_i\}$, $A_1\times A_2$作为$A_1$与$A_2$的乘积空间的拓扑基是$\{(U_1\cap A_1)\times (U_2\cap A_2)|U_i\in \tau_i\}$, 可见两者拓扑基相同, 从而拓扑相同. 这里面唯一不严谨的就是为何两种生成的子空间的拓扑基是写成上方的样子的. 为说明这个问题需要先介绍命题:
+
+命题: $\mathscr{B}$是集合$X$的拓扑基的充要条件是: (1)$\cup_{B\in \mathscr{B}}B=X$ 且(2)若$B_1,B_2\in \mathscr{B}$, 则$B_1\cap B_2\in \overline{\mathscr{B}}$(也就是对任意$x\in B_1\cap B_2$, 存在$B\in \mathscr{B}$, 使$x\in B\subset B_1\cap B_2$). $\mathscr{B}$是拓扑空间$(X,\tau)$的拓扑基的充要条件是: (1)$\mathscr{B}\subset \tau$ 且(2) $\tau\subset \overline{\mathscr{B}}$. 
+
+对于此题, 由于两种得到$A_1\times A_2$拓扑空间的方式都有明确的拓扑, 所以我们应用命题的第二部分. 对两种生成方式, (1)都显然满足, (2)只需注意到$X_1\times X_2$的拓扑是 $\overline{\mathscr{B}}$, 从而每种生成方式的$\tau$中的元素都对应着$X_1\times X_2$的相应元素交上$A_1\times A_2$, 或对应$X_i$相应元素交上$A_i$, 从而也在各自的$\overline{\mathscr{B}}$中. 故为拓扑基. 
+\end{solution}
+
+\begin{exercise}7.
+\end{exercise}
+\begin{solution}定义$F:X\rightarrow E^1\times E^1$, $F(x)=(f(x),g(x))$, 再定义$G:E^1\times E^1\rightarrow E^1$, 满足$G(x,y)=x+y$. 由定理1.3 $F$连续. 之前已证过度量空间中$\varepsilon-\delta$法则与拓扑连续的等价性, 而用前者可以轻易证明$G$连续. 故由连续的复合性(命题1.9)知$G\circ F= f+g$连续. 其他运算可类似得证. 
+\end{solution}
+
+\begin{exercise}8.
+\end{exercise}
+\begin{solution}
+考虑$\mathscr{B}'=\{(-\infty, a)|a\in R\}$, 显然是$R$的一个拓扑基, 且$\mathscr{B}\subset\mathscr{B}'$, 而由分析学的结论有任意无理数$r$可由有理数数列$x_n$逼近, 从而有 $(-\infty,r)=\cup_{i=1}^{+\infty}(-\infty, x_n)$(可以证明两个相等, 略), 从而$\mathscr{B}\subset \overline{\mathscr{B}}'$, 从而$\overline{\mathscr{B}}\subset \overline{\mathscr{B}}'$. 故两者生成相同拓扑. (见教材33页例一下方.)  生成的拓扑即$\mathscr{B}'=\overline{\mathscr{B}}'$, 也即第一节习题3的拓扑. 
+\end{solution}
+
+\begin{exercise}9.
+\end{exercise}
+\begin{solution}只需证是闭集, 也即只须证$(-\infty, a)\cap [b,+\infty)$ 为开集, 也即只须证两部分都是开集. 这是显然的(因为$\overline{\mathscr{B}}$中含有$\mathscr{B}$中任意多个的并). 
+\end{solution}
+
+\begin{exercise}10. 设$\mathscr{B}_i$是拓扑空间$(X_i,\tau_i)$的拓扑基($i=1,2$), 证明$\mathscr{B}=\{B_1\times B_2|B_i\in \mathscr{B}_i\}$是乘积空间$X_1\times X_2$的拓扑基. 
+\end{exercise}
+\begin{solution} 用$\mathscr{B}'$ 和$\overline{\mathscr{B}}'$ 表示乘积空间的拓扑基和拓扑. 命题1.12的(1)显然成立(因为$B_i\in \mathscr{B}_i\subset \tau_i$ 故$B_1\times B_2\in\mathscr{B}'\subset \overline{\mathscr{B}}'$. 任意$\overline{\mathscr{B}}'$的元素都能写成若干个$U_1\times U_2$的并, $U_i\in \tau_i=\overline{\mathscr{B}}_i$能写成若干个$\mathscr{B}_i$中元素的并, 再注意到$U_1\times U_2
+=(\cup_{\alpha\in \mathscr{A}} U_{\alpha,1})\times(\cup_{\beta\in\mathscr{B}} U_{\beta,2})
+=\cup_{\alpha\in\mathscr{A},\beta\in\mathscr{B}}U_{\alpha,1}\times U_{\beta,2}$, 
+故综合起来有$\overline{\mathscr{B}}'\subset \overline{\mathscr{B}}$. 得证. 
+\end{solution}
+
+\begin{exercise}11. 设$\mathscr{C}$是$X$的一个覆盖, 规定$X$的子集族$\mathscr{B}=\{B|B\text{是}\mathscr{C}\text{中有限个成员的交集}\}$, 证明$\mathscr{B}$是集合$X$的一个拓扑基.
+\end{exercise}
+\begin{solution}用命题1.11. (1), (2)都显然,得证. 这里证明一下命题1.11: 
+
+命题: $\mathscr{B}$是集合$X$的拓扑基的充要条件是: (1)$\cup_{B\in \mathscr{B}}B=X$ 且(2)若$B_1,B_2\in \mathscr{B}$, 则$B_1\cap B_2\in \overline{\mathscr{B}}$(也就是对任意$x\in B_1\cap B_2$, 存在$B\in \mathscr{B}$, 使$x\in B\subset B_1\cap B_2$). (证明: 必要性: 若$\overline{\mathscr{B}}$为$X$的一个拓扑, 则$\overline{\mathscr{B}}$含有$X$, 从而$X$可写成$\mathscr{B}$中若干元素的并, 故(1)成立. 若$B_1, B_2\in \mathscr{B}$, 则也属于$\overline{\mathscr{B}}$, 而$\overline{\mathscr{B}}$为$X$的拓扑, 故$B_1\cap B_2$属于它, (2)成立. 充分性: 即证(1)和(2)都满足$\overline{\mathscr{B}}$满足拓扑公理. $\overline{\mathscr{B}}$的定义蕴含公理(2), 且$\emptyset \in \overline{\mathscr{B}}$, 条件(1)说明$X\in \overline{\mathscr{B}}$, 故满足公理(1). 设$U, U'\in \overline{\mathscr{B}}$, 则$U=\cup_\alpha B_\alpha$, $U'= \cup_\beta B'_{\beta}$, 其中$B_\alpha$, $B'_\beta\in \mathscr{B}$, $\forall \alpha,\beta$. 则由(2)和公理(2)知$U\cap U'=\cup_{\alpha,\beta}(B_\alpha \cap B'_\beta) \in \overline{\mathscr{B}}$, 故公理(3)成立. 得证.)
+
+命题: $\mathscr{B}$是拓扑空间$(X,\tau)$的拓扑基的充要条件是: (1)$\mathscr{B}\subset \tau$ 且(2) $\tau\subset \overline{\mathscr{B}}$. (证明: 必要性: (1)显然, $\tau=\overline{\mathscr{B}}$故(2)也成立. 充分性: 由(1)得$\overline{\mathscr{B}}\subset \tau$. 再由(2)知$\overline{\mathscr{B}}=\tau$. 故$\mathscr{B}$为$(X,\tau)$的拓扑基. 证毕. 
+\end{solution}
+
+\subsection{分离公理与可数公理}
+
+上一节, 我们介绍了乘积空间的的概念, 由笛卡尔积定义一个集合, 为了使其上的投射都连续, 我们推导出了这个集合的拓扑的必要条件即含有$\mathscr{B}$和$\overline{\mathscr{B}}$. 进而可证它是$\overline{\mathscr{B}}$即是最小拓扑. 我们还介绍了无穷多拓扑空间的乘积空间的两种拓扑. 我们还证明了乘积空间与构成它的两个原拓扑空间的性质, 以及含有乘积空间的映射的性质. 由于乘积空间的任何开集都可以写成若干个[两个原拓扑空间的开集的交]的并的形式, 故事实上相关证明并不困难. 最后我们引出了拓扑基(分集合的拓扑基和拓扑空间的拓扑基)的概念, 有它们的用处在于: 有了拓扑基$\mathscr{B}$, 则$\overline{\mathscr{B}}=\{U\in X|U\text{是}\mathscr{B}\text{中若干成员的并}\}$是一个拓扑, 可见拓扑基$\mathscr{B}$具有这个拓扑的全部资料.  当然, 对一个拓扑空间, 其拓扑基不是唯一的. (另外注意, 我们提到$\mathbb{R}$的时候它只是实数集, 没有拓扑; 其上可以加不同的拓扑(如第一章所提到的), 加上度量拓扑后才成为$E^1$. )
+
+前已看到, 欧式空间和度量空间(欧式空间是把集合限定为$\mathbb{R}^n$, 度量限定为欧式度量的度量空间)的一些性质在拓扑中会失去. 分离公理和可数公理的加入使拓扑空间的性质更像欧式空间. 有两个可数公理和一系列分离公理(只介绍$T_1,T_2,T_3,T_4$公理.)
+
+\begin{exercise}1. 称$X$满足$T_0$公理, 如果对$X$中任意两点, 必有一开集只包含其中一点. 试举出满足$T_0$公理, 不满足$T_1$公理的拓扑空间的例子.
+\end{exercise}
+\begin{solution}
+$T_1$公理: 任何两个不同点$x$与$y$, $x$有邻域不含$y$, $y$有邻域不含$x$. 
+
+$T_2$公理: 任何两个不同点有不相交的邻域. 
+
+显然, 这里的邻域改成开邻域, 公理的意义不变(因可以互推). 显然, $T_2$公理蕴含$T_1$公理, 但反之不成立. 例如$(R,\tau_f)$满足$T_1$公理($\tau_f$为余有限拓扑, 即$\tau_f=\{A^c|A\text{是}X\text{的有限子集}\}\cup \{\emptyset\}$, 对$x\neq y$, $R\backslash \{y\}$是$x$的邻域, 对$y$同理, 故$T_1$满足. 但由于$x$的任意邻域一定包含有限集的余集, 故$x$与$y$的邻域不相交, 就要求两个有限集的余集不相交, 注意到有限集是有界集, 这不可能. 故$(R,\tau_f)$不满足$T_2$公理.  
+
+命题: $X$满足$T_1$公理$\Longleftrightarrow X$的有限子集是闭集. (证明: ``$\Longrightarrow$'': 只须证单点集是闭集, 故只须证单点集$\{x\}$的闭包是它自己, 由于任意$y\neq x$都存在$y$的邻域与$\{x\}$无交点, 故$y$不属于$\{x\}$的闭包, 从而$\{x\}$的闭包只是其子集. 从而由有限个闭集的并集是闭集知成立. ``$\Longleftarrow$'': 则单点集也是闭集, 故是其闭包, 从而任意$y\neq x$都不属于$\{x\}$的闭包, 即存在$y$的邻域与$x$不交, 从而得证. 也可证; 对$x\neq y$, $\{y\}$是闭集, 故$X\backslash \{y\}$是开集且含$x$, 故是$x$的开邻域, 且不含$y$, 同理对$x$. 从而满足$T_1$公理. 
+
+推论: 若$X$满足$T_1$公理, $A\subset X$, $x$是$A$的聚点, 则$x$的任一邻域与$A$的交是无穷集. (证: 反证法, 设$x$存在邻域$U$使$U\cap A$有限(不妨设$U$是开集, 否则找$U$中的开集充当$U$), 则$B=(U\cap A)\backslash\{x\}$为有限集故是闭集, $U\backslash B= U\cap B^c$仍是$x$的开邻域, 它不含$A\backslash\{x\}$中的点, 与$x\in A'$矛盾. 
+
+总结: 对$X$中任两点$x$和$y$. $T_0$公理是: 必有一开集(邻域)只含其一. $T_1$公理是: 有两开集(邻域)各只含其一. $T_2$公理是: 有两开集(邻域)各只含其一且不交. 它们都是存在性论断; 都是否定性论断(不能两个都含).
+
+回到本题: 例如$X=\{x,y\}$, $\tau=\{\emptyset, \{x\}, \{x,y\}\}$. 
+\end{solution}
+
+\begin{exercise}2. 如果$X$满足$T_0$公理和$T_3$公理, 它也满足$T_2$公理. 
+\end{exercise}
+\begin{solution}
+$T_2$公理是最重要的分离公理, 满足其的拓扑空间称为Hausdorff空间. 
+
+命题: Hausdorf 空间中, 一个序列不会收敛到两个以上的点. (证明: 设$\{x_n\}\rightarrow x_0$ 且$\rightarrow x$, 由Hausdorff空间性质, 存在$x_0$的邻域$U$和$x$的邻域$V$使不交, 但收敛定义说明存在$N$和$N'$使$n>N$时$x_n$均在$U$中, $n>N'$时$x_n$均在$V$中, 矛盾.) 
+
+$T_3$公理: 任意一点与不含它的任一闭集有不相交的(开)邻域. 
+
+$T_4$公理: 任意两个不相交的闭集有不相交的(开)邻域. (当$A\subset U^\circ$时, 说$U$是集合$A$的邻域. )
+
+如果$X$满足$T_1$公理, 则其单点集而是闭集, 故[若再有$T_3$公理, 则可推出$T_2$公理成立]; 故[若再有$T_4$公理成立, 则可推出$T_3$公理成立]. 然而没有$T_1$公理的前提时, 上述关系不成立, 例如$(R,\tau), \tau=\{(-\infty,a)|-\infty\leq a\leq +\infty\}$时, 注意到其任意两个非空开集都相交(但显然$\emptyset$与非空开集不交), 且任意任意闭集必为开集余集, 而任意开集都写成$(-\infty, a)$的形式, 任意两个非空余集都相交, 故为满足$T_4$公理的条件找两个不交闭集, 则其一必为空集, 则这两闭集(一个为空集)的邻域也选为一个为空集, 则$T_4$公理满足. 但任一点$x$与$[x-1,+\infty)$无不相交邻域, 故$T_3$不成立; 任意两点各自的任意邻域都彼此相交, 故$T_2$不成立; 且大的点的邻域(必为开集)总包含小的点, 故$T_1$不成立. 
+
+回到本题. 本题事实上是说, 如果把满足$T_1$和$T_3$弱化为$T_0$和$T_3$, $T_2$事实上就可满足. 证明: 对任意点$x$, $y$, 由$T_0$, 不妨设$x$存在邻域$W$不含$y$, 则由于$x\in \overline{\{y\}}\Longleftrightarrow x$的任意邻域与$\{y\}$有交点(也即包含$y$), 从而$x$不属于$\{y\}$的邻域, 而按$T_3$存在$x$的开邻域$U$满足$\overline{U}\subset W$, 则对任意$x'\in {U}$, $W$都是$x'$的邻域, 故同理可证$x'$都不属于$y$的邻域, 从而$U$与$y$的(任意)邻域无交点, 从而$T_2$成立. 
+\end{solution}
+
+\begin{exercise}3. 设$X$满足$T_1$公理, 证明$X$中任意子集的导集是闭集.
+\end{exercise}
+\begin{solution}$X$满足$T_1$公理等价于$X$的任意有限子集是闭集. (证明见前, 左推右只需注意$T_1$可推出所有单点集为闭集; 右推左只需注意单点集是有限子集, 可用构造法, 或: $\{x\}$, $\{y\}$都是闭集, 故$y$不属于$\{x\}$的闭集, 从而$y$存在邻域不含$x$(闭集的等价定义), 得证. )
+
+回到原题. 只需证明$(A')^c$是开集. 由于$A'$中的点$x$为任意[$x$的任意邻域与$A\backslash\{x\}$有交点]的点, 故$\forall x\in (A')^c$, 存在$x$的邻域$U$使$U\cap (A\backslash\{x\})= \emptyset$ 由$T_1$, $\{x\}$为闭集, 故$\{x\}^c$为开集, 从而$U\backslash \{x\}$为开集, 对其中任何点$y$, 都存在其邻域(就选$U\backslash \{x\}$)使其与$A\backslash\{y\}=A$(注意已证$U\backslash \{x\}$与$A$不交故$y$不在$A$中)不交, 从而$y$不是$A$的聚点, 从而$U\backslash \{x\}\subset (A')^c$, 从而$U\subset (A')^c$, 从而任意$(A')^c$中的点都存在邻域$U\subset (A')^c$, 从而都是内点, 从而其为开集, 从而$A'$为闭集. 
+\end{solution}
+
+\begin{exercise}4. 设$X$是Hausdorff空间, $f:X\rightarrow X$连续, 则$f$的不动点集$\text{Fix}f\equiv\{x\in X|f(x)=x\}$是$X$的闭子集.
+\end{exercise}
+\begin{solution}记$A=(\text{Fix}f)^c$, 则对任意其中的点$x$, $f(x)\neq x$, 从而$f(x)$的任意邻域的原像是$x$的邻域, 由Hausdorff空间故存在$x$的邻域$B$和$f(x)$的邻域$U$使两者不交, 且$B\cap f^{-1}(U)$也是$x$邻域, 且$B\cap f^{-1}(U)\subset A$, 从而$x$是$A$的内点. 由$x$的任意性有$A^\circ=A$故$A$是开集, 故不动点集为闭集. 
+\end{solution}
+
+\begin{exercise}5. 设$Y$是Hausdorff空间, $F: X\rightarrow Y$连续, 则$f$的图像: $G_f\equiv \{(x,f(x))|x\in X\}$是$X\times Y$的闭子集.
+\end{exercise}
+\begin{solution}记$A=G^c_f$, 则其中任一点$(x,y)$, 有$(x, f(x))\equiv (x,y)$. 由$f$连续, 故$F: x\mapsto (x,f(x))$的分量映射都连续, 从而也连续, 从而$(x, f(x))$的任意开邻域$Z$的原像也是开邻域, 从而具有形式$U\times V$(其中$U$为$x$的开邻域, $V$为$f(x)$的开邻域)的原像也是$x$的开邻域. 对
+由Hausdorff性存在$y$的邻域$B$与$f(x)$的邻域$V$不交, 且$B\cap f^{-1}(V)$是$y$邻域, 从而$F^{-1}(U\times V)\times (B\cap f^{-1}(V))$是$(x,y)$的开邻域, 且其中任意一点不含$(x, f(x))$, 从而$F^{-1}(U\times V)\times (B\cap f^{-1}(V))\in A$, 再仿4题即证. (注: 上面的证明可以简化为, 把$V$即令成$B$, 把$U$即令成$f^{-1}(V)$也即$f^{-1}(B)$,  从而也不必用$F^{-1}(U\times V)$作$x$的开集而只须用$f^{-1}(B)$. 最后一长串表达式化简为$f^{-1}(B)\times B$.)
+\end{solution}
+
+\begin{exercise}6. 记$X\times X$的对角子集$\Delta\equiv \{(x,x)||x\in X\}$, 证明当$\Delta$是$X\times X$的闭集时, $X$是Hausdorff空间.
+\end{exercise}
+\begin{solution}$\Delta$为闭集, 则任意$(x,y)$不属于$\Delta$, 也即对任意$x\neq y$, 存在$(x,y)$的邻域与$\Delta$无交点, 注意到$(x,y)$的邻域$W$必存在开集, 使其包含$(x,y)$, 且这个开集(按乘积空间开集定义)可写为若干个[$X$和$Y$的开集的笛卡尔积]的并, 从而至少有一个$X$的开集$U$包含$x$, 至少有一个$Y$的开集$V$包含$y$, 且$U\times V \subset W$, 从而$U\times V$与$\Delta$无交点, 也即$U$和$V$不交(否则与$\Delta$有交点). 
+\end{solution}
+
+\begin{exercise}7. Hausdorff空间的子空间也是Hausdorff空间.
+\end{exercise}
+\begin{solution}任意两点, 存在各自邻域使它们不交. 改成开邻域也对. 注意$x$属于子集$A$, 则$x$的$X$中的开邻域也是$x$的$A$中的开邻域. 得证. 
+\end{solution}
+
+\begin{exercise}8. 证明两个Hausdorff空间的乘积空间也是Hausdorff空间.
+\end{exercise}
+\begin{solution}对任意两点$(x_1,y_1)$, $(x_2,y_2)$, 存在由$x_1,x_2,y_1,y_2$的邻域$(U_1,U_2,V_1,V_2)$构成的乘积空间的子集$U_1\times V_1$, $U_2\times V_2$, 显然是$(x_1,y_1)$和$(x_2,y_2)$的邻域(因为乘积空间的开集是由若干个[两空间的开集的笛卡尔积]的并来定义的, 故对$x_1,y_1$的邻域$U_1$ $V_1$, 存在开集$U'\subset U_1$, $V'\subset V_1$, 从而$U'\times V'$是乘积空间的开集属于$U_1\times V_1$, 从而$U_1\times V_1$是$(x_1,y_1)$的邻域. )显然$U_1\times V_1$, $U_2\times V_2$不交. 
+\end{solution}
+
+\begin{exercise}9. 设$X$满足$T_3$公理, $F$为$X$的闭子集, $x\notin F$. 证明存在$F$和$x$的开邻域$U$和$V$, 使得$\overline{U}\cap\overline{V}=\emptyset$.
+\end{exercise}
+\begin{solution}
+
+$T_3$公理 任意一点与不含它的任一闭集有不相交的(开)邻域.
+
+$T_4$公理 任意两个不相交的闭集有不相交的(开)邻域. (当$A\subset U^\circ$时, 说$U$是集合$A$的邻域.)
+
+命题 度量空间(X,d)满足$T_i$公理, $i=1,2,3,4.$ (证: 只需证$T_1$和$T_4$. 证$T_1$只需证单点集是闭集. 这是对的, 因为对任意$y\neq x$, 存在$y$的邻域$B(y,\varepsilon)$使$\forall z\in B(y,\varepsilon), d(y,z)< d(y,x)$. 再证$T_4$: 设$A$, $B$是不交闭集, 不妨设都不空. $\forall x\in X$, $d(x,A,B)\equiv d(x,A)_d(x,B)>0$(否则$x\in A$且$x\in B$), 规定函数$f(x)=d(x,A)/d(x,A,B)$, 则当$x\in A$, $f(x)=0$; $x\in B$, $f(x)=1$. 任取$t\in (0,1)$, 则$f^{-1}((-\infty,t))$和$f^{-1}((t,+\infty))$是$A$和$B$的不相交邻域. 
+
+命题2.4 (1)满足$T_3$公理$\Longleftrightarrow $任意点$x$和它的开邻域$W$, 存在$x$的开邻域, 使$\overline{U}\subset W$. (证明: ``$\Longleftarrow$'': 对任意$x$和不含它的闭集$A$, $A^c$是含它的开集, 故是$x$的开邻域, 存在$x$的开邻域$U$使$\overline{U}\subset A^c$, 从而$\overline{U}$与$A$不交, 且$A\subset \overline{U}^c$, 且$\overline{U}^c$是开集, 故$\overline{U}^c$是$A$的开邻域, 且$U\cap \overline{U}^c$=\empty. ``$\Longrightarrow$'': 任意点$x$和它的开邻域$W$, $W^c$为不含$x$的闭集, 故存在$x$的开邻域$B$与$W^c$的开邻域$U$使$B\cap U=\emptyset$, 从而$\overline{B}\cap U = \emptyset$, 这是因为对任意$x\in \overline{B}$, 其任意邻域都与$B$有交点, 但$U$中的点显然以$U$为邻域时$U$与$B$无交点, 从而$\overline{B}\cap U = \emptyset$成立. 从而$W^c\subset U\subset \overline{B}^\circ$, 从而$\overline{B}\subset W$, 得证.) 
+(2)满足$T_4$公理$\Longleftrightarrow$任意闭集$A$和它的开邻域$W$, 有$A$的开邻域$U$使$\overline{U}\cap W$. (证明: 仿上. ``$\Longleftarrow$'': 对任意闭集$A$和$B$, $B^c$为开集(故$B^c=(B^c)^\circ$)且含有$A$(故$(B^c)^\circ\supset A$), 故存在$A$的开邻域$U$, 使$\overline{U}\subset B^c$, 故$\overline{U}^c\supset B$且为开集, 从而$U\cap (\overline{U}^c)=\emptyset$. ``$\Longrightarrow$'': 对任意闭集$A$和其开邻域$W$, $W^c$为闭集且与$A$不交, 故存在$A$的邻域$U$和$W^c$的邻域$V$, 使$U$和$V$不交, 从而$\overline{U}$与$V$不交(这是因为$V$中的点以$V$为邻域时, $V$与$U$不交, 从而$V$中的点不是$U$的聚点), 从而$W^c\subset  V\subset \overline{U}^c$, 从而$\overline{U}\subset W$, 且$U$是$A$的邻域, 得证. )
+
+总结: $T_3$公理: 任意点和任意闭集, 存在各自的邻域, 两个不交; $T_4$公理, 任意两个闭集, 存在各自邻域, 两者不交. 
+
+回到原题. $T_3$已保证了$U\cap V=\emptyset$. 对任意$x\in \overline{U}$, $x$的任意邻域都与$U$有交点, 但$V$中任一点都存在一个邻域, $V$, 这个邻域与$U$无交点, 从而任意$V$中的任意一点都不属于$\overline{U}$, 即$\overline{U}\cap V=\emptyset$. 同理$U\cap\overline{V}=0$. 对任意$(V'\backslash V)\cap(U'\backslash U)$中的点$x$, 其任意邻域都与$V\backslash \{x\} =V$有交点, 也与$U\backslash \{x\} = U$有交点, 从而$x\in U\cap V$, 矛盾! 从而$(V'\backslash V)\cap(U'\backslash U)=\emptyset$. 得证. 
+\end{solution}
+
+\begin{exercise}10. 设$f:X\rightarrow Y$是满的\underline{闭}连续映射, $X$满足$T_4$公理, 则$Y$也满足$T_4$公理.
+\end{exercise}
+\begin{solution}
+对任意$Y$中的不交闭集$U$, $V$, $U$, $V$的原像是$X$中的不交闭集, 则由$T_4$知存在各自的开邻域$A$, $B$, 它们不交. 作$C=(f(A^c))^c$, $D=(f(B^c))^c$, 它们是$Y$的两个开集(因$f$为闭映射), 且$U\subset C$, $V\subset D$, 也即$U\cap f(A^c)=\emptyset$, $V\cap f(B^c)=\emptyset$, 这是因为 $f^{-1}(U)\subset A$, 故$f^{-1}(U)\cap A^c=\emptyset$, 而且$C\cap D=\emptyset$, 这是因为$A$与$B$不交故$A^c\cup B^c= X$, 从而$f(A^c)\cup f(B^c)=Y$(因$f$为满射). 
+
+注: 这里事实上用到了一个简单的命题: $X=A\cup B\Longleftrightarrow A^c\cap B^c=\emptyset$.
+\end{solution}
+
+\begin{exercise}11. 设$f: X\rightarrow Y$是映射, $x\in X$, $\mathscr{V}$是$f(x)$的一个邻域基. 证明: 如果$\forall V\in \mathscr{V}$, $f^{-1}(V)$是$x$的邻域, 则$f$在$x$连续. 
+\end{exercise}
+\begin{solution}
+定义: 设$x\in X$, 把$x$的所有邻域的集合称为$x$的邻域系, 记作$\mathscr{N}(x)$, $\mathscr{N}(x)$的一个子集(即$x$的一组邻域)$\mathscr{U}$称为$x$的一个邻域基, 如果$x$的每个邻域至少包含$\mathscr{U}$中的一个成员.  ($\mathscr{N}(x)$, $x$的所有开邻域都构成$x$的一个邻域基; 若$\mathscr{B}$是拓扑空间$X$的拓扑基, 则$\mathscr{U}=\{B\in \mathscr{B}|x\in B\}$也是$x$的邻域基. 对度量空间$(X,d)$, 以$x$为心的全部球形邻域的集合$\{B(x,\varepsilon)|\varepsilon>0\}$是$x$的邻域基, $\{B(x,q)|q\text{为正有理数}\}$和$\{B(x,1/n)|n\text{为自然数}\}$也为$x$的邻域基. 
+
+回到原题. 对任意$x$的邻域$U$, 有$V\in \mathscr{V}$使$V\subset U$, 故$f^{-1}(V)\subset f^{-1}(U)$, 而$f^{-1}(V)$是$x$邻域, 故$f^{-1}(U)$也是$x$邻域. 得证.
+\end{solution}
+
+\begin{exercise}12. 证明: 如果$X$是$C_1$空间, 且它的序列最多只能收敛到一个点, 则$X$是Hausdorff空间.
+\end{exercise}
+\begin{solution}
+$C_1$公理: 任一点都有可数的邻域基. (度量空间满足; $(R,\tau_f)$不满足: 设$x\in R$, 则$x$的任意可数邻域族$\mathscr{U}$都不是$x$的邻域基: 对任意$U\in \mathscr{U}$, 都是有限集的余集, 故$\cup_{U\in \mathscr{U}} U^c$是可数集(也是闭集), 取$y\notin \cup_{U\in \mathscr{U}}$且$y\neq x$, 则对任意$U\in \mathscr{U}$, $y\in U$, 同时显然$R\backslash \{y\}$是$x$的开邻域, 但显然它不包含任意$U\in \mathscr{U}$.)
+
+命题: 如果$X$在$x$有可数邻域基, 则$x$有可数邻域基$\{V_n\}$, 使得$m>n$时, $V_m\subset V_n$. (证: 先取一个邻域基, 规定$V_n=\cap_{i=1}^n U_i$, 由$V_n\subset U_n$, 故$\{V_n\}$也是邻域基. )
+
+命题: 若$X$是$C_1$空间, $A\subset X$, $x\in \overline{A}$, 则$A$中存在收敛到$x$的序列. (证明: $x\in \overline{A}$, 故$x$的任意邻域与$A$相交, 从而按上一命题, 存在$\{V_n\}$使后者总包含于前某者, 构造$x_n\in\{A\cap V_n\}$, 得到$A$中序列$\{x_n\}$, 任取$x$的邻域$U$, 存在$n$, $V_n\subset U$, 从而$V_m\subset U, \forall m >n$, 从而收敛到$x$.)
+
+推论: $X$是$C_1$空间, $x_0\in X$, 映射$f:X\rightarrow Y$满足: 当$x_n\rightarrow x_0$时, $f(x_n)\rightarrow f(x_0)$, 则$f$在$x_0$连续. (反证法: 不连续则存在$f(x_0)$的邻域使$f^{-1}(V)$不是$x_0$的邻域, 即其中不存在$x_0$的开集, 从而任意$x_0$的开集都有点存在于$f^{-1}(V)$外, 注意$(f^{-1}(V))^\circ$是包含在$f^{-1}(V)$中的开集, 这说明$x_0\notin (f^{-1}(v))^\circ$, 记$B=f^{-1}(V)$, 从而$x_0\in V\backslash V^\circ = V\cap (V^\circ)^c$, [下证$V^\circ=(\overline{V^c})^c$ (从而$(V^\circ)^c=
+\overline{V^c}$): 任意$x\in V^\circ$, 存在邻域全在$V$中, 故$x\notin \overline{V^c}$, 从而前者包含于后者; 任意后者中的点不属于$\overline{V^c}$, 故存在邻域使与$V^c$不交, 从而都在$V$内, 从而属于$V^\circ$. ]从而$x_0\in \overline{(f^{-1}(V))^c}$, 由上述命题有$(f^{-1}(V))^c$中序列$\{x_n\}, x_n\rightarrow x_0$, 从而由条件, $f(x_n)\rightarrow f(x_0)$, 故几乎对所有$n$, $f(x_n)\in V$, $x_n\in f^{-1}(V)$, 矛盾.)
+
+
+注意, 上面我们证明了一个常用结论: \textbf{对$X$的子集$A$, 有$A^\circ=(\overline{A^c})^c$.}
+
+回到原题. 反证法. 注意, ``反''的不是序列最多收敛到一点, 而是反的Hausdorff空间, 即反$T_2$公理,(任意两点存在它们的邻域彼此不交), 即假设存在两点$x$, $y$, $x$的任意开集都与$y$的任意开集相交, 从而$x$的拓扑基中任一元素与$y$的拓扑基中任一元素相交. 可取命题2.5中用的拓扑基, 可取$x_n\in U_n\cap V_n, \forall n$, 它既收敛到$x$又收敛到$y$, 矛盾. 得证.
+\end{solution}
+
+\begin{exercise}13. 证明$T_3$公理具有可乘性和遗传性.
+\end{exercise}
+\begin{solution}
+定义: 一种拓扑性质称为有遗传性的, 如果一个拓扑空间具有它时, 子空间也必具有它; 一种拓扑性质称为有可乘性的, 如果两个空间都具有它时, 它们的乘积空间也具有它. 
+
+回到原题. 用命题2.4(1)来证. 设$X_1$, $X_2$, 任意点$x_1$, $x_2$, 则$(x_1,x_2)$的任意开邻域$Z$可写为$\cup_{\alpha\in \mathscr{A}}W_{\alpha,1}\times  W_{\alpha,2}$, 至少有一个笛卡尔积, 不妨设$W_1\times W_2$, 包含于$Z$中, 且含有$(x_1,x_2)$. 由$T_3$公理, $x_1$, $x_2$, 存在开邻域$U_1$, $U_2$, $\overline{U}_i\subset W_i$, $i=1,2$, 从而$U_1\times U_2$为$(x_1,x_2)$开邻域, 且由上一节习题2(1)有$\overline{U_1\times U_2}=\overline{U}_1\times\overline{U}_2\subset W_1\times W_2\subset Z$, 故乘积空间也满足$T_3$公理, 可乘性成立. 设$X$的子空间$A$, $x$是$A$中任意一点, 及任意其$A$-开邻域$W$, 从而存在$x$的$X$-开邻域$V$, 使$W=V\cap A$, 存在$x$的$X$-开邻域$U$使$\overline{U}\subset V$, 从而$U\cap A$为$x$的$A$-开邻域, 下证$(\overline{U\cap A})_A\subset W$, 注意这里$(\overline{U\cap A})_A$表$U\cap A$在$A$中的闭包. 由第一节第12题(1)的结论有$(\overline{U\cap A})_A=\overline{U\cap A}\cap A$, 注意到$\overline{U\cap A}\subset \overline{U}$, 故显然有$(\overline{U\cap A})_A\subset V$, 从而$(\overline{U\cap A})_A\subset V\cap A=W$, 从而子空间也满足$T_3$公理, 故有遗传性.
+
+注意: 闭集, 开集等概念对子空间的定义和原空间的定义是不同的; 说闭集时要指明是对谁来说的. 
+\end{solution}
+
+\begin{exercise}14. 证明$C_2$公理具有可乘性和遗传性.
+\end{exercise}
+\begin{solution}
+$C_2$公理: (拓扑空间$X$)有可数拓扑基. 
+
+ 性质: (1)已证拓扑基中所有含有$x$的元素为$x$的邻域基, 故$C_2$公理可推出$C_1$公理. (2)$C_2$空间是可分空间. $X$的子集$A$满足$\overline{A}=X$则称$X$为稠密的, $X$有可数稠密子集则$X$可分. 设$X$有一可数拓扑基$\{B_n\}$, 在每个$B_n$中取一点$x_n$, 则$\{x_n\}$是$X$的可数稠密子集, 这是因为任意$x\in X$, 其任意邻域都包含拓扑基中的某个元素, 而这个元素必含有$\{x_n\}$中的某一点, 从而$x$属于$\{x_n\}$的闭集, 从而$X$有可数稠密子集故$X$可分.
+
+回原题. 若$X_1$与$X_2$都有可数拓扑基$\mathscr{B}_i$, 则构造$\{B_1\times B_2|B_i\in \mathscr{B}_i\}$, 显然是可数集, 且上一节习题(10)已证明这样构造的集合为乘积空间的拓扑基. 故可乘性得证. 当$X$有可数拓扑基$\mathscr{B}$, 设$A$为其子空间, 则构造$\mathscr{B}_A=\{B\cap A|B\in \mathscr{B}\}$, 显然也为可数集, 且任意$A$的开集都可写成$X$的开集交$A$的形式, 故显然可写成$\mathscr{B}_A$中若干元素的并, 故遗传性成立. 
+\end{solution}
+
+\begin{exercise}15. 证明可分度量空间的子空间也是可分的.
+\end{exercise}
+\begin{solution}
+命题 可分度量空间是$C_2$空间. (证明: 设$(X,d)$是可分度量空间, $A$是它的一个可数稠密子集, 记$\mathscr{B}=\{B(a,1/n)|a\in A, n\text{为自然数}\}$, 则$\mathscr{B}$是可数开集族, 下验证$\mathscr{B}$是拓扑基. 用命题1.12, (1)显然成立, 只需要说明任意开集$U\in \overline{\mathscr{B}}$和任意$x\in U$, 存在$a\in A$和自然数$n$, 使$x\in B(a,1/n) \subset U$. (而这只需注意到存在$B(x,\varepsilon)\subset U$.) 下证略. 推论: 取$A=\{(x_1,\cdots,x_n)|\forall i, x_i\text{为有理数}\}$可知$E^n$可分(任意$x\in E^n$, 其邻域必含$A$中点), 从而满足$C_2$公理.
+
+回原题. $X$为可分度量空间, 故由上方命题它为$C_2$的, 由上一习题其子空间也为$C_2$空间, 故由性质(2)知可分. 
+\end{solution}
+
+\begin{exercise}16. 记$\mathscr{B}=\{[a,b)|a<b\}$, 证明拓扑空间$(R,\overline{\mathscr{B}})$不是$C_2$空间.
+\end{exercise}
+\begin{solution}$C_2$空间有可数拓扑基, 是可分的. 下证$(R,\overline{\mathscr{B}})$无可数拓扑基. $[a,a+1)$为开集, 从而在拓扑基中存在成员$U_a$, $a\in U_a\subset[a,a+1)$, 它以$a$为最小值, 显然$a\neq b$时$U_a\neq U_b$, 从而有$R$到拓扑基的单射, 从而不可数. 
+\end{solution}
+
+\begin{exercise}17. 
+\end{exercise}
+\begin{solution}当$a$为有理数时做成的集合为可数的, 且为拓扑基. 故为$C_2$空间. 注意, 证明任意开集$A$可以写成$\overline{\mathscr{B}}$中的成员的并, 等价于证明对任意$x\in A$, 存在$U\in \overline{\mathscr{B}}$, 使$x\in U\subset A$. 用这个等价性可以很容易地证明该题. 
+\end{solution}
+
+\begin{exercise}18.
+\end{exercise}
+\begin{solution}
+定理2.1 (Lindel\"{o}f定理) 若拓扑空间$X$满足$C_2$, $T_3$公理, 则它也满足$T_4$公理. 
+
+证明: 取定$X$的一个可数拓扑基$\mathscr{B}$, 设$F$和$F'$是不相交的闭集, 构造它们的不相交邻域如下: 对任意$x\in F$, $x\notin F'$, 由$T_3$, 有$x$和$F'$的不相交邻域$W$和$W'$, 故$\overline{W}\cap F'=\emptyset$. 取$B\in \mathscr{B}$, 使$x\in B\subset W$, 则$\overline{B}\cap F'=\emptyset$. 记$\{B_1,B_2,\cdots\}$是$\mathscr{B}$中所有闭包与$F'$不相交的成员, 上已证$F\subset \cup_{n=1}^\infty B_n$, 同理有$F'\subset \cup_{n=1}^\infty B'_n$. 记$U_n=B_n\backslash (\cup_{i=1}^n\overline{B'}_i)$, $V_n=B'_n\backslash (\cup_{i=1}^n \overline{B}_i)$, 则$U_n$, $V_n$都是开集, 且$U_n\cap V_m=\emptyset$(不妨设$n\leq m$, 则$x\in U_n$时不可能有$x\in V_n$), 令$U=\cup_{n=1}^\infty U_n$, $V=\cup_{n=1}^\infty V_n$, 则$U\cap V=\emptyset$, 设$x\in F$, 则存在$n$使$x\in B_n$, 故$x\in U_n\subset U$, 从而$U$是$F$的开邻域, 同理$V$是$F'$的开邻域, $U$和$V$是$F$和$F'$的不相交邻域. 
+
+回到原题. (1)任意两个$\tau$中的元素, $U\backslash A$, $V\backslash B$, 有它们的交集为$(U\cap V)\backslash(A\cup B)$, 注意到$(U\cap V)$为$E^1$中开集, $U\backslash A$, $V\backslash B$的交集也在$\tau$中. 从而任意有限个的交也在$\tau$中. 注意到$\cup_{\alpha\in \mathscr{A}} (U_\alpha\backslash A_\alpha)
+=\cup_{\alpha\in \mathscr{A}}  (U_\alpha\cap A^c_{\alpha})=(\cup_{\alpha\in\mathscr{A}} U_\alpha)\cap
+(\cup_{\alpha\in\mathscr{A}} A^c_{\alpha})=(\cup_{\alpha\in\mathscr{A}} U_\alpha)\backslash((\cup_{\alpha\in\mathscr{A}} A^c_{\alpha})^c)$显然也在$\tau$中. 
+
+(2)对任意两点$x$,$y$, 显然存在$E^1$中的开集$U\ni x$, $V\ni y$, 使$U\cap V=\emptyset$, 从而扣除任意无理数后也满足, 故$T_2$满足. $T_3$的等价定义(命题2.4)来举反例并不方便, 故用其原始定义来举反例. 显然, 全体无理数的集合$S$是闭集. 假设$W$是其开邻域(或$W$是其邻域, 则$W^\circ\supset S$, 故$W^\circ$是其开邻域), 则$W=U\backslash A$, 其中$A\subset S$, 显然必有$A=\emptyset$(否则有些无理数在$S$中但不在其开邻域$W$中, 矛盾), 从而$W=U$为欧式空间的开集, 且含有全体无理数. 取$x$为一有理数, 显然其任意开邻域都含有有理数. 从而证明了, 对有理数点$x$和闭集$S$, 它们的任意邻域都有交点. 故$T_3$不成立. 
+
+(3)只需证存在$\mathscr{N}$, 对$x$的开邻域$A$, 存在$B\in \mathscr{N}$使$B\subset A$. 定义$V_n=\{
+B(x, 1/n)\cap Q\}$, 显然为$(R,\tau)$的邻域, 且$\{V_n\}$为可数的, 任意$x$的开邻域$A$都存在某个$n$, 使$V_n\subset A$. 从而满足$C_1$公理. 设$A=R\backslash S$为全部有理数的集合, 显然对任意点$x$, 其任意邻域都含有理数故与$A$相交, 从而为可分空间. 
+
+(4)显然任何$\tau$中的元素与$S$的交为无理数集; 对任意无理数集$A$, 存在$U=E^1$, 使$U\backslash (S\backslash A)$是$\tau$中元素, 且其与$S$的交为$A$. 从而为离散拓扑, 任意单点集为开集, 且单点集族不可数, 故不可分. 
+
+(5)构造子集族: 取$a$为无理数, $(a-1,a)$为$E^1$中的开集, 且扣去其中中除最大的无理数$a$之外的其他无理数
+所有这样的开集构成$\mathscr{U}$, 显然$\mathscr{U}$不可数, 且每个都对应着拓扑基中一个只含有一个无理数的元素, 显然不可数. 故不满足$C_2$公理. (注: 或用反证法, 同(4)一起用.)
+\end{solution}
+
+\subsection{Urysohn引理及其应用}
+
+上一节我们介绍了可数公理和分离公理的概念. 分离公理为: $T_0$: 对任意两点, 存在只包含一个点的邻域. $T_1$: 对任意两点, 存在各自的邻域使均不包含对方的点. $T_2$: 对任意两点, 存在各自的邻域, 它们不交. $T_3$: 对任意一点和不包含此点的闭集, 存在各自的邻域, 它们不交. $T_4$: 对任意两不交闭集, 存在各自的邻域, 它们不交. 满足$T_2$的则成为Hausdorff空间, 它的一个重要性质是一个序列不会收敛到两个以上的点. $T_1$的等价表述为, $X$的有限子集是闭集. $T_3$和$T_4$的等价表述为: 对任意一点和其开邻域, 存在包含该点的另一开邻域, 其闭包在原开邻域中; 对任意一闭集和其开邻域, 存在包含该闭集的另一开邻域, 使其闭包在原开邻域中. $T_1$加$T_4$推出$T_3$, $T_1$加$T_3$推出$T_2$. 可数公理: $C_1$: 任一一点都有可数邻域基. $C_2$: 有可数拓扑基. 可推出$C_2$空间一定是$C_1$空间. 我们还有: $C_2$加$T_3$可推出$T_4$. 
+
+\begin{exercise}1. 证明$Urysohn$引理证明中定义的函数$f$满足$f(x)=\sup\{r\in Q_I|x\notin \overline{U}_r\}
+=\inf\{r\in Q_I|x\in \overline{U}_r\}$.
+\end{exercise}
+\begin{solution}
+定理2.2 (Urysohn引理) 如果拓扑空间$X$满足$T_4$公理, 则对于$X$的任意不相交闭集$A$和$B$, 存在$X$上的连续函数$f$, 它在$A$和$B$上分别取值为$0$和$1$. 
+
+证明: 记$Q_I$是$[0,1]$中的有理数的集合, 是可数集. 证明分两步. (1)用归纳定义原理构造开集族$\{U_r:r\in Q_I\}$, 使(i)当$r<r'$, $\overline{U}_r\subset U_{r'}$; (ii)$\forall r\in Q_I$, $A\subset U_r\subset B^c$. 作法如下: 将$Q_I$随意地排列为$\{r_1, r_2,\cdots\}$, 只须使$r_1=1$, $r_2=0$. 然后对$n$归纳地构造$U_{r_n}$.取$U_{r_1}=B^c$, 是$A$的开邻域. 根据$T_4$的等价定义, 可构造$U_{r_2}$是$A$的开邻域, $\overline{U}_{r_2}\subset U_{r_1}$. 设$U_{r_1},\cdots, U_{r_n}$已构造, 它们满足(i)和(ii), 记$r_{i(n)}
+=\max\{r_l|l\leq n, r_l < r_{n+1}\},r_{j(n)}=\min\{l\leq n, r_l>r_{n+1}\}$, 则$r_{i(n)}< r_{j(n)}$, 因此$\overline{U}_{r_i(n)}\subset U_{r_j(n)}$, 由$T_4$公理的等价定义, 可作$U_{r_{n+1}}$是$\overline{U}_{r_{i(n)}}$的开邻域, 并且$\overline{U}_{r_{n+1}}\subset U_{j(n)}$, 容易验证$U_{r_1},\cdots, U_{r_n}, U_{r_{n+1}}$仍满足(i)和(ii).[注意: 这一段其实是说, 我们用''扑克插牌''的方式, 对$r_{n+1}$个的时候, 按$T_4$构造出$U_{r_{n+1}}$使其为闭集$\overline{U}_{r_{i(n)}}$的开邻域且其闭包$\overline{U}_{r_{n+1}}\subset U_{r_{j(n)}}$, 从而序列在按照无理数$r_1,\cdots r_{n+1}$的大小排列时, 对应的$U$集排列满足(i)和(ii).] (2)规定函数$f: X\rightarrow E^1$为: $\forall x\in X$, 
+$$f(x)=\sup \{r\in Q_I|x\notin U_r\}=\inf\{r\in Q_I|x\in U_r\},$$注意如果$\forall r, x\notin U_r$, 则用第一式的定义, 如果$\forall r, x\in U_r$, 则用第二式的定义, 余下的情形两式值相等. [注意: 由于$U_r$按$r$的从小到大的顺序排列时, 后一个包含前一个, 从而若$r=\inf\{r\in Q_I|x\in U_r\}$, 则对于大于$r$的任意下标$r'$有$x\in U_{r'}$, 且对小于$r$的任意下标$r'$, $x\notin U_{r'}$, 可见对这样的$x$两式值相等.] 因为$A\subset U_r, \forall r\in Q_I$, 所以$f$在$A$上各点的值都是$0$; 同理$f$在$B$上各点取值为$1$. 下证$f$连续: 即证对任何开区间$(a,b)$, $f^{-1}(a,b)$是$X$的开集, 即每一点都是内点. 由$f$的定义, $\forall r\in Q_I$, (a)若$ x\in U_r$, 则$f(x)\leq r$, (b)若$x\notin U_r$, 则$f(x)\geq r$, 且显然$0\leq f(x)\leq 1, \forall x\in X$. 设$x\in f^{-1}(a,b)$, 即$a < f(x) < b$要证$x$有开邻域包含在$f^{-1}(a,b)$中. 若$f(x)\neq 0,1$, 则可取$r,r',r''\in Q_I$, 使$a<r'<r''<f(x)<r<b$. 由(a)知 $x\notin U_{r''}$, 故$x\notin U_{r'}$, 由(b)知$x\in U_r$, 故$U_r\cap \overline{U}^c_{r'}$是$x$的开邻域, 其中任一点$y$, 有$a<r'\leq f(y)\leq r<b$, 故$U_r\cap \overline{U}^c_{r'}\subset f^{-1}(a,b)$. [如果$f(x)=0$或$f(x)=1$, 可分别取$r<b$, $U_r$和$a<r'<r''$, $\overline{U}^c_{r'}$, 都为$(a,b)$的开集.] 得证.
+
+回到原题. $r=\inf\{r\in Q_I|x\in U_r\}$, 则对于大于$r$的任意下标$r'$有$x\in U_{r'}$, 且对小于$r$的任意下标$r'$[若不存在, 则说明$r=0$, 这种情况平凡], $x\notin U_{r'}$, 从而$x\in \overline{U}_{r'}$, 而对于小于$r$的任意下标$r''$, 有$r'$使$r''<r'<r$, 故$x\notin U_{r'}\supset \overline{U}_{r''}$. 从而$\inf\{r\in Q_I|x\in U_r\}=\inf\{r\in Q_I|x\in \overline{U}_r\}$. 另一半同理可证. 
+\end{solution}
+
+\begin{exercise}2. 设$X$满足$T_4$公理, $A$是$X$的闭子集, 则连续映射$f: A\rightarrow E^n$可扩张当$X$上.
+\end{exercise}
+\begin{solution}
+定理2.3 (Tietze扩张定理) 如果$X$满足$T_4$公理, 则定义在$X$的闭子集$F$上的连续函数可连续第扩张到$X$上.
+
+证明: (1)设$f: F\rightarrow E^1$连续, 且$f(F)\subset[-1,1]$, 记$A=f^{-1}([-1,-1/3]), B=f^{-1}([1/3,1])$, 则$A$, $B$是$F$的不相交闭子集, 因为$F$是$X$的闭集, 故$A$, $B$也是$X$的闭集. 由Urysohn引理, 可作$X$上的连续函数$\phi_1$, 使$\phi_1(X)\subset [-1/3,1/3]$, 并且$\phi_1$在$A$和$B$上分别取值$-1/3$和$1/3$, 令$f_1=f-\phi_1: F\rightarrow E^1$, 则$f_1(F)\subset[-2/3,2/3]$. 用$f_1$替代$f$重复以上过程, 构造出$X$上连续函数$\phi_2$, 使$\phi_2(X)\subset[-2/9,2/9]$, $F$上的连续函数$f_2=f_1-\phi_2=f-\phi_1-\phi_2$满足$f_2(F)\subset[-4/9,4/9]$. 不断重复, 归纳地作出$X$上的连续函数序列$\{\phi_n\}$, 使得$\phi_n(X)\subset[-\frac{2^{n-1}}{3^n},\frac{2^{n-1}}{3^n}]$; $|f(x)-\sum_{i=1}^n\phi_i(x)|\leq \frac{2^n}{3^n}, \forall x\in F.$ 根据$(i)$, 函数$\widetilde{f}\equiv \sum_{n=1}^\infty\phi_n$有意义, 连续, 且$|\widetilde{f}(x)|\leq 1, \forall x\in X$, 根据(ii), $\widetilde{f}(x)=f(x),\forall x\in F$, 即$\widetilde{f}$是$f$的扩张. (2)设$f$是$F$上的连续函数, 不一定有界. 规定$f': F\rightarrow E^1$为$f'(x)=\frac{2}{\pi}\arctan (f(x)),\forall x\in F$, 则$f'(F)\subset(-1,1)$. 由(1), 有$f'$的扩张$\widetilde{f}': X\rightarrow E^1$, $\widetilde{f}'$连续, 且$\widetilde{f}'(X)\subset [-1,1]$, 集$E=(\widetilde{f}')^{-1}(\{-1,1\})$, 则$E$是$X$的闭集, 且$F\cap E=\emptyset$. 根据Urysohn引理, 存在$X$上的连续函数$h$, $h(X)\subset[0,1]$, 且$h$在$E$和$F$上分别取值$0$和$1$. 于是对任意$x\in X$, $h(x)\widetilde{f}'(x)\in (-1,1)$, 因此可规定$\widetilde{f}:X\rightarrow E^1$为$\widetilde{f}(x)=\tan(\frac{\pi}{2}h(x)\widetilde{f}'(x)),\forall x\in X$, 则$\widetilde{f}$连续, 且当$x\in F$时, 因为$h(x)=1$, 故$\widetilde{f}(x)=f(x)$. 从而$\widetilde{f}$是$f$的扩张. 得证.
+
+回到原题. 设$g_i: E^n\rightarrow E^1$, 满足$g_i(x)=x_i$, 则根据Tietze扩张定理, 存在$f_i=
+g_i\circ f: A\rightarrow E^1$的扩张: $\widetilde{f}_i: X\rightarrow E^1$. 令$\widetilde{f}=(\widetilde{f}_1,\cdots, \widetilde{f}_n)$, 显然为$f$的扩张. 
+\end{solution}
+
+\begin{exercise}3. 拓扑空间$Y$的子集$B$称为$Y$的一个收缩核, 如果存在连续映射$r: Y\rightarrow B$, 使得$\forall x\in B, r(x)=x;$ 称$r$为$Y$到$B$的一个收缩映射. 设$D$是$E^n$的收缩核, $X$满足$T_4$公理, $A$是$X$的闭集, 证明连续映射$f:A\rightarrow D$可扩张到$X$上. 
+\end{exercise}
+\begin{solution}设$i:D\rightarrow E^n$为包含映射, 由于$D$为$E^n$的收缩核, 故存在映射$r:E^n\rightarrow D$使$\forall x\in D$ 有$r(x)=x$, 从而$r\circ i:D\rightarrow D$为恒同映射. 由上一题结论, 连续映射$F=i\circ f$ 可扩张为$\widetilde{F}: X\rightarrow E^n$, 则可证明$\widetilde{f}=r\circ \widetilde{F}$为$f$的扩张. 
+\end{solution}
+
+\begin{exercise}4. 设$S^n = \{(x_1,\cdots x_{n+1})\in E^{n+1}|\sum_{i=1}^{n+1}x^2_i=1\}$ 为$n$维球面, $X$满足$T^4$公理. 证明从$X$的闭集$A$到$S^n$的连续映射可扩张到$A$的一个开邻域上. 
+\end{exercise}
+\begin{solution}
+定义: 一个拓扑空间$(X:\tau)$称为可度量化的, 如果可以在集合$X$上规定一个度量$d$, 使$\tau_d=\tau$.
+
+命题2.8 拓扑空间$X$可度量化$\Longleftrightarrow$存在从$X$到一个度量空间的嵌入映射. (证明: ``$\Longrightarrow$'': 显然. ``$\Longleftarrow$'': 设$f: X\rightarrow(Y,d)$为嵌入映射, 记$B=f(X)$, $d_B$是$d$在$B$上诱导的度量, 则$f:X\rightarrow(B,d_B)$是同胚, 规定$X$山的度量$\rho$为: $\rho(x,x')=d_B(f(x),f(x'))$, 则$f^{-1}:(B,d_B)\rightarrow (X,\rho)$是保持度量的一一对应, 从而是同胚. 于是$\text{id}=f^{-1}\circ f: X\rightarrow (X,\rho)$是同胚, 即$\tau_\rho$是$X$原有拓扑. )
+
+定理2.4 (Urysohn 度量化定理) 拓扑空间$X$如果满足$T_1$, $T_4$和$C_2$公理, 则$X$可以嵌入到Hilbert空间$E^\omega$中. 
+
+证明: 取$X$的可数拓扑基$\mathscr{B}$, $\mathscr{B}$中两个成员$B$与$\widetilde{B}$若满足$\overline{B}\subset \overline{B}$, 就称为一个典型对. 把所有典型对(是可数的)排列好, 记为$\pi_1,\pi_2,\cdots, \pi_n,\cdots$, 对任意$n$, $\pi_n$由$B_n$和$\overline{B}_n$生成. 由于$X$满足$T_4$公理, 用Urysohn引理可构造连续函数$f_n:X\rightarrow E^1$, 使得$f_n$在$\overline{B}_n$上取值为$0$,  在$\widetilde{B}^c_n$上取值为$1$, $\forall n$. (如果典型对只有$M$对, 则$n>M$时, 让$f_n=0$)规定$f: X\rightarrow E^\omega$为 $f(x)=(f_1(x),\frac{1}{2}f_2(x),\cdots,\frac{1}{n}f_n(x),\cdots), \forall x\in X$, $f$是单的. [根据$T_1$公理, 当$x\neq y$时, 必有$\widetilde{B}\in \mathscr{B}$, 使$x\in \widetilde{B}, y\notin \widetilde{B}$, 再由$T_4$公理, 注意到$\{x\}$为闭集, 故存在$B\in \mathscr{B}$, 使得$x\in B, \overline{B}\subset \widetilde{B}$, 设$B$与$\widetilde{B}$是典型对$\pi_n$, 则$f_n(x)=0$, $f_n(y)=1$, 则$f(x)\neq f(y)$.] 由于$X$与$E^\omega$都是$C_1$空间, 连续性可用序列语言描述(见命题2.6的推论: 若$X$是$C_1$空间, $x_0\in X$, 映射$f:X\rightarrow Y$满足$x_n\rightarrow x_0$时, $f(x_n)\rightarrow f(x_0)$, 则$f$在$x_0$连续. ), 故为证$f$是嵌入映射只要验证: 对任意序列$\{x_n\}$, $x_k\rightarrow x\Longleftrightarrow f(x_k)\rightarrow f(x)$. ``$\Longrightarrow$'': 用$f_i$连续, 略. ``$\Longleftarrow$'': 只须证$x_k$不收敛到$x$时, $f(x_k)$不收敛到$f(x)$. 取$x$的开邻域$\widetilde{B}\in \mathscr{B}$, 使无穷多个$x_k\notin \widetilde{B}$, 取$B\in \mathscr{B}$, 使$x\in B$, $B$与$\widetilde{B}$($B$存在是因为$\{x\}$是闭集且满足$T_4$公理), 构成典型对$\pi_n$, 于是对无穷多个$k$, $f_n(x_k)-f_n(x)=1$, 从而$\rho(f(x_k),f(x))\geq 1/n$, 从而$f(x_k)$不收敛到$f(x)$. 
+
+回到原题. 定义$r:  E^{n+1}\backslash\{0\} \rightarrow S^n$, $x\mapsto x/||x||$.  $i\circ f: A\rightarrow E^{n+1}$可以扩张为$\widetilde{f}: X\rightarrow E^{n+1}$, 则$r\circ \widetilde{f}: f^{-1}(\widetilde{f}(X)\backslash \{0\})\rightarrow S^1$ 显然为扩张.  
+\end{solution}
+
+
+\subsection{紧致性}
+
+\begin{exercise}1. 证明$(R,\tau_f)$的任何子集都紧致; 证明$(R,\tau_c)$不紧致.
+\end{exercise}
+\begin{solution}
+定义: 拓扑空间称为列紧的, 如果它的每个序列有收敛(即有极限点)的子序列. 
+
+命题: 定义在列紧拓扑空间$X$上的连续函数$f: X\rightarrow E^1$有界, 并达到最大, 最小值. 
+
+定义: 拓扑空间称为紧致的, 如果它的每个开覆盖有有限的子覆盖. (按定义, 有限拓扑空间荣获拓扑空间的拓扑为有限集则为紧致. $(R,\tau_f)$为紧致的, 因其每个开覆盖中必有非空开集$U$, $U$的余集为有限集, 故再取$\mathscr{U}$中有限个开集覆盖$U^c$, 它们与$U$一起构成$\mathscr{U}$的一个有限字符该. $E^1$不是紧致的: 如选$\mathscr{U}=\{(-\infty,a)|a\in R\}$.
+
+ 回原题: 由于$(R, \tau_f)$子集$A$的任何开覆盖都对应$(R,\tau_f)$中某个开覆盖(其元素交上$A$即得$A$的那个有限开覆盖), 而后者有有限子覆盖, 故交上$A$便得$A$的有限子覆盖. 故其任何子集都紧致. $(R,\tau_c)$不紧致是因为, 对其开覆盖$\mathscr{U}=\{((Q\backslash\{q\})\cup\{r\})^c|r\text{为无理数},q\in Q\}$, 其子覆盖必含有所有有理数, 故必含有所有有形如$((Q\backslash\{q\})\cup\{r\})^c$的集合, 故不可数. 
+\end{solution}
+
+\begin{exercise}2. 按下列步骤证明列紧度量空间紧致. 步骤(1)-(4)见下. 
+\end{exercise}
+\begin{solution}
+下面证明对于度量空间, 列紧与紧致等价.
+
+命题2.10 紧致$C_1$空间是列紧的. (注显然度量空间是$C_1$的: 可选邻域基为$\{B(x,1/n)\}$) (证明: 设$\{x_n\}$是紧致$C_1$空间$X$的一个序列, 要证明它有收敛的子序列, 分两步进行: (1)用紧致性证明存在$x\in X$, 它的任意邻域都含有$\{x_n\}$中的无穷多项: 假设任意点$x\in X$可找到其开邻域$U_x$只含$\{x_n\}$的有限多项, 故$\{U_x|x\in X\}$为$X$的开覆盖, 但$\{x_n\}$不能被任一有限子族盖住, 故不存在有限子覆盖, 矛盾. (2)设$x$的任意邻域都含$\{x_n\}$的无穷多项, 因$X$是$C_1$的, 故可取$x$的可数邻域基$\{U_n\}$, $m>n$时$U_m\subset U_n$, 取$x_{n_i}$是$x_n$包含在$U_i$中那些项的第$i$个, 故$n_{i+1}>n_i$, 有$\{x_{n_i}\}$(以$i$为指标)为$\{x_n\}$的子序列, 且$x_{n_i}\rightarrow x$. 得证.) (从而度量空间, 因为满足$C_1$, 故紧致度量空间是列紧的.)
+
+定义 度量空间$(X,d)$的子集$A$称为$X$的一个$\delta$-网, 如果$\forall x\in X$, $d(x, A)<\delta$, 或$\cup_{a\in A}B(a,\delta)=X$. 
+
+命题: 对任意$\delta>0$, 列紧度量空间存在有限的$\delta$-网. (证: 假设不然, 则存在$\delta_0$, 对任意子集, 都有点到其距离大于$\delta_0$. 用此可构造序列, 对任意$n$, 第$x_n$项与前$n-1$项距离都大于$\delta_0$, 显然无收敛子列. 与列紧性矛盾.) (由该命题得到: 列紧度量空间一定有界, 证略.) 
+
+设$\mathscr{U}$是列紧度量空间$(X,d)$的一个开覆盖, 且$X\notin \mathscr{U}$, 定义$\phi_{\mathscr{U}}: X\rightarrow E^1$为 $\phi_{\mathscr{U}}(x)=\sup \{d(x,U^c)|U\in \mathscr{U}\}, \forall x\in X$, 因$X$有界, 有$M$使$d(x,y)\leq M$, 故当$U\neq x$时, $d(x,U^c)\leq M$, 又由于$\mathscr{U}$是开覆盖, 存在$U\in \mathscr{U}$, 使$x\in U$, 故$\phi_{\mathscr{U}}\geq d(x,U^c)>0$. 再验证$\phi_{\mathscr{U}}$连续: 对任意$x, y$, $d(y, U^c)=\inf\{d(y,a)|a\in U^c\}\leq \inf \{d(x,y)+d(x,a)|a\in U^c\}=d(x,y)+d(x,U^c)$, 故$\phi_{\mathscr{U}}(y)\leq d(x,y)+\phi_{\mathscr{U}}(x), 再可证|\phi_{\mathscr{U}}(x)-\phi_{\mathscr{U}}(y)|\leq d(x,y)$. 故$\phi_{\mathscr{U}}$连续. 
+
+定义 $\mathscr{U}$是列紧度量空间$(X,d)$的一个开覆盖, $X\notin \mathscr{U}$, 称函数$\phi_{\mathscr{U}}$的最小值为$\mathscr{U}$的Lebesgue数, 记作$L(\mathscr{U})$. 
+
+命题: $L(\mathscr{U})$是正数, 且当$0<\delta<L(\mathscr{U})$时, 对任意$x\in X$, $B(x,\delta)$必包含在$\mathscr{U}$的某个开集$U$中. (证: 列紧说明最小值可取到, 故大于零; 后者显然.)
+
+命题 列紧度量空间是紧致的. (证明: $(X,d)$是列紧度量空间, 对它的开邻域$\mathscr{U}$找出有限子覆盖: 不妨设$\mathscr{U}$不含$X$, 从而由Lebesgue数, 取$\delta<L(\mathscr{U})$, 令$A=\{a_1,\cdots,a_n\}$为$X$的$\delta$-网(存在性上面已证), 故$\cup_{i=1}^nB(a_i,\delta)=X$, 且由上一命题有$U_i\in \mathscr{U}$使$B(a_i,\delta)\subset U_i$. 得证.)
+
+定理: $X$是度量空间, 则$X$列紧$\Longleftrightarrow X$紧致. (注: 上面一系列命题就是为了证明此定理. 再次把思路列一下: (1)证明紧致度量空间(度量空间是$C_1$的)是列紧的, 比较容易, 只须对任意序列, 存在点$x\in X$, 其任意邻域都有$\{x_n\}$的无穷多项. 反证法即可: 若任一点都存在邻域含有有限多项, 这些邻域构成开覆盖, 有有限子覆盖, 含有有限多项, 与无穷序列矛盾. 再由$C_1$空间任一点可找到邻域基使后面的包含于前面的, 从而总可找到收敛子序列. (2)反过来, 列紧度量空间来证紧致, 先证列紧度量空间存在有限子集, 这些点以$\delta$为半径的开球邻域覆盖整个空间. 也用反证法, 若存在$\delta_0$使任意有限集的开球邻域的并不为整个空间, 可归纳地构造序列使每两点距离都大于$\delta_0$. 与列紧矛盾. 再证, 对列紧度量空间的开覆盖, $x$到开覆盖元素的余集的距离的上确界, 所有[$x$的这个上确界]的集合中, 最小值是一个正数(这要通过$X$列紧及函数的连续性来证明), 取$\delta<$这个数. 结合命题2.11即可证明结论. 
+
+一般地, $E^n$的子集$A$紧致的充分必要条件是$A$为有界闭集. 
+
+本题要求按以下步骤证明列紧度量空间紧致: 
+
+\textsl{(1)若$X$列紧, 则每个可数开覆盖有有限子覆盖.}
+
+证明: 反证法. 设可数开覆盖$\{U_n\}$不存在有限子覆盖, 取$x_1$, 不妨设$U_1\ni x_1$, 再任取$U_1$外的$x_2$, 不妨设$U_2\ni x_2$; 一般地取$x_n\in (X\backslash (\cup_{i=1}^{n-1} U_i))$, 故存在$U_n\ni x_n$, 得到无穷序列$\{x_n\}$, 且$x_n\notin U_i$, $i=1,\cdots, n-1$. 由列紧, $\{x_n\}$有收敛子列$x_{n_i}$收敛到$x$, 由于度量空间是$C_1$的, 故必可找到$x$的邻域基$\{V_n\}$, $V_{n-1}\supset V_n$, $\forall n$. 存在$x$的开覆盖$U_m\in \{U_n\}$,  使$V_M\subset U_m$; 且存在$N$, 使当$i>N$时, 总有$x_{n_i}\in V_M\subset U_m$, 但有序列的构造方式, 必有$x_n\notin U_m$, 当$n>m$, 故矛盾! 从而原命题得证. 
+
+\textsl{(2)若$X$满足$C_2$公理, 则$X$的每个开覆盖有可数子覆盖.}
+
+证明: $X$满足$C_2$公理, 从而$X$有可数拓扑基, 对$X$的每个开覆盖, 每个元素(开集都是若干拓扑基中元素(开集)的并, 故$X=$所有开覆盖的元素的并$=$[是开覆盖中某个开集的子集的拓扑基的元素]的并, 而最后一者是可数个的并. 把这些拓扑基中的元素(由于是可数个)记为$V_1$, $V_2,\cdots$, 对每个$V_i$, 按上所述, 必有某个开覆盖中的元素$U_i$包含它, 从而$X=\cup_{i=1}^\infty V_i \subset \cup _{i=1}^\infty U_i$. 得证.
+
+\textsl{(3) 如果$X$满足$C_2$公理, 则$X$列紧$\Longrightarrow X$ 紧致}
+
+证: 由(1)和(2)即得. 
+
+\textsl{(4) 列紧度量空间满足$C_2$公理, 从而紧致. }
+
+证: 由命题2.11(对任意$\delta>0$, 列紧度量空间存在有限的$\delta$-网), 可对$\delta_n=1/n$找到有限的$\delta_n$-网, 对所有$n$, 然后记它们的并为$A$, $A$是可数个有限集的并故仍可数, 且显然任意$x$的任意邻域$B(x,\varepsilon)$, 存在充分小的$\delta_n$($n$足够大), 与该邻域相交. 从而得到列紧度量空间为可分的, 从而满足$C_2$公理(见第四节定理). 从而紧致.  得证.
+\end{solution}
+
+\begin{exercise}3. 有限个紧致子集之并集紧致.
+\end{exercise}
+\begin{solution}
+定义: 一个拓扑空间$X$的子集$A$如果作为子空间是紧致的, 就称为$X$的紧致子集. $X$中一个开集族$\mathscr{U}$如果满足$A\subset \cup_{U\in\mathscr{U}} U$, 则称$\mathscr{U}$是$A$在$X$中的一个开覆盖.
+
+回原题. 对设有限个紧致子集为$A_i$, $i=1,\cdots, n$. 对$A=\cup_{i=1}^n A_i$的任意开覆盖$\mathscr{U}$, $\mathscr{U}_i=\{U\cap A_i| u\in \mathscr{U}\}$显然为$A_i$的开覆盖(注意, $A_i$的开集可从$A$的开集诱导出, 也可从$X$的开集诱导出, 第一节已经证明是一样的, 也就是说若$U$为$A$的开集, 则$U\cap A_i$的确是$A_i$的开集), 由于$A_i$是紧致子集, 故$A_i$在$X$中的任意开覆盖有有限子覆盖, 这个子覆盖的元素若并上$A_i$就是$A_i$的开覆盖中的元素, 所欲这个子覆盖中的任意元素都是$\mathscr{U}$中的元素. 由于这个过程对每个$i=1,\cdots, n$成立, 故把所有这些子覆盖求并, 即得$\mathscr{U}$的一个有限子覆盖. 从而$A$紧致. 得结论. 
+\end{solution}
+
+\begin{exercise}4. 设$A$是度量空间$(X,d)$的紧致子集, 则
+(1) 规定$A$的直径$D(A)=\sup\{d(x,y)|x,y\in A\}$. 证明存在$x,y\in A$, 使$d(x,y)=D(A)$; (2) 若$x\notin A$, 则存在$y\in A$, 使得$d(x,y)=d(x,A)$; (3) 若$B$是$X$的闭集, $A\cap B=\emptyset$, 则$d(A,B)\neq 0$.
+\end{exercise}
+\begin{solution}
+定义: 一个拓扑空间$X$的子集$A$如果作为子空间是紧致的, 就称为$X$的紧致子集. $X$中一个开集族$\mathscr{U}$如果满足$A\subset \cup_{U\in\mathscr{U}} U$, 则称$\mathscr{U}$是$A$在$X$中的一个开覆盖.
+
+命题: $A$是$X$的紧致子集$\Longleftrightarrow A$在$X$中的任一开覆盖有有限子覆盖. (证明: ``$\Longrightarrow$'': 设$\mathscr{U}$是$A$在$X$中的开覆盖, 则$\mathscr{U}_A=\{U\cap A|U\in \mathscr{U}\}$是$A$的开覆盖. 因为$A$紧致, 故$\mathscr{U}_A$有有限子覆盖$\{U_i\cap A|i=1,\cdots,n\}$. 则$\{U_i|i=1,\cdots,n\}$是$\mathscr{U}$的有限子覆盖. ``$\Longleftarrow$'': 对任意$A$的开覆盖$\mathscr{V}$, 可做成$A$在$X$中的开覆盖, 有有限子覆盖, 从而$\mathscr{V}$有有限子覆盖. 故$A$紧致. 
+
+命题: 紧致空间的闭子集紧致. (证明: 由上一命题只需证闭子集$A$在$X$中的任意开覆盖有有限子覆盖. 由于$A^c$是开集, 故$A$的开覆盖添加$A^c$后得$X$的开覆盖, 由于$X$紧致, 故存在子覆盖, 且必包含$A^c$, 故子覆盖中去掉$A^c$即为$A$的原开覆盖的有限子覆盖.)
+
+ 命题: 紧致空间在连续映射下的像也紧致.  (证: 设$X$紧致, 映射$f:X\rightarrow Y$连续, 要证$f(X)$是$Y$的紧致子集. 设$\mathscr{U}$是$f(X)$在$Y$中的开覆盖, 则$\{f^{-1}(U)|U\in\mathscr{U}\}$是$X$的开覆盖, 有子覆盖$\{f^{-1}(U_1),\cdots, f^{-1}(U_n)\}$, 故$X=\cup_{i=1}^nf^{-1} (U_i)$, 故$f(X)\subset \cup_{i=1}^n U_i$, 故$\{U_i,i=1,\cdots, n\}$是$\mathscr{U}$的子覆盖, 得证. 可见, 紧致是拓扑性质.)
+ 
+ 推论: 定义在紧致空间上的连续函数有界, 并且达到最大最小值. (证明: 设$X$紧致, $f: X\rightarrow E^1$连续, 故$f(X)$是$E^1$上的紧致子集, 故是$E^1$的有界闭集, 故$f$是有界的, 设$a$, $b$分别是$f(X)$的最大, 最小值, 则有$x_1$, $x_2\in X$, 使$f(x_1)=a, f(x_2)=b$, 即$f$在$x_1$, $x_2$处达最大最小值. 
+
+注意, 到此为止我们没有证的是, (列紧性推出)有界闭区间上连续函数是有界的, 可达最大最小值; 有界闭区间上每个序列都有收敛子序列(从而有界闭区间列紧), $E^n$的子集$A$紧致的充分必要条件是$A$为有界闭集. 由于这些是分析中的结论, 与列紧性更接近, 就不在这里再证了. 
+
+ 回到原题. (1)$D(A)=\sup\{\sup\{d(x,y)|x\in A\}|y\in A\}$, $f_y(x)=d(x,y)$为连续函数, 可取到最大值, 设为$f_y(x_0)$, 则$g(y)=f_y(x_0)=d(x_0,y)$也可取到最大值. 注这里用到的主要是上方的推论, 以及$A$是紧致子集的条件. 本题也可用列紧性证, 见答案. (2)$d(x,\cdot): A\rightarrow E^1$是定义在紧致子集$A$上的连续函数. 下略. (3) 反证法, 由定理2.7, $d(A,B)$是闭集$A\times B$上的连续函数, 能取到最小值, 若$d(A,B)=0$则(因能取到最值)存在$d(x,y)=0$从而必$x=y$, 矛盾. 
+\end{solution}
+
+\begin{exercise}5. 证明紧致空间的无穷子集必有聚点(Bolzano-Weierstrass性质). 
+\end{exercise}
+\begin{solution}
+设紧致空间为$X$, 无穷子集为$A$, 若$x$是其聚点, 则$x$的任意(开)邻域都与$A\backslash\{x\}$有交点. 
+
+反证法. 假设$X$中任意一点都不是$A$的聚点, 则对任意$x\in X$, 存在$x$的开邻域$U_x$, 使其与$A\backslash\{x\}$无交点. 则有$X=\cup_{x\in X}U_x$, 故$\mathscr{U}=\{U_x|x\in X\}$为$X$的一个开覆盖, 则必有有限子覆盖, 设为$U_{x_1},\cdots, U_{x_n}$. 从而$U_{x_i}\cap( A\backslash\{x_i\})=\emptyset$,从而$U_{x_i}\cap A\subset \{x_i\}$, $i=1,\cdots, n$, 从而$A=X\cap A=(\cup_{i=1}^n  U_{x_i})\cap A\subset
+\{x_1,\cdots, x_n\}$, 与$A$为无限集矛盾! 故得证.
+\end{solution}
+
+\begin{exercise}6. 如果$X$的每个紧致子集都是闭集, 则$X$的每个序列不会有两个或以上的极限点.
+\end{exercise}
+\begin{solution}
+第四节命题2.2中已证明了Hausdorff空间中一个序列不会收敛当两个以上的点. 这是因为一旦$x_n\rightarrow x$, 则其任意邻域含有几乎所有的项, 但假若还有另一个收敛点$x_0$, 则存在$x$和$x_0$的不交邻域. 
+
+命题2.17 若$A$是Hausdorff空间$X$的紧致子集, $x\notin A$, 则$x$与$A$有不相交的邻域. (证明: 任意两点$x$与$y$有不交邻域$U_y$和$V_y$, 则$\{V_y|y\in A\}$为$A$在$X$中的开覆盖, 有子覆盖$\{V_{y_1},\cdots, V_{y_n}\}$, 它们的并, 以及$U_{y_1},\cdots, U_{y_n}$的交都是开集(后者是开集使依赖于条件''有限个开集的交是开集''), 且分别是$A$和$x$的邻域, 显然$U\cap V$为空. $U$, $V$即为所求. 
+
+推论: Hausdorff空间的紧致子集是闭集. (注意闭集定义是其中任一点的任意邻域与该集相交.)
+
+定理2.6 设$f:X\rightarrow Y$是连续的一一对应, 其中$X$紧致, $Y$是Hausdorff空间, 则$f$是同胚. (证: 要证$f^{-1}: Y\rightarrow X$连续, 只须证$f$是闭映射. 设$A$是$X$的闭集, 则$A$紧致(见之前的命题), 故$f(A)$为$Y$的紧致子集(见之前命题), 则$f(A)$是$Y$的闭集(上一命题).)
+
+回到原题. 注意到单点集总是紧致的, 故$X$满足$T_1$公理. 设$X$的一个序列收敛到$a$和$b$, 则$X\backslash \{b\}$是包含$a$的开集, 必定包含$\{x_n\}$几乎所有项, 故$\{x_n\}$只有有限项为$b$. 作子集$A=\{x_n|x_n\neq b\}\cup\{a\}$, 则$A$紧致(这是因为$a$的任意开邻域含有其中几乎所有项), 从而$A$为闭集, $A^c$是$b$的开邻域, 最多只能含$\{x_n\}$的有限多项. 故不收敛到$b$. 得证.
+\end{solution}
+
+\begin{exercise}7. 证明紧致度量空间是可分的, 从而是$C_2$空间.
+\end{exercise}
+\begin{solution}
+仿照2题(4)的做法: 紧致度量空间显然存在有限的$\delta$-网. 令$\delta_n=1/n$, $n=1,2,\cdots$, 得到的$\delta_n-$网的并显然是可数集, 且是稠密的. 再用可分空间一定是$C_2$空间得证.
+
+ 注: 回顾一下如何从可分度量空间得到$C_2$空间的(命题2.7): 可分度量空间存在可数稠密子集, 则其中所有点的所有以$1/n,n=1,2,\cdots$为半径的开球为拓扑基. 验证是拓扑基要证: $\mathscr{B}\subset \tau$, $\tau\subset\overline{\mathscr{B}}$, 前者显然, 后者的证明也并不难. 
+ \end{solution}
+  
+\begin{exercise}8. 如果$X\times Y$紧致, 则$X$与$Y$都紧致.
+\end{exercise}
+\begin{solution}
+紧致性无遗传性但有可乘性. 
+
+引理: 设$A$是$X$的紧致子集, $y$是$Y$中的一点, 在乘积空间$X\times Y$中, $W$是$A\times\{y\}$的邻域, 则存在$A$和$y$的开邻域$U$和$V$, 使$U\times V\subset W$. (证明: 对$x\in A$, $(x,y)$是$W$的内点, 因此可作$x$,$y$的开邻域$U_x$, $V_x$, 使$U_x\times V_x\subset W$. $\{U_x|x\in A\}$是$A$在$X$中的开覆盖. 下面的证明与命题2.17(即证明$A$是Hausdorff空间$X$的紧致子集, 则任意不属于其的点$x$与其有不相交邻域)的证明精神是一样的(用到有限开邻域都是因为只有有限个开集的交才是开集), 故略. )
+
+定理2.7 若$X$与$Y$都紧致, 则$X\times Y$也紧致. (证明: 固定$y$, 有$X\times\{y\}\cong X$, 则$X\times Y$的开覆盖$\mathscr{U}$有有限个开集, 其并是$X\times \{y\}$的邻域. 由引理, 有$y$的开邻域$V_y$使$X\times V_y\subset W_y$, 因而$X\times V_y$被$\mathscr{U}$中有限个开集覆盖, (但此时$Y$与$V_y$的关系可能还是无限的!) 故$\{V_y|y\in Y\}$为紧致空间$Y$的开覆盖, 有子覆盖$\{V_{y_1},\cdots, V_{y_n}\}$, 即$X\times Y=\cup_{i=1}^n(X\times V_{y_i})$, 其中每个$X\times V_{y_i}$都被$\mathscr{U}$中有限个开集覆盖, 故$X\times Y$也被$\mathscr{U}$中有限个开集覆盖. 得证.)  这个证明的过程是: 通过$X\times\{y\}$与$X$同胚, 先来找前者的有限子覆盖; 对前者的每一个, 有存在各分量(即$X$和$y$)的开邻域, 再说明$X$的开邻域显然就是$X$, $y$de开邻域$V_y$, 由$\{V_y\}$构成$Y$的覆盖故也有有限开覆盖, 从而$X\times Y=\cup_{i=1}^n(X\times V_{y_i})$, 每一个都被$\mathscr{U}$中有限个覆盖(它们的并是$W_{y_i}$). 
+
+回原题. 对$X$的任意开覆盖, 其任意元素$\times Y$再做成集合显然是$X\times Y$的开覆盖, 从而有有限子覆盖, 再去掉$\times Y$即得$X$的有限子覆盖.
+\end{solution}
+
+\begin{exercise} 9. $X$的子集族$\mathscr{A}$`称为有核的, 如果$\mathscr{A}$中任何有限个成员之交非空. 证明: $X$紧致$\Longleftrightarrow X$的任何有核闭集族$\mathscr{A}$之交$\cap_{A\in\mathscr{A}}A\neq \emptyset$.
+\end{exercise}
+\begin{solution}
+``$\Longrightarrow$'': $\mathscr{A}$为$X$的有核闭集族, 则$\mathscr{B}=\{A^c|A \in \mathscr{A}\}$, 都为开集, 且任意有限个成员之并$U$不等于$X$. 假设$\cup_{B\in \mathscr{B}} B=X$, 则由$X$紧致, 则必有有限开覆盖, 矛盾! 故$\cup_{B\in \mathscr{B}} B\neq X$, 得证. ``$\Longleftarrow$'': 也用反证法. 假设存在$X$的开覆盖, 没有有限子覆盖, 则任意有限个开覆盖中的开集不能覆盖$X$, 与''$X$的任意有核闭集子之交非空矛盾. 故成立. (``$\Longleftarrow$'': 对任意$X$的开覆盖, 开覆盖每个元素的余集做成的闭集族交为空, 故必为无核的, 故
+存在有限成员之交为空.) (``$\Longrightarrow$'': 若闭集族之交为空, 则可构造开覆盖, 有有限子覆盖, 为无核的, 从而紧致空间中任何有核的闭集族之交非空.)
+\end{solution}
+
+\begin{exercise}10. 设$A,B$分别是$X,Y$的紧致子集, $W$是$X\times Y$的开集, 且$A\times B\subset W$. 证明$A,B$分别有开邻域$U,V$,使$U\times V\subset  W$. 
+\end{exercise}
+\begin{solution}
+注意$A\times B$是紧致的, 这是因为定理2.7保证. 从而其为紧致子集. 按乘积空间开集定义有$W=\cup_{\alpha\in\mathscr{A}} U_\alpha\times V_\alpha$, 则$\mathscr{U}=\{
+U_\alpha\times V_\alpha|\alpha\in\mathscr{A}\}$是$X\times V$在$X\times Y$中的开覆盖, 有有限子覆盖, 显然为$A\times B$邻域, 且属于$W$.
+
+证法2: 用乘积空间紧致性的引理, 对$A\times \{b\}$用, 有$U_b\times V_b\subset W$. 再注意到$B$的紧致性, $\{V_b\}$为$B$在$Y$中的开覆盖, 有限子覆盖$V_i$, 对$U_i$求交, $V_i$求并即证. 
+\end{solution}
+
+
+\begin{exercise}11. 设$Y$紧致, 证明投射$j:X\times Y\rightarrow X$是闭映射.
+\end{exercise}
+\begin{solution}
+注意, 开映射不一定是闭映射, 闭映射也不一定是开映射. 当$f:X\rightarrow Y$为一一对应时, 才有开映射等价于闭映射, 等价于$f^{-1}$连续(第2节习题11). 这是因为: 一一对应保证了$X=f^{-1}(Y)$. 投射显然是开映射(第三节习题3)(对任一$X\times Y$的开集, 总为若干个$X$和$Y$的开集的笛卡尔积的并, 易证为开映射), 但其不为一一对应, 故不一定为闭映射! 
+
+设$A$是$X\times Y$的闭子集, 要证明$j(A)$是$X$的闭子集, 即$(j(A))^c$是开集. 对任意$x\in (j(A))^c$, 有$\{x\}\times Y =j^{-1}(x)\subset A^c$, 故存在$x$的开邻域$U$, 使$U\times Y\subset A^c$, 即$U\subset (j(A))^c$, 于是$x$是$(j(A))^c$的内点. 故$j(A)$为闭集. 
+\end{solution}
+
+\begin{exercise}12. 设$X$是Hausdorff空间, 则$X$的任意多个紧致子集之交也紧致.
+\end{exercise}
+\begin{solution}
+注意到Hausdorff空间的紧致子集是闭集, 任意多个闭集的交还是闭集, 紧致空间的闭子集紧致.
+注: 证第一句话是用到命题2.17: 若$A$是Hausdorff空间$X$的紧致子集, $x\notin A$, 则$x$与$A$有不相交邻域. (证明的起点: $x$与$A$中任意点有不相交开邻域.) 第三句话是命题2.15(设$X$是紧致空间, $A$是闭子集, 则$A^c$为开集, 故存在包含其的$X$的开覆盖有有限多个子覆盖, 从而这有限个除去$A^c$剩下为$A$的覆盖. )
+\end{solution}
+
+\begin{exercise}13. 如果$X$满足$T_3$公理, $A$是$X$的紧致子集, $U$是$A$的邻域, 则存在$A$的邻域$V$, 使$\overline{V}\subset U$.
+\end{exercise}
+\begin{solution}
+$X$满足$T_3$公理, 故任意属于$A$的点$x$和包含它的任意开邻域$U_x$, 有$x$的开邻域$V_x$使$\overline{V}_x\subset (U\cap U_x)$, 而$A$的所有点的开邻域$U_x$是$A$在$X$中的一个开覆盖, 由$A$是$X$的紧致子集, 故由命题2.14, $\{V_x\}$必有有限子覆盖$V_{x_i}$, 从而$\cup_{i=1}^n V_{x_i}\supset A$为$A$的开邻域, 且$\cup_{i=1}^n V_{x_i}\subset U$. 
+\end{solution}
+
+\begin{exercise}14. 设$X$满足$T_3$公理, 则$X$中紧致子集$A$的闭包也紧致.
+\end{exercise}
+\begin{solution}
+$A$为$X$的紧致子集, 对任意$\overline{A}$的开覆盖, 也是$A$的在$X$中的开覆盖, 故有$A$的有限子覆盖, 故这个有限子覆盖的并为$A$的开邻域, 存在$A$的邻域$V\supset A$使$\overline{V}$包含于其中(上一习题的结论), 从而$\overline{A}\subset \overline{V}$也包含于其中. 
+\end{solution}
+
+\begin{exercise}15. 证明度量空间$X$紧致的充分必要条件是$X$上任意连续函数都是有界的.
+\end{exercise}
+\begin{solution}必要性由命题2.16的推论保证(该命题是说紧致空间在连续映射下的像也紧致, 再由$E^1$上的紧致子集为有界闭集即得).
+
+下证充分性. 反证法: 若不紧致, 则不列紧, 不妨设$\{x_n\}$各不相同, 记$A$是$\{x_n\}$中各项构成的子集, 对任意$x\in X$, $x$必有邻域不含$A\backslash\{x\}$的点, 从而$A$是$X$的闭集, 并且是离散的. 作函数$f_0: A\rightarrow E^1$为$f_0(x_n)=n$, $f_0$连续(证略), 可扩张到$X$上成为无界函数. 
+\end{solution}
+
+\begin{exercise}16. 设$f:X\rightarrow Y$是闭映射, 并且$\forall y\in Y$, $f^{-1}(y)$是$X$的紧致子集, 则对$Y$的任一紧致子集$B$, $f^{-1}(B)$也紧致.
+\end{exercise}
+\begin{solution}
+$f^{-1}(B)$的任意$X$中开覆盖$\{U_\alpha\}$, 任意$b\in B$, 该开覆盖也是紧致子集$f^{-1}(b)$的开覆盖, 从而
+$f^{-1}(b)$被其中有限个盖满, 记其并为$W_b$, 作$V_b=(f(W^c_b))^c$, 由于$b$的$f^{-1}$的原像都在$W_b$中, 故都不在$W^c_b$中, 故$f(W^c_b)$不含$b$, 故$(f(W^c_b))^c$含$b$, 从而$V_b$为$b$的开邻域, 与$f(W^c_b)$不交, 故$f^{-1}(V_b)$一定与$W^c_b$不交, 从而$f^{-1}(V_b)\subset W_b$.  $\{V_b\}$又是$B$在$Y$中的开覆盖, 故有有限子覆盖, 故$f^{-1}(B)\subset \cup f^{-1}(V_i)\subset \cup W_i$. 得证.
+
+整理一下思路: 为证$f^{-1}(B)$紧致, 按定义要证其任意开覆盖有有限子覆盖. 找其任意一个开覆盖, 则$B$中任意一点$b$, 显然$f^{-1}(b)$在$f^{-1}(B)$中, 故$f^{-1}(B)$的开覆盖也为$f^{-1}(b)$的开覆盖, 有有限子覆盖. 这都是自然的. 关键是下一步. 注意到我们要用$f$是闭映射, 就必须构造闭集, 一个自然的想法是对任意开覆盖中的元素$U$(是开集), 构造$(f(U^c))^c$, 且给$U$一些限制条件. 最简单的想法是要求$f^{-1}(b)$在其中, 然而这须要进一步阐明: $f^{-1}(b)$有好多点, 什么叫要求$f^{-1}(b)$在其中? 这时可以考虑: 显然有$U$使与$f^{-1}(b)$有交, 但若仅仅有交, 可能$f^{-1}(b)$还有点不在其中, 则可能有点在$U^c$中, 则可能$f(U^c)$含$b$, 则可能$(f(U^c))^c$不含$b$(言外之意: 也可能含!), 这样没有用, 只有取所有含$f^{-1}(b)$的开集$U$才能使$f(U^c)$不含$b$, 故$(f(U^c))^c$一定含$b$! 从而我们就取[覆盖$f^{-1}(b)$]的那些开覆盖, 有有限子覆盖, 取其并为$W_b$, 则$(f(W^c_b))^c$一定含$b$! 且为$b$的开邻域.  注意, 我们对每个点$b\in B$对应的$f^{-1}(b)$都选出了有限子覆盖, 它们的并显然是$f^{-1}(B)$的一个覆盖, 但还不是有限的. 下面我们还需要用$B$的紧致性来得到$f^{-1}(B)$的一个有限子覆盖: 注意到我们通过$f^{-1}(b)$的有限子覆盖做成了$W_b$, 且做成了$b$的开邻域$(f(W^c_b))^c$, 则所有它们的并为$B$的子覆盖! $B$紧致故必有有限开覆盖, 设为$(f(W^c_i))^c$, 现在我们还要说明这些有限开覆盖能再诱导出$f^{-1}(B)$的覆盖: 其具体样子应该是由有限个$W_i$构成的. 为此, 只要说明$\cup W_i \supset \cup f^{-1}((f(W^c_i))^c)\supset f^{-1}(B)$. 后面一个包含号的证明比较简单: 注意到其等价于证明$f^{-1}(\cup (f(W^c_i))^c)\supset f^{-1}(B)$, 或$\cup (f(W^c_i))^c\supset B$, 这是上面就已经说过的(正是因为所有$(f(U^c))^c$包含$B$才选出的$W_i$); 再证前一个包含号: 注意到只需证明$f^{-1}((f(W^c_i))^c)\subset W_i$, 只需证明$f^{-1}((f(W^c_i))^c)$与$W^c_i$不交, 只需证明$(f(W^c_i))^c$与$f(W^c_i)$不交, 而这是显然的! 最后注意到每个$W_i$都是$f^{-1}(B)$中开覆盖的有限个元素的并, 故有限个$W_i$包含的所有$f^{-1}(B)$的开覆盖中的元素是有限个的. 得证. 
+\end{solution}
+
+\begin{exercise}17. 证明局部紧致空间的闭子集也是局部紧致的.
+\end{exercise}
+\begin{solution}
+定义: 拓扑空间$X$称为局部紧致的, 如果$\forall x\in X$都有紧致的邻域. 显然, 紧致空间是局部紧致的, $E^m$不是紧致的但是局部紧致的. 
+
+回原题. 任何闭子集$A$中的元素都与邻域与其相交, 交集为闭子集作为拓扑空间的邻域.设$U$为$x$的紧致邻域, 则$A\cap U$为$x$的邻域, 且易证为紧致邻域. (任意$A\cap U$的开覆盖, 都可得到$A \cap U$在$A$中的开覆盖, 也可补充为$A$的开覆盖, 必有有限子覆盖, 再把补充的去掉即可.) 
+\end{solution}
+
+
+\begin{exercise}18. 设$(X,\tau)$是非紧致Hausdorff空间, 在$X$中添加一个新元素$\Omega$, 所得集合记作$X_*$, 规定$X_*$的子集族$\tau_*=\tau\cup\{X_*\} \cup\{X_*\backslash K|K\text{是}X\text{的紧致子集}\}$.
+
+(1) 验证$\tau_*$是$X_*$上的拓扑, 且$\tau_*$在$X$上导出的子空间拓扑即$\tau$; (2)$X$是$(X_*,\tau_*)$的稠密子集; (3)$(X_*,\tau_*)$是紧致的; (4) 如果$(X,\tau)$是局部紧致的Hausdorff空间, 则$(X_*,\tau_*)$为Hausdorff空间.
+\end{exercise}
+\begin{solution}
+(1)有限个元素的交: 若这有限个中含有$\tau$的元素, 显然交属于$\tau$; 若不含有, 则注意到$\cap(X_*\backslash K_i)=X_*\backslash (\cup K_i)$, 而有限个紧致子集的并显然是紧致子集(习题3). 任意元素的并: 只需验证若干$\{X_*\backslash K|K\text{是}X\text{的紧致子集}\}$中的元素的并还在其中(只需注意若干紧致子集的交仍为紧致子集), 以及$\tau$中一元素$A$与$\{X_*\backslash K|K\text{是}X\text{的紧致子集}\}$中一元素的并仍在后者中, 注意$A\cup (X_*\backslash K)=X_*\backslash (K\backslash A)$, 而$K\backslash A
+= K\backslash (A\cap K)$为$K$中的闭集, $K$紧致, 故由命题2.15知$(K\backslash A)$紧致. 故$\tau_*$为拓扑. 
+$\{X_*\backslash K|K\text{是}X\text{的紧致子集}\}$中任意者与$X$的交为$X\backslash K$, 注意由命题2.17的推理有Hausdorff空间中$K$紧致故为闭集, 故$X\backslash K$为开集, 从而属于$\tau$. 
+
+(2)显然$\Omega$任一开集与$X$有交点. (注意到$K$必不为$X$.)
+
+(3)任意开覆盖(不妨设不含$X_*$), 必至少有一个$B$来自于$\{X_*\backslash K|K\text{是}X\text{的紧致子集}\}$, 则紧致性显然.
+
+(4)只需证任意$x\in X$和$\Omega$有不相交的开邻域. 由于$(X,\tau)$是局部紧致的, 这是显然的.
+\end{solution}
+
+\begin{exercise}19. $E^n$的一点紧致化同胚于$S^n$.
+\end{exercise}
+\begin{solution}
+用球极投射, 球的北极还没有定义, 补充定义球的北极映射到$\Omega$, 得到映射$f$. $f$显然是一一的. $f$与$f^{-1}$在[补充定义的点]外的点处都连续. 在北极, 任意规则邻域(指的是球上的圆形开集)都通过$f$映射到$\Omega$的邻域; 故$f$连续; 任意$\Omega$的开邻域(注意: 在$E^n$中有界闭区域等价于紧致子集, 见教材定理2.5下方的注释)在$E^n$中的余集都为有界闭区域, 故也可定义$\Omega$的规则邻域为大圆环, 在$f^{-1}$下映射到北极点的邻域. 注意, 这些规则开邻域映到规则开邻域就可以证明任何开邻域映到任何开邻域. 故得证.  (注: 或像答案一样只需证$S^n\backslash\{N\}$的一点紧致化同胚于$S^n$: 两个同胚空间的一点紧致化显然是同胚的(包含$\Omega_1$的开邻域余集是闭集, 映到闭集, 余集是$\Omega_2$的开邻域. )
+\end{solution}
+
+\subsection{连通性}
+
+
+\begin{exercise}1. 证明平凡拓扑空间连通, 包含两个以上点的离散拓扑空间不连通.
+\end{exercise}
+\begin{solution}
+定义: 拓扑空间$X$称为连通的, 如果它不能分解为两个非空不相交开集的并. 或: $X$不能分解为两个非空不相交闭集的并, 或: $X$没有既开又闭非空真子集. 或: $X$的既开又闭的子集只有$X$与$\emptyset$. (例如: $(R,\tau_f)$是连通的, 因其任意两个非空开集一定相交; $(R,\tau_c)$也是连通的, 原因相同. 设$A$是$E^1$的非空真闭集, 不妨设$0\notin A$, 但$A$含正数, 记$a=\inf\{x>0|x\in A\}$, 由于$A$闭, 故$a\in A$, 且$a>0$, 而由$(0,a)\cap A=\emptyset$推出$a$不是$A$的内点, 从而$A$不是开集. 从而$E^1$不存在非空的既开又闭的真子集, 故$E^1$连通. )
+
+平凡拓扑显然空间显然连通. 包含两个以上点的离散拓扑空间, 显然每个单点集都是开集和闭集. 
+\end{solution}
+
+\begin{exercise}2. 在实数集$R$上规定拓扑$\tau_1=\{(-\infty,a)|-\infty\leq a\leq +\infty\}$, $\tau_2
+=\overline{{\{[a,b)|a<b\}}}$(拓扑基是$[a,b)$), 证明$(R,\tau_1)$连通, $(R,\tau_2)$不连通.
+\end{exercise}
+\begin{solution}
+第一个连通是因为任两个非空开集相交; 第二个是因为任意一开集又是闭集(其余集为可表为可数个开集之并).
+\end{solution}
+
+\begin{exercise}3. 证明$D^n$连通.
+\end{exercise}
+\begin{solution}
+先介绍连通空间的性质.
+
+命题2.21: 连通空间在连续映射下的像也是连通的. (证明: 注意到连续映射的性质: 闭(开)集的原像为闭(开)集, 反证法即证.) 由此得到$S^1$是连通的. 另一例: $A\subset E^1$, 则$A$连通$\Longleftrightarrow A$是区间. (注:  $E^1$ 上的子集$A$称为区间, 如果$a, b\in A$时, $[a,b]\subset A$. 注意, 若$A$是区间, 则只能是$(a,b),[a,b],(a,b],[a,b)$之一. 证略.) 推论: 连通空间上的连续函数取到一切中间值, 或说像集是区间. 
+
+引理: 若$X_0$是$X$的既开又闭的子集, $A$是$X$的连通子集, 则或者$A\cap X_0=\emptyset$, 或者$A\subset X_0$. (证: $A\cap X_0$显然为$A$的开集; 还是$A$的闭集. 下略.) 
+
+命题2.22: 若$X$有一个连通的稠密子集$A$, 则$X$连通. (若$X$不连通, 则存在$X_0$为既开又闭的非空真子集, 则
+$A\cap X_0$为空或$A\subset X_0$, 注意到$X_0$为既开又闭, 故前者说明$\overline{A}$不为$X$; 后者也说明$\overline{A}$不为$X$, 与$A$稠密矛盾.) (注; 由此命题可以证明$\{(x,\sin (1/x))|x\in (0,1)\}\cup \{(0,y)|y\in[-1,1]\}$连通. )推论: 若$A$是$X$的连通子集, $A\subset Y\subset \overline{A}$, 则$Y$连通. 
+
+命题2.23: 如果$X$有一个连通覆盖$\mathscr{U}$($\mathscr{U}$中每个成员都连通), 且$X$有一连通子集$A$, 它与$\mathscr{U}$中每个成员都相交, 则$X$连通. ($X$存在既开又闭的非空子集$B$, 也被连通覆盖$\mathscr{U}$覆盖, 
+则覆盖中的元素, 以及$A$, 要么与其不交, 要么属于$B$. 至少有一个$\mathscr{U}$中的元素$U$属于$B$, 由于$A$与每个覆盖中的元素相交, 故也只能属于$B$, 这样推出所有的$\mathscr{U}$中的元素都属于它, 从而必然$B=X$, 故$X$连通.) (注: 用此引理可证明$E^2$连通. 归纳地可证明$E^n$连通. 有了$E^n$连通故$S^n\backslash \{N\}$连通, 故$S^n$连通.)
+
+定理: 连通性可乘. (用命题2.23, 取覆盖为$\{\{x\}\times Y|x\in X\}$, 连通子集为$X\times \{y_0\}$.)
+
+对本题, 显然存在连续满映射$f: E^n\rightarrow D^n$ (例如$f(x)=x$当$|x|\leq 1$, $f(x)1$, 其他). 由于$E^n$连通故$D^n$连通.  
+\end{solution}
+
+\begin{exercise}4. 设$X_1$, $X_2$都是连通空间$X$的开子集, $X_1\cup X_2= X$, $X_1\cap X_2$非空, 并且连通. 证明$X_1$, $X_2$都连通.
+\end{exercise}
+\begin{solution}设$X_1$存在非空的既开又闭的真子集$A$, 由于$X_1\cap X_2$非空且连通, 故要么其与$A$的交为空, 要么$(X_1\cap X_2)\subset A$. 对前一种情况, 记$B=X_1\backslash A$为$X_1$的非空既开又闭真子集, 有 $(X_1\cap X_2)\subset B$, 故和第二种情况实质是相同的. 我们只需讨论第二种情况.  
+可证$A$为$X_1\cap X_2$中的即开又闭子集(开显然; 闭是因为$X_1\backslash A$为开, 故$(X_1\backslash A) \cap (X_1\cap X_2)= (X_1\cap X_2)\backslash A$, 为$X_1\cap X_2$的开集, 故$A$为$X_1\cap X_2$的闭集)
+ 由于$X_1\cap X_2$非空连通, 矛盾! 故$X_1$不存在非空的既开又闭的真子集$A$, 故$X_1$连通. 类似可证$X_2$连通.
+\end{solution}
+
+\begin{exercise}5. 设$X$是满足$T_1$, $T_4$公理的连通空间, 并且$X$中至少有两个点, 证明$X$不可数.
+\end{exercise}
+\begin{solution}
+取$X$的两个不同点$x_0$, $x_1$, 则$\{x_0\}$, $\{x_1\}$都是$X$的闭集, 由Urysohn引理(因满足$T_4$引理), 有连续函数$f:X\rightarrow E^1$, 使得$f(x_0)=0, f(x_1)=1$, 因为$X$连通, 故$[0,1]\subset f(X)$, 而$[0,1]$不可数, 故$X$不可数. 
+\end{solution}
+
+\begin{exercise}6. 证明局部连通空间$X$的开子集$A$也局部连通.
+\end{exercise}
+\begin{solution}
+定义: 拓扑空间$X$的一个子集称为$X$的连通分支, 如果它是连通的, 并且不是$X$的其他连通子集的真子集. 
+
+命题2.24: $X$的每个非空连通子集包含在唯一的一个连通分支中. (设$A$是$X$的一个非空连通子集, 记$\mathscr{F}=\{F\subset X|F\text{连通},F\cap A\neq \emptyset\}$, $Y=\cup_{F\in \mathscr{F}} F$, 则$A\subset Y$, 根据命题2.23, $Y$连通. 如果$Y$是连通子集$B$的真子集, 则可推出$B\in \mathscr{F}$, 故$B\subset Y$, 故$Y$为连通分支. 如果$Y'$也是包含$A$的连通分支, 则可推出$Y'\subset Y$, 由$Y'$的极大性, 得$Y'=Y$, 故唯一性成立. )
+
+命题: 连通分支是闭集. (由命题2.22, $A$连通推出$\overline{A}$连通. 下略.)
+
+定义: 拓扑空间$X$称为局部连通的, 如果$\forall x\in X$, $x$的所有连通邻域构成$x$的邻域基.
+
+注意, $X=A\cup B$, $B=\{(0,y)|y\in [-1,1]\}$, $A=\{(x,\sin\frac{1}{x})|x\in (0,1)\}$, 已证其为连通的(因$A$是连通的, 且$\overline{A}=A\cup B$), 但不是局部连通的, 例如考虑$(0,0)$, 可证$U=\{(x,y)\in X|y\neq -1\}$为其邻域, 但$U$含$(0,0)$的连通子集都不是$(0,0)$的邻域. 故其不是局部连通的. 
+
+命题2.26: 局部连通空间的连通分支是开集. ($x\in A$有连通邻域必含在$A$中, 故$A$是开集.)
+
+回到原题. 对任意$x\in A$, 其在$A$中的任意邻域都为其在$X$中的邻域, 含有$x$的连通邻域, 该连通邻域与$A$的交就是它自己, 是$x$在$A$中的连通邻域.
+\end{solution}
+
+\begin{exercise}7. 证明: $X$不连通$\Longleftrightarrow$存在定义在$X$上的连续函数$f:X\rightarrow E^1$, 使$f(X)$是两个点. 
+\end{exercise}
+\begin{solution}$X$不连通则可分为两个不交闭集的并, 映到不同两点, 该函数显然连续; 反之若有连续函数使像为两个点, 则原像为两个不交闭集, 且并为$X$. 
+\end{solution}
+
+\begin{exercise}8. $X$是$E^2$的子集, $X=\{(x,y)|x, y\text{不全为无理数}\}$, 证明$X$连通.
+\end{exercise}
+\begin{solution}对$r\in Q$, 作$A_r=\{(x,y)|x=r\text{或}y=r\}$, 则$A_r$连通, 且所有$A_r$为$X$的覆盖, 且都与$X$的连通子集$\{(x,0)|x\in E^1\}$相交.
+\end{solution}
+
+\begin{exercise}9. $X$是紧致Hausdorff空间, $\mathscr{F}$是$X$的一族连通闭子集, 满足: $\mathscr{F}$中任何有限个成员之交是非空连通集. 证明$Z=\cap_{F\in \mathscr{F}} F$是非空的连通集.
+\end{exercise}
+\begin{solution}
+上一节习题9保证了$B$非空. 反证法: 如果$Z$可分解为它的两个不相交非空闭集的$A$和$B$之和, 则$A$, $B$都是$X$的闭集[$A$是$Z$的闭集, $B$是$Z$的开集, 故可写成$B=Z\cap Z_1$, $Z_1$为$X$中开集, 从而$A=Z\backslash B
+=Z\backslash (Z\cap Z_1)=Z\cap Z_1^c$, 其中余集是对$X$来说的, 故$A$为闭集], 故$A$,$B$在$X$中有不相交的开邻域$U$, $V$(这是因为紧致的Hausdorff空间满足$T_3$, $T_4$公理!). 
+
+
+(注: $A$是$X$的子集, 若$A$是开集, 则$A$的开集也是$X$的开集; 若$A$是闭集, 则$A$的闭集也是$X$的闭集!)
+
+ (注: 先回顾一下相关定理: 紧致空间的闭子集紧致. [这是因为, 紧致空间任意闭集$A$, $A^c$是开集, 证明$A$紧致只需证$A$在$X$中的任一开覆盖$\mathscr{U}$有有限子覆盖. 连同$A$的任意开覆盖, 构成$X$的开覆盖, 有有限子覆盖, 若含有$A^c$就除去它, 即得$A$的$X$中的有限子覆盖, 故$A$紧致.] Hausdorff空间的不相交紧致子集有不相交邻域. [这是因为, 设它们为$A$和$B$, 对任一$x\in A$, 任一$B$中点$y$有$x$的邻域$U_y$和$y$的邻域$V_y$不交, 则$V_y$的并为$B$的开覆盖, 有有限子覆盖$V_{y_i}$(这是因为$B$紧致), 对$U_{y_i}$求交得$U_x$, 仍为$x$的邻域, 对$V_{y_i}$求并的$V_x$, 则$U_x$与$V_x$为$x$与$B$的不交邻域. 这实际上是证明了命题2.17. 再注意到对于每个$x$都有$U_x$不交$V_x$, 则所有$U_x$构成$A$的开覆盖, 有有限子覆盖$U_{x_i}$, 对$U_{x_i}$求交得$U$, $V_{x_i}$求交得$V$, 仍为开集因是有限个求交, 从而显然$U$, $V$为$A$, $B$邻域, 且不交. ] 
+紧致Hausdorff空间满足$T_4$公理. [设$A$和$B$为不交闭集, 则都紧致, 且上面刚证有不交邻域, 故满足$T_4$.]
+以及上一节习题9: [``$\Longrightarrow$'': $X$的任何有核闭集族, 取每个成员的余集得到''不满开集族'': 即任意有限成员的并不为$X$, 现在要在$X$紧致的条件下证所有成员的并不为$X$. 这是显然的: 若所有成员的并为$X$, 则有有限子覆盖, 矛盾. ``$\Longleftarrow$''$X$的任意不满开集族之并不满, 显然等价于紧致.]
+)
+
+继续原题的证明. 令$X_0=(U\cup V)^c$, 则$X_0$也紧致. 记$\mathscr{F}_0=\{F\cap X_0|F\in \mathscr{F}\}$, 则$\mathscr{F}_0$是$X_0$中的一个闭集族, 并且$\cap_{G\in \mathscr{F}_0} G =(\cap_{F\in \mathscr{F}} F) \cap X_0 = \emptyset$, 故$\mathscr{F}_0$无核, 故存在有限个成员$F_i\cap X_0$, 交为空, 故$(\cap_{i=1}^n
+F_i)\cap X_0$为空, 故$\cap_{i=1}^n F_i$ 包含于$U\cup V$, 但$\cap_{i=1}^n F_i$连通, 故只能包含于$U$, $V$之一, 从而$\cap_{F\in \mathscr{F}}$含在$U$, $V$之一, 矛盾!
+\end{solution}
+
+\begin{exercise}10. 证明 $B=\{(0,y)|y\in [-1,1]\}$, $A=\{(x,\sin\frac{1}{x})|x\in (0,1)\}$所定义的$
+U=\{(x,y)\in X=A\cup B|y\neq -1\}$的包含$(0,0)$点的连通分支是$B\backslash\{(0,-1)\}$. 
+\end{exercise}
+\begin{solution}
+定义: 拓扑空间$X$的一个子集称为$X$的连通分支, 如果它连通且不是$X$的其他连通子集的真子集. 
+
+回原题. 显然$B\backslash\{(0,-1)\}$是连通的, 假设有$X$的连通子集为其与另一部分$V$的交, 则$V\subset A$, $V$中只能含有这样的点$x$, 对任意$x_0$使得$\sin \frac{1}{x_0}=-1$, $x<x_0$!  但对任意$x\in V$, 总可找到$x_0<x$使$\sin \frac{1}{x_0}=-1$, 故$x\notin V$, 矛盾! 故只能$V=\emptyset$. 得证. 
+\end{solution}
+
+
+
+\subsection{道路连通性}
+
+\begin{exercise}1. 证明$S^n$道路连通.
+\end{exercise}
+\begin{solution}
+定义: 设$X$是拓扑空间, 从单位闭区间$I=[0,1]$到$X$的一个连续映射$a: I\rightarrow X$称为$X$上的一条道路, 把$a(0)$和$a(1)$称为$a$的起点和终点, 统称端点. 道路是指映射本身, 而不是像集. 如果道路是常值映射, 即$a(I)$是一点, 就称点道路. 起点与终点的道路称为闭路. 道路的逆: 也为道路, 记为$\bar{a}(t)=a(1-t)$, 乘积$ab$: 规定略, 也是道路(连续性用粘接引理得到).
+
+定义: 拓扑空间$X$称为道路连通的, 如果任意$x,y\in X$, 存在$X$中分别以$x$和$y$为起终点的道路. 
+
+按此定义, $S^n$显然道路连通.
+\end{solution}
+
+\begin{exercise}2. 设$A\subset E^2$, $A^c$是可数集, 证明$A$道路连通. 
+\end{exercise}
+\begin{solution}$A$中任意两点间的$E^2$中的互不相交的道路都有不可数条(这是显然的, 可构造证明), 故必有一条全部在$A$中. 
+\end{solution}
+
+\begin{exercise}3. 证明道路连通性是可乘的.
+\end{exercise}
+\begin{solution}利用定理1.3: 分量映射连续则到乘积空间的映射连续.
+\end{solution}
+
+注:  $B=\{(0,y)|y\in [-1,1]\}$, $A=\{(x,\sin\frac{1}{x})|x\in (0,1)\}$, $X=A\cup B$, 不是道路连通的,  记$J=a^{-1}(B)$, 它是$I$的非空闭集, 设$t\in J$, 则$a(t)\in B$, 不妨设$a(t)=(0,y), y\neq -1$. 这时, 上面提到的$U$就是$a(t)$的邻域, 由$a$的连续性, 必存在$t$的邻域$W$使$a(W)\subset U$, 不妨设$a(W)$连通, 故$a(W)$包含于$U$的含$a(t)$的连通分支$B\backslash\{(0,-1)\}$中, 故$W\subset J$, $t$是$J$的内点, $J$是开集, 故$J=I$.  
+
+\begin{exercise}4. 设$X_1$, $X_2$都是$X$的开集, 且$X_1\cup X_2= X$. $a$是$X$上的道路, 且它的两个端点分别在$X_1$, $X_2$中, 证明$a^{-1}(X_1\cap X_2)$非空.
+\end{exercise}
+\begin{solution}
+$a^{-1}(X_1\cap X_2)= a^{-1}(X_1) \cap a^{-1}(X_2)$. 注意$a^{-1}(X_1)\cup a^{-1}(X_2) =a^{-1}(X_1\cup X_2)=a^{-1}(X)= I$, 且$a^{-1}(X_1) $, $a^{-1}(X_2)$都为$I$中开集, 且$I$连通, 故$a^{-1}(X_1) $, $a^{-1}(X_2)$必相交. 
+\end{solution}
+
+命题2.27 道路连通一定连通. (证: 设$X$道路连通, 对任意$x_0, x_1\in X$, 有$X$中道路$a$. 故$x_0, x_1$在$X$的同一连通子集$a(I)$中, 从而属于同一连通分支. 故$X$只有一个连通分支. 故连通.)
+
+命题2.28: 道路连通空间的连续映像是道路连通的. (用复合映射连续性即证.)
+
+定义: 规定$x$与$y$可用$X$上的道路连接, 则说$x$,$y$相关, 记作$x\sim y$. 这是一个等价关系. 拓扑空间在该等价关系下分成的等价类称为$X$的道路连通分支. (任意$x\in X$属于$X$的唯一的道路分支, $X$的每个道路连通的子集包含在某个道路分支中, $X$道路连通的充要条件是它只有一个道路分支.)
+
+命题2.29: 拓扑空间的道路分支是它的极大道路连通子集. (证: 设$A$是$X$的道路连通分支. 先证其道路连通: 即对任意$x_0,x_1\in A$, 构造$A$上道路. 由道路分支定义, 存在$X$上两点间道路, $a(I)$道路连通, 故含于一道路分支. 且$a(I)$与$A$有交, 故包含于$a$. 故$a$可看作$A$上连接两点的道路. 极大性: 设$A\subset B$, $B$道路连通, 则$B$所在的道路分支就是$A$, 故$A=B$.) 可推出, $X$的每个道路分支都连通, 故必包含在某连通分支中, 故$X$的每个连通分支是一些道路分支的并. 
+
+\begin{exercise}5. 如果$X_1$和$X_2$都是$X$的开集, $X=X_1\cup X_2$, 且$X$与$X_1\cap X_2$都道路连通, 则$X_1$与$X_2$都道路连通.
+\end{exercise}
+\begin{solution}
+注: 本题最关键的是要意识到, 每条道路在出$X_1$进$X_2$的时候, 都要经过区域$X_1\cap X_2$. 本题的证明过程也就是对这一要点的严格化. 
+
+证$X_1$道路连通. 由于$X_1\cap X_2$是$X_1$的道路连通子集, 只用证明, 对任意$x_0\in X_1\backslash X_2$, $x_0$与$X_1\cap X_2$在$X_1$的同一道路分支中. 由于$X$道路连通, 有$X$中的道路$a$, $a(0)=x_0$, $a(1)=x_1\in X_2$, 由上题知$a^{-1}(X_1\cap X_2)$非空, 设其下确界为$t_0$, 则$[0,t_0]\subset a^{-1}(X_1)$ [注: 这是很重要的一论断. 这一论断的原因是: 假设存在$t\in [0,t_0]$使$a(t)$不属于$X_1$, 则属于$X_2\backslash X_1$, 则有连通道路连接$x_0$和$a(t)\in X_2$, 由上一题知有$t_1\in [0,t_0)$使$t_1\subset a^{-1}(X_1\cap X_2)$, 与$t_0$是下确界矛盾!] 因为$a^{-1}(X_1)$是$I$的开集, 故存在$\varepsilon$, 使$[0,t_0+\varepsilon)\subset a^{-1}(X_1)$, 由$t_0$的定义知存在$t_1\in[0,t_0+\varepsilon)$使得$a(t_1)\in
+X_1\cap X_2$, 故$x_0$与$X_1\cap X_2$在同一连通分支中.
+\end{solution}
+
+\begin{exercise}6. 上一题把$X_1$, $X_2$是$X$的开集改为''闭集'', 证明结论也成立.
+\end{exercise}
+\begin{solution}
+先证明习题4改为闭集, 也成立. 这是因为, $X=X_1\cup X_2$, $X_1$, $X_2$闭, 则$X\backslash X_1=X_2\backslash X_1$开, $X\backslash X_2=X_1\backslash X_2$开. 从而若道路的任一端点在$X_1\cap X_2$, 则显然成立; 否则, 有$a^{-1}(X_1\backslash X_2)$, $a{-1}(X_2\backslash X_1)$为开集, 且必不交(因为像不交, 从而必有点存在于$(X_1\cap X_2)$. 
+
+再证该题. 注意到$X_1\cap X_2$为闭集, $X_1\backslash X_2$, $X_2\backslash X_1$为开集, 对任意$x_0\in X_1$, $x_1\in X_2$的道路, 由上方证明, 必与$X_1\cap X_2$有交, $a^{-1}(X_1\cap X_2)$为闭集, 找出下确界, 则必能取到下确界(有界闭集可以取到下确界)$t_0$, 则必有$[0,t_0)\cup\{t_0\}=[0,t_0]\subset a^{-1}(X_1)$, 从而得证. 
+\end{solution}
+
+再补全本节的一点基础知识: 
+
+定义2.13: 拓扑空间$X$称为局部道路连通的, 如果对任意$x\in X$, $x$的道路连通邻域构成$x$的邻域基. 例如, $X=\{(x,y)|x\text{是有理数, 或}y=0\}$道路连通但不是局部连通的(因为任意$y\neq 0$的点没有道路连通邻域!)
+
+引理: 如果拓扑空间$X$的每一点$x$有邻域$U_x$, 使得$x$与$U_x$中的每一点都可用$X$上道路连结, 则(1)$X$的道路分支都是既开又闭的; (2)$X$的连通分支就是道路分支. (证略.)
+
+定理 局部道路连通空间$X$的道路分支就是连通分支, 它们是既开又闭的; 当$X$连通时, 它也道路连通. 
+
+\subsection{拓扑性质与同胚}
+
+对$R$上的拓扑$E^1$, $\tau_f$, $\tau_c$, $\tau_1$, $\tau_2$:
+
+再证明一下$\tau_f$, $\tau_c$是拓扑. 注意到若干个个开集的并的余集是这些开集的余集的交, 而若干可数集的交仍可数, 从而$\tau_f$, $\tau_c$是拓扑(注拓扑公理的(1), (3)显然成立).  
+
+$T_1$: 只有$\tau_1=\{(-\infty,a)|-\infty\leq a\leq+\infty\}$不满足$T_1$公理. (右边点的任意开集都含左边点故不满足. 对其他拓扑: $\tau_2$, $E^1$显然满足; 对$\tau_f$和$\tau_c$, 只需取$x$, $y$的邻域$R\backslash \{y\}$, $R\backslash \{x\}$.).  
+
+Hausdorff性质: 显然$\tau_2$, $E^1$满足$T_2$公理; 而其他三个空间不满足$T_2$. ($\tau_1$不满足显然; 对其他两个: 注意到: $U\cap V=\emptyset \Longleftrightarrow U^c\cup V^c= X$: (左推右显然; 右推左: $U^c\cup V^c=X$, 故$U\subset V^c$, 故$U\cap V=\emptyset$.)  故证明不是Hausdorff空间, 只需证明有两点有两不交开邻域, 只需证明有两点有开领域的余集之并为$R$. 而$\tau_f$, $\tau_c$任意开集的余集是有限和可数的, 故并上不可能覆盖$R$.)
+
+$T_3$和$T_4$: (i)$\tau_1$不满足$T_3$(这是因为, 注意到$\tau_1$中每个开集的闭包都是$R$, 从而由$T_3$的等价命题知不满足), 但满足$T_4$(任意闭集的余集为开集, 开集总形如$(-\infty, a)$, 故闭集必形如$[a,+\infty)$, 故若有两不交空集, 其一必为空, 故$R$, $\emptyset$为不交邻域); (ii)$\tau_2, E^1$满足$T_4$, 故再由满足$T_1$知满足$T_3$. (注: $E^1$满足$T_4$的证明在课本命题2.3; 关于$\tau_2$, 证明其为$T_4$的较为复杂, 见后面对第一, 二章总结中的Sogenfrey line的介绍. )
+(iii)$\tau_f$, $\tau_c$满足$T_1$但不为$T_2$的, 故不可能为$T_4$或$T_3$的(证明也很显然: 用等价命题: 若闭集$A$有开邻域$B$, 且有$A$的开邻域$C\subset B$, 由于$\overline{C}$为闭集则必为开集的余集, 则必为可数的, 但包含不可数子集$C$, 矛盾! 故这样的$C$不存在. 故不满足$T_4$或$T_3$.) 
+
+$C_1$和$C_2$: $\tau_1$满足$C_2$(拓扑基为所有$a$为有理数的$(-\infty, a)$, 即第四节习题17); $\tau_f$, $\tau_c$不满足$C_1$(若点$x$有可数邻域族, 则其元素的余集的并可数, 取不属于其中的元素$y$, $y$属于所有邻域族中的元素, 则$R\backslash \{y\}$为$x$的开邻域(对$\tau_f$, $\tau_c$都是), 但不含任一邻域族中的元素. ) 可分度量空间是$C_2$空间, 而欧式空间$E^n$可分, 故为$C_2$. $\tau_2$不是$C_2$的, 证明见第四节习题16. 单$\tau_2$是$C_1$的(任意$\tau_2$中的元素(即开集)都可写成若干个$[a,b)$的并(这是因为有限个的交为空或具有形式$[a,b)$), 从而对$x$点, $[x,x+1/n)$为邻域基. )
+
+紧致性: 只有$(R,\tau_f)$(及其任何子集)是紧致的(此即第6节习题1. 证: 任何开覆盖, 其中一个元素的余集为有限个. 下略). 其它的都不紧致(反例: $\tau_1$: $\{(-\infty,n)\}$; $\tau_2$: $\{[n,n+1/5)\}$; $\tau_c$:
+选定$q\in Q$, $\{((Q\backslash \{q\})\cup \{r\})^c, r=R\backslash Q\}$. $E^1$: $\{(n-2/3, n+2/3)\}$.)
+
+连通性: 只需要看是否有开集也是闭集. $\tau_1, E^1$显然连通; $\tau_c$, $\tau_f$也连通(注意, 预备知识中有$A\cap B=\emptyset\Longleftrightarrow A^c\cup B^c=X$, 这里用其反面结论: $A\cap B$有交当且仅当余集的并不为全空间); $\tau_2$, 事实上每个$[a,b)$都也是闭集($(\cup[a-n,a))\cup(\cup[b+1/n,+\infty))$为其余集), 故只有$\tau_2$不连通. 
+
+道路连通性: 设$x,y\in R$, $f:I\rightarrow R$为$x,y$间的一条道路. (i) $\tau_1, E^1$道路连通(只需选直线道路, 可知开集的原像为开集), (ii) $\tau_f$也道路连通(选直线道路, 任意$\tau_f$的开集是$R$中去掉有限个点, 在直线道路的原像下为$I$去掉有限个点, 为开集), (iii)$\tau_c$不道路连通(设$f: [0,1]\rightarrow X$为连续映射, $f([0,1]\cap Q)$可数故为$\tau_c$的闭集, 故$f^{-1}(f([0,1]\cap Q))$为闭集且包含$[0,1]\cap Q$, 注意任意$c\in [0,1]$的任何邻域都与$[0,1]\cap Q$相交, 故包含$[0,1]\cap Q$的最小闭集是$[0,1]$, 且$f([0,1])=f([0,1]\cap Q)$为可数集, 但这样$[0,1]$的任一个开集的像都为可数集, 为$\tau_c$的闭集, 与$f$为连续映射矛盾! 故$\tau_c$不连通. ) , (iv) $\tau_2$不道路连通, 因为它不是连通的. 
+
+可见, 只有$\tau_2 =\overline{\{[a,b)|a<b\}}$不连通(注意上方的横线代表包含正负无穷), 只有$(R,\tau_f)$是紧致的(每个开集的余集只有有限多个元素, 可被有限多个开集覆盖). 
+
+上面分析得到的结论可以列表如下(见表\ref{table1}). 显然, $\tau_f$, $\tau_c$, $\tau_1$, $\tau_2$, $E^1$两两不同胚. 注意, $E^1$的这些结论都可以拿到$E^n,n>1$上来用, 故不能直接说明$E^1$与$E^n, n>1$不同胚. 下面的习题1给出了$E^1$与$E^n$不同胚的一种证法. 
+
+\begin{table}[!t]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\hline
+&$T_1$&$T_2$(Hausdorff)&$T_3$&$T_4$&$C_1$&$C_2$&紧致性&连通性&道路连通性\\
+\hline
+$\tau_1$ &$\times$  &$\times$  &$\times$  &$\surd$   &$\surd$   &$\surd$ &$\times$&$\surd$&$\surd$  \\
+\hline
+$\tau_2$ &$\surd$   &$\surd$   &$\surd$   &$\surd$   &$\surd$   &$\times$&$\times$&$\times$&$\times$\\
+\hline
+$\tau_f$ &$\surd$   &$\times$  &$\times$  &$\times$  &$\times$  &$\times$&$\surd$&$\surd$&$\surd$  \\
+\hline
+$\tau_c$ &$\surd$   &$\times$  &$\times$  &$\times$  &$\times$  &$\times$&$\times$&$\surd$&$\times$\\
+\hline
+$E^1$    &$\surd$   &$\surd$   &$\surd$   &$\surd$   &$\surd$   &$\surd$&$\times$&$\surd$&$\surd$\\
+\hline
+\hline
+\end{tabular}
+\caption{$\tau_1=\{(-\infty,a)|-\infty\leq a\leq+\infty\}$, $\tau_2 =\overline{\{[a,b)|a<b\}}$, $\tau_f$为余有限拓扑, $\tau_c$为余可数拓扑. $E^1$的结论与$E^n,n>1$的结论相同. }\label{table1}
+\end{table}
+
+利用紧致性, $[a,b]$不同胚于开区间和$[0,+\infty)$; $S^1$不同胚于$E^1$. (用二分法可证$[a,b]$为列紧的, 故紧致; $(a,b)$不为列紧的因可构造序列只收敛于$a$或$b$; $[0,+\infty)$显然不是列紧的. 显然$E^1$不为紧致, 而$S^1$为$E^1$的一点紧致化, 故紧致, 或说$S^1$为有界闭集故紧致.)
+
+利用连通性和反证法可得到$[0,+\infty)$不同胚于$E^1$, 否则$f$是同胚映射, 则$f|(0,+\infty)\rightarrow
+E^1\backslash \{f(0)\}$也为同胚映射, 但前者连通后者不连通, 与连通性是拓扑性质矛盾. (注: 同胚映射原集与像集去掉一点, 仍然为一一的, 且开集的像映到开集, 以及是开映射, (注意, 去掉一点的空间的开集为原空间的开集, 故新空间的开集也都是原空间的开集), 故仍同胚) 
+
+\begin{exercise}1. 证明$E^1$与$E^n(n>1)$不同胚.
+\end{exercise}
+\begin{solution}仿上: 设存在同胚映射$f$, 则$f|(E^1\backslash \{O\}$也同胚, 但$E^1\backslash\{O\}$不连通, $E^N\backslash \{0\}$连通.
+\end{solution}
+
+\begin{exercise}2. 证明$I$与$S^1$不同胚.
+\end{exercise}
+\begin{solution}仿习题1, 同样用同胚映射和连通性. (设$f(0.5)=1+0i$.)
+\end{solution}
+
+\begin{exercise}3. 若$f: S^1\rightarrow E^1$连续, 则$f$不是单的, 也不是满的.
+\end{exercise}
+\begin{solution}
+$S^1$紧致, 在连续映射$f$下的像也紧致, 而$E^1$不满, 可见不满. $S^1$道路连通, 故连通, 故像也连通, 故
+像$f(S^1)$为$E^1$中区间, 若连续映射$f$为单的, 则$f: S^1\rightarrow f(S^1)$是同胚, 从而$f(S^1)$必为开集, 又是区间, 故只能是开区间$(a,b)$, 再设有$f(t)=c\in (a,b)$, 挖去这一点后, 原集道路连通但后者不道路连通. 矛盾. 故不能为单.
+\end{solution}
+
+\begin{exercise}4. 若$f: S^2\rightarrow E^1$连续, 则存在$t\in E^1$, 使$f^{-1}(t)$是不可数集, 并且
+在$f(S^2)$中, 原像是可数集的点不多于两个. 
+\end{exercise}
+\begin{solution}$S^2$紧致(P53), 而$f$是$S^2$上的连续函数, 故有界且取到最大最小值(P54). 设$a$, $b$为$f$的最大值和最小值, 则存在$x_1\in S^2$, $x^2\in S^2$, $f(x_1)=a$, $f(x_2)=b$. 由于$S^2$是道路连通的, 且显然有不可数条互不相交(指除了端点$x_1$, $x_2$外无其他交点)的道路连接$x_1$和$x_2$, 这样每条道路都给出一个$I$到$E^1$上闭集的连续映射, 从而映射的像必为区间(P62), 从而事实上映射的像就是$[a,b]$. 可见, 对任意$c\in (a,b)$, 由于每条道路上都有其原像, 从而$f^{-1}(c)$为可数集. 且可见最多只有两个点, $a$, $b$, 其原像可能是可数集.   
+\end{solution}
+
+\begin{exercise}5. 证明$S^2$与$S^1$不同胚.
+\end{exercise}
+\begin{solution}
+注意到$S^1$挖去一点后不连通, $S^2$挖去一点仍连通, 可见不存在逆映射连续的连续的一一映射.
+\end{solution}
+
+\begin{exercise}6. 证明两条相交直线的并集与一条直线不同胚.
+\end{exercise}
+\begin{solution}若有同胚映射$f$, 去掉交点后原集变为四条射线(四个不同的连通分支), 像集变为两条射线,(两个不同的连通分支), 由于连续映射把连通空间映成连通的, 故必至少有两条射线被映到同一条射线, 但会从$f^{-1}$推出矛盾(一个连通分支映到两个连通分支). 
+\end{solution}
+
+\subsection*{第一, 二章回顾}
+
+第二章讲了拓扑公理(四个分离公理和两个可数公理), 然后讲了$T_4$推出的重要结论: Urysohn引理, Tietze定理.
+随后, 讲了三个拓扑空间的性质: 紧致性, 连通性和道路连通性. 
+
+注意四个分离公理的条件是逐渐加强的, 但并不是说后面的公理能推出前者(例如$(R,\tau_1)$不满足$T_1$-$T_3$但满足$T_4$). 事实上, 在我们的公理叙述设置下, $T_1$联合$T_4$能推出$T_3$, $T_1$联合$T_3$能推出$T_2$. 回顾: $T_1$是说任意两个点, 有不含对方点的(开)邻域; $T_2$是说, 任意两个点, 有不交邻域; $T_3$是说, 任意单点和与其不交的闭集, 有不交邻域; $T_4$是说, 任意两不交闭集, 有不交邻域. 当然, 这里面还有一些推论: (1)满足$T_1$公理$\Longleftrightarrow$有限子集是闭集(证: ``$\Longrightarrow$'': 只需证单点集为闭集, 不难, 略; ``$\Longleftarrow$'': 从而单点集为闭集, 余集为开集,得证); (2)$T_3$和$T_4$的等价定义, 这里只叙述$T_4$: 满足$T_4$公理$\Longleftrightarrow$ 任意闭集和其开邻域$W$, 有$A$的开邻域$U$, 使$\overline{U}\subset W$. (证: 等价性显然.) (3)$T_2$公理(Hausdorff空间)可推出序列不会收敛到两个以上的点. 可数公理: $C_1$公理: 任一点有可数邻域基; $C_2$: 有可数拓扑基. 显然, $C_2$可推出$C_1$. 各个公理间也有一些错综复杂的关系, 本书只介绍了两个: $C_2+T_3\Longrightarrow T_4$(此即Lindel\"{o}f定理), $T_0+T_3\Longrightarrow T_2$. 应当理解, 它们名义上是公理, 其实是一些拓扑性质(见下), 并非所有的拓扑空间满足这些公理, 而满足这些公理的空间更像欧式度量空间. 另外注意, Urysohn引理事实上给出了一个$T_4$的等价条件: 任意不交闭集$A$和$B$, 存在$X$上的连续函数$f$在$A$和$B$上分别取值$0$和$1$. 事实上我们在证明度量空间满足$T_4$时就是使用的这一定理的证明思路. 
+
+我们研究拓扑, 一个基本问题就是研究拓扑空间的同胚分类, 这是通过空间之间的映射完成的: 拓扑性质是在同胚映射下保持不变的性质. 从这种意义上说, 如果证明了一个性质是拓扑性质, $X$具有该性质, 而存在一个连续映射$f:X\rightarrow Y$使$Y$(或$f(X)$)不具有该性质, 则说明两个空间必不同胚. 本节的6个习题都是用这个想法来证明, 而下面将要学习的代数拓扑也是该想法的延伸. 
+
+所以, 现在把注意力集中到拓扑性质上. 第一章已说, 用开集或其派生的拓扑概念来刻画的性质都是拓扑性质. 这是很好理解的: 因为在拓扑中, 最基本的规定是集合$X$和(更重要地)其开集(是$2^X$的一个子集, 或$X$的一个子集族, 满足三条公理), 开集是所有的讨论的基础, 后面所有的概念, 定理都是在开集的基础上自然派生的. 而连续映射定义为: 开集的原像为开集, 故同胚作为一一连续映射, 且逆映射连续, 就从定义上保证了任何从开集派生出的概念都得以在同胚下保持, 从而在拓扑中我们说, 如果两个空间是同胚的, 则一个空间所(不)具有的所有拓扑性质, 像空间都(不)具有. 这样, 显然地, $T_1$-$T_4$, $C_1$, $C_2$, 连续性, 道路连通性, 紧致性, 列紧致, 等等所有
+我们在书中遇到的所有这些属性都是拓扑性质, 即在同胚下保持不变. 注意, 连续映射是用像为开(闭)集推出原像为开(闭)集的方式定义的, 而不是$X$的开(闭)集都映到$Y$的开(闭)集(只能选前者为连续映射的定义是显然的: 因为我们要研究的是像空间的性质, 故第一步上来肯定是任取$Y$的一个开集, 看它在$X$中是怎样的). 事实上, 我们把后者起名为开(闭)映射, 其看似是说$f^{-1}$是连续映射, 然而这不完全正确, 这是因为$f^{-1}$不一定为映射! 所以, 开映射不一定为闭映射, 见第二节习题(10). 只有$f^{-1}$为映射(也即$f(X)=Y$, 且$f$单, 也即$f$为一一的)时, 开映射$\Longleftrightarrow$闭映射$\Longleftrightarrow f^{-1}$连续. 故同胚也等价于, 一一映射$f$为连续映射且为闭(开)映射. 
+
+
+然而, 这些拓扑性质, 在连续映射下不一定保持不变(显然是因为连续映射可以不满, 可以不单, 逆映射可以不连续, 故比同胚弱很多), 因而书中出现了很多习题和命题, 来说明拓扑性质在连续映射下的行为. 比如: 第二节习题7: $f$为满的连续映射, $X$可分则$Y$可分(用$f(\overline{A})\subset \overline{f^{-1}(A)}$即证); 第四节习题10: $f$是满的连续闭映射,$X$满足$T_4$则$Y$满足$T_4$[证: 事实上, 看到满映射, 就与全空间有关, 故证明中应该会出现余集. 任取$Y$的两闭集$Y_1$, $Y_2$, $f$连续, 故原像$X_1$, $X_1$为闭集, 有不交开集$A_1$, $A_2$, $A^c_i$为闭集, 由于$f$为闭映射, 故$f(A^c_i)$为闭集, $(f(A^c_i))^c$为开集, 含有$Y_i$(为说明这个只需说明$f(A^c_i)$与$Y_i$无交, 这是显然的), 且$(f(A^c_1))^c$与$(f(A^c_2))^c$不交(只需注意命题: $X=A\cup B\Longleftrightarrow A^c\cap B^c=\emptyset$).] 再如, 紧致空间, 连通空间, 道路连通空间, 在连续映射下的像也是紧致空间, 连通空间, 道路连通空间. 分析可见, 基本上是当$X$具有某拓扑性质时, 其连续映射下的像(或等价地, 满映射)就具有该性质, 但也不完全是这样, 例如$T_4$公理就需要$f$还是闭映射. 
+
+除了连续映射之外, 我们还可以关于拓扑性质的以下问题: 如果$X$(和$Y$)满足某拓扑性质, 则其子集(遗传性)或乘积空间(可乘性)是否还具有该性质. 例如第三节习题5: 可分性是可乘的(任意点$(x,y)$的任意邻域$W$有$U\times V\in W$, $U$为$x$邻域, $V$为$y$邻域, 分别交于$X$和$Y$的可数稠密子集$A$, $B$, 乘积也是可数的.), 但没有遗传性(第四节习题18). $T_1$, $T_2$, $T_3$公理都有遗传性和可乘性[$T_1$, $T_2$的遗传性显然, 只需注意$x\in X$的开邻域$U$, 则$U\cap A$是$x$在$A$中开邻域, 可乘性也显然, 只需注意邻域的乘积是$(x,y)$的邻域. $T_3$的遗传性和可乘性: 遗传性用定义验证, 可乘性用等价定义证明, 只需注意$\overline{A\times B}=\overline{A}\times \overline{B}$.)$T_4$不满足遗传性(反例?)和可乘性(见下). $C_2$具有可乘性和遗传性(证明略, 从而$C_1$也具有). 紧致性, 连通性和道路连通性都没有遗传性($(a,b)\subset[a,b]$), 但都有可乘性. 
+这些性质总结于表\ref{table2}中. 
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\hline
+       &可分性   & $T_1$  & $T_2$  & $T_3$  &$T_4$   &$C_1$  &$C_2$  & 紧致性 & 连通性 & 道路连通性\\
+\hline
+遗传性 &$\times$ & $\surd$&$\surd$  &$\surd$ &$\times$&$\surd$&$\surd$&$\times$&$\times$&$\times$\\
+\hline
+可乘性 &$\surd$  & $\surd$&$\surd$  &$\surd$ &$\times$&$\surd$&$\surd$&$\surd$ &$\surd$ &$\surd$ \\
+\hline
+\hline
+\end{tabular}
+\caption{一些拓扑性质是否具有遗传性和可乘性.}
+\end{table}
+
+现在我们简单叙述$T_4$不满足可乘性, 只需用半开半闭拓扑: $\tau_2=\overline{\{[a,b)|a,b\in R\}}$. 注意, 在上一节中曾经系统学习过该拓扑. 事实上该拓扑被称为low limit topology, 或把$(R,\tau_2)$叫作Sorgenfrey line, 指由左闭右开区间为拓扑基生成的拓扑. 事实上, 它有较欧式拓扑更''优良''的性质, 意思是, 它具有比欧式空间更多的开集. 这是因为每个欧式空间的开集都由开区间生成, 而每个开区间都可由$\tau_2$的开集生成: $(a,b)
+=\cup_{n=1}^\infty[a+\frac{1}{n},b)$, 即可数个$\tau_2$开集的并. 其次, 虽然并非所有开集都是闭集, 但所有形如$[a,b)$的开集都是闭集. 两个Sorgenfrey line 的乘积空间称为Sorgefrey plane, 可以证明其不是$T_4$的: 法1: 只需注意到其子集(副对角线)$A=\{(-x,x):x\in R\}$是离散拓扑子空间(因为$[-x,-x+1)\times[x,x+1)$与$A$只交于$(-x,x)$, 故每个单点集都是$A$的开集, 从而$A$为离散拓扑子空间), 对任意$A$的非空子集$B$, $B$和$A\backslash B$都为$A$的不交闭集, 且可证明$A$为$R^2$的闭集, 从而$B$, $A\backslash B$也为$E^2$的闭集. 从而, 如果$R^2$为$T_4$的, 根据Urysohn引理, 有连续函数$f: R^2\rightarrow [0,1]$, 使$B$映到$0$, $A\backslash B$映到$1$, 故至少有$2^{|R|}$个不同的这样的连续函数. 但有结论: 若$X$可分, 即有可数稠密子集$E$, 则任何两个$X\rightarrow [0,1]$的函数, 若在$E$上重合, 则在整个$X$上重合, 这说明对我们的问题, 只有
+$[0,1]^{Q^2}=2^{|N|}=|R|$个函数, 矛盾. 法2: 只需注意到$A=\{(x,-x)|x\in R\}$为闭集, $C=\{(x,-x)|x\in Q\}$和$A\backslash C$都是闭集(这是因为,显然任意$C$中的元素, 及$R^2\backslash A$中的元素, 都存在开集使与$A\backslash C$不交), 可以证明, $C$的开邻域必有与$A\backslash C$相交(??). 
+
+\subsection{几个常见曲面}
+
+\begin{exercise}1. 如果把矩形带先扭转$360^\circ$, 然后把两侧边粘接, 得什么空间?
+\end{exercise}
+\begin{solution}平环. (问: 但直观上仍与平环不同, 但这个不同在拓扑中无法区分: 因为存在其与平环的同胚(注意到, 任意平环中的开集, 在扭转矩形带中仍为开集)
+\end{solution}
+
+\begin{exercise}2. 证明: 沿M\"{o}bius带的中腰线割开, 所得空间为平环.
+\end{exercise}
+\begin{solution}是一个扭转了$720^\circ$的平环, 同上, 这个扭转在拓扑中无法区分.  
+\end{solution}
+
+\begin{exercise}3. 如果先将圆柱面拧$180^\circ$, 再弯曲粘接两截口, 得什么空间?
+\end{exercise}
+\begin{solution}环面(同样, 这个扭转在拓扑中无法区分). 
+\end{solution}
+
+\subsection{商空间与商映射}
+
+\begin{exercise}1. 设$f: X\rightarrow Y$和$g: Y\rightarrow Z$都是连续映射, 使得$g\circ f$是商映射, 证明$g$也是商映射.
+\end{exercise}
+\begin{solution}
+定义: 一个集合$X$上的等价关系$\sim$, 相应等价类的集合记为$X\slash \sim$, 称为$X$关于$\sim$的商集, 把$X$上的点对应到它的等价类, 得到映射$p: X\rightarrow X\slash \sim$, 称为粘合映射. 
+
+定义: 设$(X,\tau)$是拓扑空间, $\sim$是集合$X$上的一个等价关系. 规定商集$X\slash\sim$上的子集族$\widetilde{\tau}\equiv \{V\subset X\slash \sim |p^{-1}(V)\in \tau\}$, 可验证$\widetilde{\tau}$为$X\slash\sim$上的一个拓扑(只需要注意到$p$是满射, 且逆映射的运算可提到括号外, 见预备知识), 称为$\tau$在$\sim$下的商拓扑, 称$(X\sim\tau, \widetilde{\tau})$是$(X,\tau)$关于$\sim$的商空间. (注: 可验证$p$为开映射, $\widetilde{\tau}$是$X\slash \sim$上使$p$连续的最大拓扑.)
+
+定理3.1: $X$, $Y$是两个拓扑空间, $\sim$是$X$上的一个等价关系, $g:X\slash \sim \rightarrow Y$是一一映射, 则$g$连续$\Longleftrightarrow g\circ p$连续. (按定义即证. 该定理也可叙述为: $f:X\rightarrow X'$为商映射(见下), $g:X'\rightarrow Y$是一映射, 则$g$连续$\Longleftarrow g\circ f$连续.)
+
+定义: $A$是拓扑空间$X$的一个子集, 把$A$看作一个等价类, 其他各点自成一等价类, 得到的商空间记作$X\slash A$. 对任意拓扑空间$X$, 记$CX\equiv X\times I\slash X\times \{1\}$, 称为$X$上的拓扑锥. 如果$X\subset E^n$, $a\in E^{n+1}\backslash E^n$, 规定$E^{n+1}$的子集$aX\equiv \{ta+(1-t)x|t\in I, x\in X\}$称为$X$上以$a$为顶点的几何锥. 
+
+定义(商映射): 设$X$和$Y$是拓扑空间, $f:X\rightarrow Y$称为商映射, 如果(1)$f$连续, (2)$f$是满的, (3)设$B\subset Y$, 如果$f^{-1}(B)$是$X$的开集, 则$B$是$Y$的开集. (注: (1)和(3)合在一起就是: $B$是$Y$的开集$\Longleftrightarrow f^{-1}(B)$是$X$的开集. 当$X\slash \sim$是$X$的一个商空间时, 粘合映射$p:X\rightarrow X\slash \sim$满足此条件, 且是满映射, 故为商映射.
+
+回原题. $g\circ f$是满的, 显然$g$是满的. 且若$g^{-1}(B)$是$Y$的开集, 则$f^{-1}(g^{-1}(B))$是$X$的开集,
+则$B$是$Z$的开集, 故$g$是商映射.
+\end{solution}
+
+\begin{exercise}2. 设$f:X\rightarrow Y$是商映射, $B$是$Y$的开集(或闭集), $A=f^{-1}(B)$, 则$f_A: A\rightarrow B$也是商映射.
+\end{exercise}
+\begin{solution}商映射定义: (1)+(3): $B$为$Y$的开集$\Longleftrightarrow f^{-1}(B)$为$X$的开集, (2) $f$为满映射.
+
+回原题. $f$为满射, 故由$A=f^{-1}(B)$得到$f(A)=B$, 故$f_A:A\rightarrow B=f(A)=f_A(A)$为满射. 连续性: 对任意$B$中的开集$U$, 因为$B$为开集, 故$U$为$Y$中开集, 从而$f^{-1}(U)$为$X$中开集, 且属于$A$, $A=f^{-1}(B)$为$X$的开集, 且$f^{-1}(U)=(f_A)^{-1}(U)$, 故$f_A$为连续映射. 对任意$U\in B$, $f^{-1}(U)=f_A^{-1}(U)$是$A$中开集则也是$X$中开集, 则$U$是$Y$中开集, 故也是$B$中开集, 从而$f_A:A\rightarrow B$而是商映射. 
+\end{solution}
+
+\begin{exercise}3. 设$X$是Hausdorff空间, 证明$CX$也是Hausdorff空间.
+\end{exercise}
+\begin{solution}$CX\equiv X\times I\slash X\times \{1\}$, 由于$X$是Hausdorff的, $I$是Hausdorff的, 故
+$X\times I$是Hausdorff的. 设锥顶为$a= p(x,1), \forall x\in X$. 则$p: X\times [0,1)\rightarrow CX\backslash \{a\}$为同胚映射, 故$CX\backslash \{a\}$为Hausdorff的, 再由其中任一点$(x,t)$, $p(X\times[0,t+\varepsilon))$都为其开邻域, 与$a$的开邻域$p(X\times (t+2\varepsilon,1])$不交, 从而$CX$为Hausdorff空间. 
+
+注意: 我们之前没有证明过类似''连续映射保Hausdorff空间''的命题, 只知道拓扑性质在同胚下保持! 
+\end{solution}
+
+\begin{exercise}4. 设$A$是Hausdorff空间$X$的紧致子集, 证明$X\slash A$也是Hausdorff空间. 
+\end{exercise}
+\begin{solution}
+设$a\in A$, 则$p: X\backslash A\rightarrow (X\slash A)\backslash \{\langle a\rangle\}$为同胚, 注意到$T_2$有遗传性, 故$X\backslash A$为Hausdorff的, 从而在同胚映射下$(X\slash A)\backslash \{\langle a\rangle\}$为Hausdorff的. 且注意Hausdorff空间的紧致子集是闭集, 从而$X\backslash A$为开集, 从而$(X\slash A)\backslash \{\langle a\rangle \}$为开集, 从而任意其开集也是$X\slash A$的开集; 从而只需要再证$\langle a\rangle$与 任意$X\backslash A$中的点有不交开邻域. 注意到第6节的重要命题2.17( $A$是Hausdorff空间$X$的紧致子集, $x\notin A$, 则$x$与$A$有不相交(开)邻域), 从而得证. 
+\end{solution}
+
+\begin{exercise}5.
+\end{exercise}
+\begin{solution}
+商映射的定义: 如果连续满映射$f:X\rightarrow Y$满足对$B\subset Y$, 若$f^{-1}(B)$是$X$的开集, 则$B$是$Y$的开集. 
+
+定义: 任给$f:X\rightarrow Y$, 规定$X$中等价关系$\overset{f}{\sim}$如下: 若$f(x)=f(x')$, 则说$x$与$x'$$\overset{f}{\sim}$等价, 记作$x\overset{f}{\sim} x'$.
+
+命题: 如果$f:X\rightarrow Y$是商映射, 则$X\slash \overset{f}{\sim} \cong Y$. (证: 记$p:X\rightarrow X\slash \overset{f}{\sim}$是粘合映射, 则显然有一一对应$g: X/\overset{f}{\sim}\rightarrow Y$, 使$g\circ p= f$, 等价地$g^{-1}\circ f =p$. 由定理3.1得到$g$, $g^{-1}$的连续性, 故$g$是同胚. 
+
+命题: 连续的满映射$f: X\rightarrow Y$若还是开映射或闭映射, 则它是商映射. (证略.)
+
+定理: 如果$X$紧致, $Y$是Hausdorff空间, 则连续满映射$f: X\rightarrow Y$一定是商映射(只需注意紧致空间的闭子集$A$紧致; 从而$f(A)$紧致(紧致空间的像紧致), 再由Hausdorff性推出$f(A)$为闭集.) (注意, 定理2.6是连续的一一对应+$X$紧致, $Y$Hausdorff则推出映射为同胚的; 可见此处为其一个推广. 
+
+命题: 商映射的复合映射也为商映射. (证略.)
+
+回原题. (1)连续满射是显然的. 对$V\subset [0,1]$有$f^{-1}(V)\cap [0,1]=V$, 若$f^{-1}(V)$为$(-2,1)$的开集, 则按定义, $V$为$[0,1]$的开集. 
+(2)$f((-0.5,0.5))=[0,0.5]$不为开集; $f((1,2))=1$不为开集; $f((-1,-0.5])=[0.5,1)$不为闭集. 
+\end{solution}
+
+\begin{exercise}6. 证明$S^1\times S^1  \cong T^2$.
+\end{exercise}
+\begin{solution}$f:I\times I \rightarrow S^1\times S^1$, $f(x,y)=(e^{i 2\pi x},e^{i 2\pi y})$, 由定义3.2证$f$为商映射, 且$I\times I \slash \overset{f}{\sim}$的意义是对边粘合故同胚于$T^2$. 
+\end{solution}
+
+\begin{exercise}7. 证明$E^2/D^2\cong E^2$.
+\end{exercise}
+\begin{solution}
+参见例2. 总结一下\textbf{证明$A\slash B\cong C$的一般思路:} 一般先作映射$f: A\rightarrow C, $ 再说明它是商映射, 且说明$A\slash \overset{f}{\sim} \cong A\slash B$(一般这个是商映射的定义隐含的: 注意到$A/\overset{f}{\sim}$的意思是$A$中非单射的点作认同, 如果这些点就是$B$, 则有$A\slash \overset{f}{\sim} \cong A\slash B$), 再由命题3.1, $A\slash \overset{f}{\sim}\cong C$, 从而$A\slash B\cong C$. 说明是商映射时, 可用定理3.2: 只需要说明$A$紧致, $C$是Hausdorff, $f$为连续满映射.
+
+对本题, 映射$f(r,\theta)\rightarrow f(r-1,\theta)$若$r>1$, $f(r,\theta)\rightarrow (0,0)$若$0\leq r\leq 1$. 显然是连续满映射, 且为闭映射[这是证明的难点. 证: 若$A$是有界闭集, 则$A$紧致, 故$f(A)$紧致, 故是$E^2$的闭集; 若闭集$A$与$D^2$不交, 则$d(A,(0,0))=1+\varepsilon$, 则利用$f|E^2\backslash D^2$为同胚映射, 知$f(A)$为$E^2\backslash\{(0,0)\}$的闭集, 且$f(A)\subset E^2\backslash B((0,0),\varepsilon)$, 故事$E^2$的闭集. 一般地, 任意闭集可表为$A=A_1\cup A_2$, $A_1$有界闭集, $A_2$与$D^2$不交. 下略.] 从而是商映射, 而且根据商映射的定义知 $E^2 \slash \overset{f}{\sim} \cong E^2\slash D^2$, 再由命题3.1 得证. 
+\end{solution}
+
+\begin{exercise}8. 设$A$是环面$T^2$上一经圆与一纬圆的并集. 证明: $T^2\slash A \cong S^2$.
+\end{exercise}
+\begin{solution}
+设$p_1$为 $I\times I$到$T^2$的标准粘合映射(见P81例1), 再设$p_2$为$T^2$通过粘合某经圆和某纬圆的并集为一点的粘合映射, 则$p_2\times p_1$显然是商映射, 且意义是把$I\times I$的边界视为一点, 从而$T^2\slash A
+\cong I\times I/\partial(I\times I) \cong S^2$.
+\end{solution}
+
+\begin{exercise}9. $M$是M\"{o}bius带, $\partial M$是它的边界. 证明: $M\slash \partial M \cong P^2$.
+\end{exercise}
+\begin{solution}用例4的结论: 存在粘合映射$p_1$, 把三角形映到M\"{o}bius带, 再由粘合映射$p_2$是把三角形剩下的一条边粘为一点. 注意粘合映射可交换. 得证. 
+\end{solution}
+
+\begin{exercise}10. 设$X$是$E^n$中的紧致子集, $a\in E^{n+1}\backslash E^n$, 证明: $ aX\cong CX$.
+\end{exercise}
+\begin{solution}
+回顾定义: $CX\equiv X\times I\slash X\times \{1\}$, $aX \equiv \{ta+(1-t)x|t\in I, x\in X\}$. 
+
+定义$f(x,t)=ta+(1-t)x$, 显然为$X\times I$到$aX$的连续满射(连续性可用$\varepsilon-\delta$语言证明). 注意$aX$是$E^{n+1}$的子集, 故是Hausdorff的($T_2$的遗传性), 且$X$紧致, $I$紧致故$X\times I$紧致(紧致的可乘性), 故由定理3.2知$f$为商映射. 且注意到$x\in E^{n+1}\backslash E^n$, $X\in E^n$, 故在$X\times [0,1)$, $f$为同胚. 而$f(X\times 1)=a$, 从而显然有$X\times I\slash \overset{f}{\sim}\cong CX$. 再由命题3.1, 得证. 
+\end{solution}
+
+\begin{exercise}11. 
+\end{exercise}
+\begin{solution}
+(1)记$(0,1]$中的代表元为$1$. $p((0,1))=1$, $p([0.3,0.4])=1$, 但$p^{-1}(1)=(0,1]$, $(0,1]$不是$E^1$中开集, 故按定义$1$不是$E^1\slash (0,1]$中开集. 故不是开映射. $p^{-1}((E^1\slash(0,1])\backslash(0,1])$不是$E^1$中的开集, 故$1$也不是$E^1\slash (0,1]$中的闭集. 
+
+(2)(注: 如果$f^{-1}(V)$开, 则$V$开. 连续性是: $V$开, 则$f^{-1}(V)$开. 粘合映射显然都满足, 因为商空间的定义就是用这个来定义的, 是双向满足的. 或说, 粘合映射一定是商映射.) 
+
+回原题. $p_A$是一一的, 注意$A$的拓扑是$E^1$的拓扑在$E^1\backslash (0,1]$上的诱导拓扑, $p(A)=A$是商映射的拓扑在子集$A$上的诱导拓扑, 拓扑是不同的. $(-1,0]$是$A$(定义域)的开集; 由于$p^{-1}((-1,0])=(-1,0]$不为$E^1$的开集, 故$(-1,0]$也不为$E^1\slash(0,1]$的开集, 注意$(-1,0]\cap p(A)=(-1,0]$, 显然也不为$p(A)$的开集. 从而不为商映射. 
+\end{solution}
+
+\begin{exercise}12. 设$f: S^2\rightarrow E^4$规定为$f(x,y,z)=(x^2-y^2,xy,xz,yz)$, 证明$f(S^2)\cong P^2$.
+\end{exercise}
+\begin{solution}
+注意: $f: S^2\rightarrow f(S^2)$为连续满映射, 且要证$f$为开映射或闭映射(注此题的$f$应该既是开映射也是闭映射, 但如何证?), 从而$f$是商映射. 只要再证在$\overset{f}{\sim}$下, 两点等价必为对径点, 从而由命题3.1有$f(S^2)\cong S^2\slash \overset{f}{\sim}\cong P^2$, 后一个同胚是因为$\overset{f}{\sim}$按$f$的定义就是$P^2$. 证对径点映到同一点: 
+若$(x^2-y^2,xy,xz,yz)=(x'^2-y'^2,x'y',x'z',y'z')$, 可推出必有$(x,y,z)=\pm(x',y',z')$.  
+\end{solution}
+
+\begin{exercise}13. 证明由$f(x,y)=(\cos2x\pi,\cos 2y \pi, \sin2y\pi, \sin2x\pi\cos \pi y, \sin2x \pi \sin \pi y)$规定的映射$f: I\times I \rightarrow E^5$的像$f(I\times I) \cong $Klein瓶.
+\end{exercise}
+\begin{solution}
+仍然找非单射的点, 只有$f(1,y)=f(0,y)$, $\forall y\in I$, 以及$f(x, 1)=f(1-x, 0)$, $\forall x\in I$. 显然$f: I\times I\rightarrow f(I\times I)$为连续满映射, 再证为开映射或闭映射(如何证?), 则仿上题知有$f(I\times I)\cong I\times I\slash \overset{f}{\sim}\cong$Klein瓶.
+ \end{solution}
+ 
+ \begin{exercise}14. 设$X, Y$是两个集合, 记$X\bigsqcup Y$为无交并, 即公共点也算不同元素, 从而作为$X\bigsqcup Y$的子集, $X\cap Y=\emptyset$. 设$(X_i, \tau_i),i=1,2$为两拓扑空间, 规定$X_1\bigsqcup X_2$的拓扑$\tau=\{U\subset X_1 \bigsqcup X_2|U\cap X_i \in \tau_i\}$, 称为拓扑和, 拓扑空间记为$X_1+X_2$. 设$X$, $Y$为两拓扑空间, $A\subset X$, $f: A\rightarrow Y$连续, 在$X+Y$中规定等价关系$\sim$, 使等价类为(1) $X\backslash A$中的单个点, 或(2) $\{y\}\cup f^{-1}(y)$, $\forall y\in Y$. 称商空间$(X+Y)\slash \sim$为映射$f$的贴空间, 记作$Y\cup_f X$.  
+ 
+ 设$i: S^1\rightarrow D^2$是包含映射, 证明$D^2\cup_i D^2\cong S^2$. 
+ \end{exercise}
+ \begin{solution}映射$f: D^2+D^2\rightarrow S^2$($f$的构造是显然的, 故略), $f$显然为满的连续开映射(如何说明是开映射?),使得$D^2\cup_i D^2
+ \cong D^2+D^2/\overset{f}{\sim} \cong S^2$.
+ 
+注: 再次强调\textbf{证明$A\slash B\cong C$的一般思路:}一般先作映射$f: A\rightarrow C, $ 再说明它是商映射, 且说明$A\slash \overset{f}{\sim} \cong A\slash B$(一般这个是商映射的定义隐含的: 注意到$A/\overset{f}{\sim}$的意思是$A$中非单射的点作认同, 如果这些点就是$B$, 则有$A\slash \overset{f}{\sim} \cong A\slash B$), 再由命题3.1, $A\slash \overset{f}{\sim}\cong C$, 从而$A\slash B\cong C$.
+ \end{solution}
+
+\begin{exercise}15. 
+\end{exercise}
+\begin{solution}
+思路见上一题注. 作$p: E^2_++E^2_+\rightarrow E^2$为$p(x,y)=(x,y)$, 当$(x,y)$属于左边的$E^2_+$, $p(x,y)=(x,-y)$, 当$(x,y)$属于右边的$E^2_+$. $p$是满的连续闭映射(如何说明是闭映射?), 故是商映射, 且$\overset{p}{\sim}$就是$f$所决定的等价关系, 故得证. 
+\end{solution}
+
+最后补充本节最后内容: 
+
+定理3.3 设$f: X\rightarrow Y$是商映射, $Z$是局部紧致的Hausdorff空间, $\text{id}: Z\rightarrow Z$为恒同映射, 则$f\times \text{id}: X\times Z\rightarrow Z$也是商映射. 
+
+证明: 记$F=f\times \text{id}$, 显然是连续满映射, 只需验证当$W\subset Y\times Z$使得$F^{-1}(W)$是开集时, $W$是开集. 任取$(y_0,z_0)\in W$, 证其是$W$的内点. 取$x_0\in f^{-1}(y_0)$, $(x_0,z_0)\in F^{-1}(W)$, 有$z_0$的邻域$B$, 使$\{x_0\}\times B\subset F^{-1}(W)$, 即$\{y_0\}\times B\subset W$. 由$Z$是局部紧致Hausdorff空间, 可不妨设$B$紧致(命题2.20(2)), 规定$Y$的子集$V \equiv \{y\in Y|\{y\}\times B\subset W\}$, 则$y_0\in V$, 且$V\times B\subset W$. 如果$f(x)=y$, 则$F(\{x\}\times B)=\{y\}\times B$, 从而$y\in V$等价于$\{x\}\times B\subset F^{-1}(W)$. 规定$U=f^{-1}(V)$, 则$U=\{x\in X|\{x\}\times B\subset F^{-1}(W)\}$. 由$B$紧致, $F^{-1}(W)$开集, 故对任意$x\in U$, 则$\{x\}\times B\subset F^{-1}(W)$, 有$x$的邻域$U_x$, 使得$U_x\times B\subset F^{-1}(W)$, 即$U_x\subset U$, 故$U$为开集, 由于$f$是商映射, 故$V$也是开集, 从而$(y_0,z_0)$是$V\times B$的内点, 从而也是$W$的内点. 得证. 
+
+注, 上方证明思路: 已说明, 大目标是证明$F^{-1}(W)$开时, $W$也开, 即任一$W$中点$(y_0,z_0)$为内点. 注意我们还知道$f$为商映射故若有$f^{-1}(V)=U\subset X$为开集则$V$开(我们当然希望$y_0$在$V$中, 从而是$y_0$的邻域), 而如果再能找到$z_0$的邻域$B$, 且使$V\times B\subset W$, 则得证. 这样问题转化为如何找到合适的$V$. 从$V$的要满足的条件看到还涉及到一个$z_0$的邻域$B$, 不妨先选定它: $F^{-1}(W)$为开集故存在$z_0$的邻域$B$使$\{x_0\}\times B\subset F^{-1}(W)$, 且通过$Z$的性质可选$B$紧致(后面将用到这个紧致性), 从而确定下了$B$. 下面要确定$V$. 首先要保证的就是$V\times B\subset W$, 从而我们自然先尝试$V=\{y\in Y|\{y\}\times B\subset W$, 且显然$y_0\in V$. 自然地$U=f^{-1}(V)$, 我们要证$U\times B\subset F^{-1}(W)$, 这是显然的(见上方的证明). 下面只需证明$U$为开集, 注意到第6节P56的引理, 这是成立的. 故得证. 
+
+注意: $E^1$, $I$都是局部紧致的Hausdorff空间(局部紧致是说任意$X$中的点$x$都有紧致的邻域), 以后在代数拓扑中将常在$Z=E^1$或$I$的情况下应用此定理. 
+
+\subsection{拓扑流形与闭曲面}
+
+\begin{exercise}1. 证明流形满足$C_1$公理.
+\end{exercise}
+\begin{solution}
+定义: 一个Hausdorff空间$X$称为$n$维(拓扑)流形, 如果$X$的任一点都有一个同胚于$E^n$或$E^n_+$的开邻域. (从而二次锥面不是流形. 注意, 二次锥面指的是两个通常意义的锥面顶点相对放在一起, 而不是只有一个锥!)设$M$是$n$维流形, $x\in M$如果有同胚于$E^n$的开邻域, 则称$x$是$M$的内点, 否则只有同胚于$E^n_+$的开邻域, 称为边界点. 全体内点的集合称为$M$的内部, 是$M$的一个开集. (注: 以上我们还默认了事实不同维数的欧式空间不同胚, $E^n_+$与$E^n$不同胚, 这些只有在代数拓扑中可证.)
+
+回原题: 设$x$点的开邻域$U$同胚于$E^n$, 则存在同胚映射$f:U\rightarrow E^n$. 记$\mathscr{U}=\{f^{-1}(B(f(x), 1/n))|n\in N\}$, 则$x$的任意开邻域$V$, $U\cap V$也是$x$的开邻域, $f(U\cap V)$是$f(x)$的开邻域, 必存在$B(f(x),1/n)\subset f(U\cap V)$. 对$x$的同胚于$E^n_+$的开邻域, 取$\mathscr{U}_+=\{f^{-1}(B(f(x),1/n)\cap E^n_+ )|n\in N\}$, 证法同上.
+\end{solution}
+
+\begin{exercise}2. 证明紧致流形满足$C_2$公理.
+\end{exercise}
+\begin{solution}
+任一点$x$都有开覆盖$U$同胚于$E^n$或$E^n_+$. 先证$U$是$C_2$的: 对其中任一开集, 映到$E^n$或$E^n_+$的开集, 显然$E^n$或$E^n_+$是$C_2$的(取所有有理点的所有半径$1/n$的开球), 且$C_2$是遗传的, 把这些集合映回$U$也是$U$的拓扑基; 再注意到紧致性, 每点同胚于$E^n$或$E^n_+$的开邻域的并有有限子覆盖, 故任意开集, 都可被其覆盖. 得证. (事实上: 只需注意到拓扑性质在同胚下不变, 故$U$一定为$C_2$的!)
+\end{solution}
+
+\begin{exercise}3. 证明紧致流形是可度量化的.
+\end{exercise}
+\begin{solution}
+定义: 一个拓扑空间$(X,\tau)$称为可度量化的, 如果可以在集合$X$上规定一个度量$d$, 使得$\tau_d=\tau$(P48).
+
+命题(P48): 拓扑空间$X$可度量化等价于存在从$X$到一个度量空间的嵌入映射. 
+
+定理(Urysohn度量化定理): 拓扑空间$X$如果满足$T_1$, $T_4$, $C_2$, 则可嵌入到Hilbert空间$E^\omega$中. 
+
+回原题. 由紧致Hausdorff空间推得满足$T_4$(命题2.18, P55), 再用Urysohn度量化定理即得结论.
+\end{solution}
+
+\begin{exercise}4. 
+\end{exercise}
+\begin{solution}
+由P25例1, 只需证同胚于开区间. $x\in(-1,1)$时, 选邻域$(x-\varepsilon,x+\varepsilon)$; $x\notin (-1,1)$时, 取$p((-|x|-\varepsilon,|x|+\varepsilon))$, $x=\pm 1$ 时, 可选$p((-1-\varepsilon,-1)\cup(1-\varepsilon, 1+\varepsilon))$, 可以验证都为$E^1\slash \sim$的开邻域, 作从这些(像)邻域到开区间的一一映射(作法是显然的故略), 且显然为连续映射, 逆也连续(开区间的开集也是$E^1$的开集, 故在$p$下也是$E^1\slash \sim$的开集; 反之亦然), 故每一点都有同胚于$E^1$的开邻域. 但点$1$和$-1$的邻域必相交, 这是因为它们的邻域的原像必是$\pm 1$在$E^1$中的邻域, 注意到$\{B(x,1/n)|x\in Q\}$为拓扑基, 故至少存在一个$B(x, 1/n)\ni 1$, 从而$1$的两边都被开集覆盖. 从而必相交. 
+\end{solution}
+
+\begin{exercise}5. 证明流形满足$T_3$公理.
+\end{exercise}
+\begin{solution}
+任一点$x$及其任意开邻域$V$, 设$x$的开邻域$U$同胚于$E^n$或$E^n_+$, 则$U\cap V$同胚于$E^n$的开子集, 由$T_3$有遗传性及$E^n$为$T_4,T_1$的, 故$U\cap V$为$T_3$的, 故存在$x$的开集$W\subset U\cap V$使$\overline{W}\subset U\cap V\subset V$.
+\end{solution}
+
+\begin{exercise}6. 证明流形局部道路连通和局部紧致.
+\end{exercise}
+\begin{solution}
+局部紧致定义: 任意点有紧致邻域. (注意, 如果我们证明了流形$X$是局部紧致的, 则由其为Hausdorff的, 故其满足$T_3$公理(命题2.20, P57). 证明其局部紧致是显然的, 略. 
+
+局部道路连通: 任一点$x$, 其道路连通邻域构成$x$的邻域基. 证明: 注意到每一点都有邻域$U$同胚于$E^n$或$E^n_+$, 为道路连通的, 故任意$x$的邻域$V$, $V\cap U$包含道路连通的开邻域. 
+\end{solution}
+
+\begin{exercise}7. 证明流形的内部是它的开子集.
+\end{exercise}
+\begin{solution}
+内部中任一点$x$, 有邻域$U$同胚于$ E^n$, 从而$U$中任一点都有邻域$U$同胚于$E^n$, 故$U$包含于内部.
+\end{solution}
+
+正文中的其他内容: 
+
+记$n$维流形有边界点, 则记$\partial M$是它的边界点的集合, 可以证明$\partial M$是一个没有边界点的$(n-1)$维流形.
+
+定义:  二维流形称为曲面, 没有边界点的紧致连通曲面称为闭曲面. 
+
+$E^2, D^2$, 平环, M\"{o}bius带都不是闭曲面, 因都有边界点. 射影平面$P^2$是闭曲面, 它的紧致性与连通性明显(原空间连通, 则连续映射$p$的像也连通), 只需证每一点有开邻域同胚于$E^2$. 将它看作$D^2$粘合$S^1$上对径点的商空间, $p$是粘合映射, 如果$y\in P^2$在$p$下的原像是$D^2$的一个内点$x$, 则$p(D^{2\circ})\cong D^{2\circ} \cong E^2$, 是$y$的开邻域, 如果$p^{-1}(y)$是$S^1$上一堆对径点$x$, $x'$, 取$U=B(x,\varepsilon)\cup B(x',\varepsilon),\varepsilon <1$, 则$p(U)\propto E^2$(利用上一节习题15). Klein瓶也是闭曲面(证略). 一般地, 假设$\Gamma$是一个偶数边的多边形, 如果成对地粘接$\Gamma$的边, 那么所得的商空间时闭曲面. 
+
+定义: 环柄,亏格为$n$的可定向闭曲面$nT^2$, 安交叉帽(从而变为闭曲面), 亏格为$m$的不可定向闭曲面$mP^2$(也即球面洞口的对径点粘合), $1P^2$就是$P^2$, $2P^2$是Klein瓶. 
+
+
+\subsection{闭曲面分类定理}
+
+闭曲面定义: 没有边界点的紧致连通曲面. 
+
+定理3.4(闭曲面分类定理)$\{nT^2\}$和$\{mP^2\}$不重复地列出了闭曲面的所有拓扑类型(在同胚意义下).
+
+定理的结论有两部分: (1)任一闭曲面或属于$nT^2$型(对某个$n$), 或属于$mP^2$型(对某个$m$). (2)对任意$n,m,
+nT^2\neq mP^2$; 当$n\neq n'$时, $nT^2\neq n'T^2$, 当$m\neq m'$时, $mP^2\neq m' P^2$. (注:(2)的证明要用到基本群或同调群, (1)可用商空间方法证明.)
+
+引理: 任一闭曲面都有多边形表示. 
+
+命题: 除球面外, 任一闭曲面都有标准表示(标准多边形表示只有两类): $a_1b_1a^{-1}_1b^{-1}_1a_2b_2a^{-1}_2b^{-1}_2\cdot a_nb_na^{-1}_nb^{-1}_n$, 便是$nT^2$型曲面, $a_1a_1a_2a_2\cdot a_ma_m$表$mP^2$型曲面.
+
+引理: $(\Gamma', \varphi')$中反向边对不相邻, 且至少与另一边对相间排列.
+
+对任一给定的多边形表示, 为确定标准多边形表示, 只需看: (i)有无同向对(有: 必为$mP^2$, 否则为$nT^2$), (ii)标准化表示的边数$=l$(原表示的边数)$-2k$(两倍的原表示的顶点类个数)$+2$. 
+
+\begin{exercise}1. 
+\end{exercise}
+\begin{solution}(1)有同向对(故为$mP^2$型), 原边数为$8$, 顶点类个数为$2$(画图即知), 标准化边数为$6$, 故为$3P^2$. (2)有同向对(故为$mP^2$型), 顶点类个数为$1$(画图即知), 标准化边数为$8$, 故为$4P^2$. (3)无同向对(故为$nT^2$型), 顶点类个数为$1$, 标准化边数为$8$, 为$2T^2$. (4)有同向对(故为$mP^2$型), 原边数为12, 顶点类个数为$1$, 标准化边数为$12-2\times 1+2=12$, 故$m=12/2=6$, 为$6P^2$.
+\end{solution}
+
+\begin{exercise}2.
+\end{exercise}
+\begin{solution}(1)$(m+n)T^2$, (2)$(m+n)P^2$(打的补丁仍然是$m+n$个M\"{o}bius带); (3)注意有同向对故必为$\sim P^2$型; 两者的标准化表示见上方命题, 可以在$nT^2$的$b^{-1}_1$后引入两条反接的$cc^{-1}$, 在$mP^2$的第二个$a_1$后引入两条反接的$cc^{-1}$, 再粘合即可. 再用公式, 注意到当前的标准化表示边数为$4m+2n$, 故为$(2m+n)P^2$. 
+\end{solution}
+
+\begin{exercise}3. 
+\end{exercise}
+\begin{solution}
+用上一题(3)知为$3P^2$.
+\end{solution}
+
+\section{代数拓扑习题作答}
+
+\subsection{关于群的补充知识}
+
+\begin{exercise}1. 设$F$是自由交换群, $H_1$, $H_2$都是交换群. 又设$j:H_1\rightarrow H_2$是满同态, $f_2:F\rightarrow H_2$是同态, 则存在同态$f_1 : F\rightarrow H_1$, 使得$j\circ f_1= f_2$.
+\end{exercise}
+\begin{solution}
+定义: 群$G$的子群$N$是正规子群, 如果它在共轭变换下不变, 即: 对每个$n\in N$和$g\in G$, 有$gng^{-1}\in N$. 对于一般的$G$的子群$H$, 其陪集的集合$\{a H|a\in G\}$ 不一定是一个群: 子集的积的定义$aH\times bH=ab H$并不自洽(因可能存在$aH$和$bH$中元素的乘积并不在$abH$中). 当$H$是正规子群时, 这是自洽的($ag'bg=abg''g\in H$). 且左陪集和右陪集是一样的, 统称陪集, 陪集组成的群叫作$G$关于$H$的商群, 记为$G/H$. (例如, 空间群中, 平移群是其正规子群. 交换群的任何子群都是正规子群.) 若存在$G$到$H$的满同态$f$, 则同态的核为$G$的正规子群, $H$同构于$G/\text{Ker} f$, 即为$G$的商群. 反之, 对任意一个$F$和其商群$H$, 存在从$F$到$H$的满映射. 故商群与满映射的像同构. 这即是群同构基本定理的第一条.
+
+定理: 群同构第一定理: 给定$G$和$G'$两个群, $f:G\rightarrow G'$群同态, 则$f$诱导出一个从$G/\text{Ker}f$到$f(G)$的群同构. 
+
+群同构第二定理: 给定群$G$、其正规子群$N$、其子群$H$, 则$N\cap H$是$H$的正规子群(显然),  且有群同构$H/(H\cap N) \cong HN/N$. 
+
+群同构第三定理: 给定群$G$, $N$和$M$为$G$的正规子群, 满足$M\subset N$, 则$N/M$是$G/M$的正规子群, 且有群同构$(G/M)/(N/M)\cong G/N.$
+  
+
+定义: 交换群$F$称为自由交换群, 如果有子集$A\subset F$, 使得$\forall x\in F$可唯一表示成$A$中有限个元素的整系数线性组合: 
+$$x= \sum\limits_{i=1}^k n_ia_i, \quad a_i\in A, n_i\in\mathbb{Z}.$$
+称$A$为$F$的一个基. 如果自由交换群$F$有一个基$A$只包含有限个元素, 则称$F$是有限基自由交换群. 
+
+注: 自由交换群的定义要抓住唯一这个词. 如果一个$x\in F$, 则按群的乘法, $2x$, ...,$nx$都属于$F$; 但不可能有一个$nx=0$, 否则与唯一性相违背. 所以, 直观上已经可以感受到它与$\mathbb{Z}^n$的同构性(见直和一节). 
+
+设$A$是自由交换群的基, $H$是一交换群, 则从$A$到$H$的任一对应$\theta: A\rightarrow H$可按下式唯一决定同态$\varphi: F\rightarrow H$: 
+$$\varphi(\sum_{i=1}^k n_i a_i) = \sum_{i=1}^k n_i\theta(a_i).$$
+则称$\varphi$是$\theta$的线性扩张. 如果交换群$H$有一有限子集$A= \{a_1,\cdots,a_r\}$, 使得$H$的每个元素$x$可表为$x= \sum_{i=1}^rn_ia_i$, 则称$H$是有限生成交换群, $A$是它们的一个生成元组. (注: 与上面有限基自由交换群的概念比较可以看到, 区别在于: 这里有限生成交换群的元素表示法不是唯一的. )
+
+命题: 交换群$H$是有限生成的$\Longleftrightarrow$$H$是一个有限基自由交换群$F$的商群. (证: $\Longleftarrow$: 设$j: F\rightarrow H$是满同态, $F$为有限基自由交换群故$\{j(f_1),\cdots,j(f_r)\}$是$H$的生成元组(显然). $\Longrightarrow$: 取$H$的生成元组$\{a_1,\cdots,a_r\}$, 构造$F$为$F=\{(n_1,\cdots,n_r)|n_i\in \mathbb{Z}\}$,  则$F$在向量加法下式有限基自由交换群. 规定$j: F\rightarrow H$为$j(n_1,\cdots, n_r)=\sum\limits_{i=1}^nn_ia_i$, 则$j$是满同态. )推论: 有限生成交换群的商群也是有限生成的.
+
+回原题. $j$是$H_1$到$H_2$的满同态, 故$H_2$是$H_1$的商群($H_1$模掉$j$的核这个正规子群). 现在$f_2$是$F$到$H_2$的同态, 则存在$F$的一个基$A$. 作$f_1:F\rightarrow H_1$使得$f_1(a)$等于$f_2(a)$(是$H_1$中$j$的核的陪集)的某个元素, 即得$j\circ f_1 = f_2$. 得证. 
+\end{solution}
+
+下只讨论有限生成的交换群. 重复其定义: 如果交换群$H$有一有限子集$A=\{a_1,a_2,\cdots,a_r\}$, 使得$H$的而每个元素$x$可以表成$x=\sum_{i=1}^rn_ia_i$, 的形式, 则称$H$是有限生成交换群, 称$A$是它们的一个生成元组. 设$H$是有限生成交换群, $h\in H$称为有限阶的, 如果存在$r\in \mathbb{N}$使得$rh=0$. 记$T_H$是$H$的全部有限阶元素构成的集合, 则$T_H$是$H$的子群, 称为$H$的挠子群. 设$H_0$是$H$的子群, 规定
+$$C(H_0)\equiv \{h\in H|\text{存在}r\in \mathbb{N}, \text{使得}rh\in H_0\},$$
+它是$H$的一个子群, 它是$H$的一个子群, 特别地, $C(T_H)=C(0)=T_H$. 
+
+命题: (1) $H/C(H_0)$ 无有限阶非0元素; (2) $C(H_0)/H_0$的每个元素都是有限阶的. (证: (1) 设$h\in H$, 使得它代表的商群元素$\langle h\rangle \in H/C(H_0)$ 是有限阶的, 则有$r\in \mathbb{N}$, 使得$r\langle h\rangle  = 0$, 故$rh \in C(H_0)$, 由定义, 存在$r'\in \mathbb{N}$, 使得$r'(rh)\in H_0$, 故$h\in C(H_0)$, $\langle h\rangle =0$. (2)由$C(H_0)$的定义即得: $C(H_0)/H_0$中任一元素可写为$a+H_0$, 其中$a\in C(H_0)$, 按定义存在$r\in \mathbb{N}$, $ra\in H_0$, 从而$r(a+H_0) =H_0$, 从而为$r$阶(有限阶).) 推论: $H/T_H$无有限阶非零元素. 
+
+注: $T_H$的意义很好理解, 就是有限阶元素的集合(是个群). $C(H_0)$的意思是, 把$H_0$的元素的所有''方根''元素找出来. 命题是说, 这就导致$H/C(H_0)$无有限阶非零元素. (思路:设 $h\in H$代表的$h+C(H_0)$的等价类是有限阶的, 则存在$r$使得$rh+rC(H_0)=C(H_0)$, 故$rh\in C(H_0)$, 从而存在$r'$使得$r'rh\in H_0$, 从而$h\in C(H_0)$, 从而$h+C(H_0)$为零阶. )
+
+引理: 设$r_1,\cdots, r_n$都是整数, 其最大公约数为1. 则存在$A\in GL^0_n(\mathbb{Z})$使得$A
+(r_1,\cdots,r_n)^T=(1,0,\cdots)$. (证略.)
+
+定理: 没有有限阶非0元素的有限生成交换群是自由群. 
+
+证明: 自由交换群的定义是任意元素可唯一表为某子集中有限个元素的整系数线性组合. 设$H$是有限生成交换群, 它没有有限阶非0元素.假设$H$的生成元组包含元素个数的最小值为$n$, 并且$\{a_1,\cdots, a_n\}$是一个生成元组. 用反证法说明它自由生成$H$. 否则有不全为0的整数$r_1,\cdots,r_n$, 使得$r_1a_1+r_2a_2+\cdots r_na_n=0$. 由于$H$没有有限阶非0元素, 不妨课设最大公约数$(r_1,\cdots,r_n)=1$, 则由引理, 有$A\in GL^0_n(\mathbb{Z})$, 使得$A(r_1,\cdots,r_n)^T=(1,0,\cdots,0)^T$, 令$(b_1,\cdots,b_n)=(a_1,\cdots,a_n)A^{-1}$, 则$\{b_i\}$也是$H$的生成元组, 并且可证$b_1$=0. 故$\{b_2,\cdots,b_n\}$为$H$的生成元组. 矛盾. 
+
+推论: 设$H_0$是有限生成交换群$H$的子群, 则$H/C(H_0)$是自由交换群. 特别地, $H/T_H$是自由交换群. 
+
+\begin{exercise}2. 证明两个有限生成交换群的直和也是有限生成的.
+\end{exercise}
+\begin{solution}
+交换群的直和就是普通群的直积的概念. 两个交换群$H_1$和$H_2$的直和是一个交换群, 记作$H_1\oplus H_2$, 其集合为$\{(h_1,h_2)|h_i\in H_i, i=1,2\}$, 加法由$(h_1,h_2)+(h'_1,h'_2)=(h_1+h'_1,h_2+h'_2)$规定. 任意有限个交换群的直和可类似地规定. 设$H$有一组子群$H_1,\cdots, H_n$使得对任意$h\in H$可唯一表为$h\sum_{i=1}^n h_i,h_i\in H_i$, 则$\oplus_{i=1}^nH_i\cong H$. 这时称$H$是$H_1,\cdots,H_n$的内直和, 记作$H=\oplus_{i=1}^nH_i$, 称$H_i$是$H$的直和因子. 设$F$是有限基自由交换群, $\{f_1,\cdots,f_n\}$是它的基, 记$\langle f_i\rangle$是$f_i$生成的自由循环群, 则
+$$F= \bigoplus\limits_{i=1}^n\langle f_i\rangle \cong \underbrace{\mathbb{Z}\oplus\cdots\mathbb{Z}}_{n\text{个}} = \mathbb{Z}^n.$$
+
+回原题. 显然. (任意直和的任意元素写为$(h_1,h_2)$, 其中$h_1= \sum n_i a_i$, $h_2=\sum m_j b_j$. 直和生成元为$(a_i,0),(0,b_j)$. 
+\end{solution}
+
+\begin{exercise}3. 设$F=F_1\oplus F_2$, 其中$F_1$, $F_2$都是自由交换群, 分别以$A_1$和$A_2$为基, 则$F$也是自由交换群, 以$A_1\times \{0\}\cup \{0\}\times A_2$为基. 
+\end{exercise}
+\begin{solution}
+对$(f_1,f_2)$, 两分量都可独立唯一表为整系数线性组合. 且注意$(f_1,f_2)=(f_1,0)+(0,f_2)$, 故以$A_1\times \{0\}\cup \{0\}\times A_2$为基.
+\end{solution}
+
+命题: 设$H_1,H_2$是$H$的子群, $H_1+H_2=H$( 即$\forall h\in H$, 有表示式$h=h_1+h_2,h_i\in H_i$, 并且$H_1\cap H_2=0$, 则$H = H_1 \oplus H_2$. (只需证分解式的唯一性. 略.)
+
+\begin{exercise}4. 设$H_1$, $H_2$都是交换群, $f:H_1\rightarrow H_2$和$g:H_2\rightarrow H_1$是同态, 满足$f\circ g = \text{id}$, 则 $H_1 = \text{Im} g\oplus \text{Ker} f$. 
+\end{exercise}
+\begin{solution}
+命题: 设$j: H\rightarrow F$是满同态, 且$F$是自由交换群, 则$H\cong \text{Ker}j \oplus F$. (证:取$F$的一个基$A$, 规定对应 $\theta: A\rightarrow H$: 使$\forall a\in A, j(\theta(a))=a$. 由$\theta$线性扩张得到同态$\varphi: F\rightarrow H$, 满足$j\circ \varphi = \text{id}: F\rightarrow F$. 从而$\varphi$是单同态. $\forall h\in H$, 记$h_2 = \varphi(j(h)),h_1=h-h_2$, 则$h_1\in \text{Ker} j$, $h_i\in \text{Im} \varphi$, 且可证$\text{Ker} j$, $\text{Im}\varphi$只交于单位元. 得证.)
+
+注意: 在满同态的情况下, 若$H$, $F$只是一般的群, 我们只有$H/\text{Ker}j\cong F$, 但现在如果$F$为自由交换群, 我们可以进一步写为$H\cong \text{Ker}j\oplus F$, 这里有一个''陪集''的集合$\{\text{Ker}j+a|a\in H\}$转化为直和的过程, 而这个过程并不是对所有群$H,F$都能实现的. 如果$F$是自由交换群, 则可通过映射$j$反过来对$a\in H$作一些限制. 对一般的满同态$f: G\rightarrow H$, 用来划分陪集的集合$\{\text{Ker}f\cdot a|a\in G\}$的$a$的集合显然与$\text{Ker} f$只交于单位元. 同构第一基本定理保证了总有$G/\text{Ker} f \cong H$, 但并不一定成立$G \cong \text{Ker} f \times H$   事实上, 对一般的群满同态 $f:G\rightarrow H$, 能否由$G/\text{Ker}f$转化为$G\cong \text{Ker}f\times H$是一个同调代数中的基本问题, 它与分裂引理(交换群范畴)有关(对一般的群范畴, 结论要更复杂一些), 其要点是存在一个逆映射$g$使得$f\circ g= \text{id}$.  这里我们不作过多延伸. 
+
+推论: 设$H_0$是有限生成交换群的子群, 则$H\cong C(H_0)\oplus (H/C(H_0))$ (这是因为$H/C(H_0)$是自由交换群), 特别地$H\cong T_H\oplus (H/T_H)$.
+
+回原题. $f\circ g$ 为$H_2$到$H_2$的恒同映射, 故$g$为单同态, 对任意$h\in H_1$, 记$h_2=g(f(h))$, $h_1=h-h_2$, 则$f(h_1)=f(h)-f(h_2)=f(h)-f(g(f(h)))=f(h)-f(h)=0$, 故$h_1\in \text{Ker} f$, 且$h_2\in \text{Im}g$. 再设有$h'\in \text{Im}g$ 且$h'\in \text{Ker}f$, 则存在$h''\in H_2$使$h'=g(h'')$, 从而$0=f(h')=f(g(h''))=h''$, 从而$h'=0$. 从而$\text{Im} g$与$\text{Ker} f$只交于单位元. 得证. 
+
+从习题和命题中可以看到, 逆映射同态的存在以及符合映射等于恒同映射的存在是关键. 具体可见分裂引理. 
+\end{solution}
+
+\begin{exercise}
+5. 任一非空自由交换群有直和因子是有限基自由交换群.
+\end{exercise}
+\begin{solution}
+回顾定义: $F$为自由交换群, 则有其子集$A\in F$, 使对任意$x\in F$可唯一表成$x=\sum_{i=1}^k n_ia_i,a_i\in A,n_i\in \mathbb{Z}$. 然而内直和的定义中,要求的是$H$有一组子群$H_1,\cdots, H_n$, 子群的个数为$n$为有限的. 对一般的自由交换群, 总可以抽出$A$中(比如说)前两个做成有限基自由交换群, 而后面的$A$的元素做成的子群, 只需要保证总个数为有限即可. 这些子群构成$H$的内直和. 得证.
+\end{solution}
+
+\begin{exercise}6. 若$H$的每个元素都是有限阶的, 则$H^*=0$.
+\end{exercise}
+\begin{solution}
+设$H$是交换群, 记$H^*$是所有从$H$到$\mathbb{R}$(看作加法群)的群同态的集合, 在$H^*$中规定加法运算和数乘运算如下:
+$$\forall f,g\in H^*, f+g\in H^*: \text{规定为:} (f+g)(h)=f(h)+g(h),\forall h\in H;$$
+$$\forall f\in H^*, r\in \mathcal{R}, rf\in H^*, \text{规定为:} (rg)(h)=rf(h), \forall h\in H.$$
+在这两种运算下, $H^*$是实线性空间. 设$\varphi: H_1\rightarrow H_2$是同态, 则$\forall f\in H^*_2, f\circ \varphi \in H^*_1$. 规定$\varphi^*: H^*_2\rightarrow H^*_1$为$\varphi^*(f)=f\circ\varphi,\forall f\in H^*_2$, 则$\varphi^*$是线性映射. 且$(\varphi_2\circ \varphi_1)^*(f)=f\circ\varphi_2\varphi_1=\varphi_1^*\circ\varphi^*_2(f)$; 若$\varphi$是同构, 则$\varphi^*$也是同构. 
+
+回原题: 对任意$f\in H^*$, 对任意$h\in H$, 存在$r\in \mathbb{N}$使$rh=0$, thus $f(rh)=rf(h)=0$, thus 对任意$h$ 有$f(h)=0$, 故$f=0$. 得证.
+
+再证$\mathbb{Z}^*=\mathbb{R}$: 任取$f,g\in \mathbb{Z}$, 设$f(1)=rg(1)$,其中$r\in \mathbb{R}$, 则对任意$h\in \mathbb{Z}$, 有$f(h)=hf(1)=hrg(1)=(rg)(h)$, 故有$f=rg$. 可见$\mathbb{Z}^*=\mathbb{R}$. 同理可证$\mathbb{Q}^*=\mathbb{R}$. 
+\end{solution}
+
+\begin{exercise}7. 若$\varphi:H_1\rightarrow H_2$是满同态, 则$\varphi^*$是单的.
+\end{exercise}
+\begin{solution}
+设存在$f_1,f_2\in H^*_2$, 使$\varphi^*(f_1)=\varphi^*(f_2)$, 则按定义有$f_1\circ\varphi=f_2\circ\varphi: H_1\rightarrow \mathbb{R}$. 由于$\varphi$为满同态, 故$\forall h\in H_2$, 存在$h_1$, 使$\varphi(h_1)=h$, 且$f_1\circ\varphi (h_1)=f_2\circ\varphi(h_1)$, 也就是$f_1(h)=f_2(h)$, $\forall h\in H_2$. 故必有$f_1=f_2$, 即$\varphi^*$是单的.
+\end{solution}
+
+在下一习题之前, /再补充一些内容.
+
+命题: (1) $(H_1\oplus H_2)^* \cong H^*_1\times H^*_2$. (2) 若$H_0$是$H$的子群, 且$H/H_0$的每个元素都是有限阶的, 则$H^*_0\cong H^*$.
+
+证: 规定$\zeta: H^*_1\times H^*_2\rightarrow (H_1\oplus H_2)^*$为: $\forall (f_1,f_2)\in (H^*_1\times H^*_2)$, $\zeta(f_1,f_2)\in (H_1\times H_2)^*$为$\zeta(f_1,f_2)(h_1,h_2)=f_1(h_1)+f_2(h_2), \forall(h_1,h_2)\in H_1\oplus H_2$, 则$\zeta$是线性映射. 若$\zeta(f_1,f_2)=0$, 则可证$f_1=0$, 同理$f_2=0$, 说明$\zeta$是单的; 设$g\in (H_1\oplus H_2)^*$, 由$f_1(h_1)=g(h_1,0)$规定$f_1\in H^*_1$, $f_2(h_2)=g(0,h_2)$规定$f_2\in H^*_2$, 则$\zeta(f_1,f_2)=g$, 故$\zeta$是满的. (1)得证. (2)记$i: H_0\rightarrow H$为包含映射. 下证$i^*:H^*\rightarrow H^*_0$是同构. 若$i^*(f)=f\circ i=0$, 推$f=0$: 则对任意$h_0\in H_0$, $f(h_0)=0$. 由$H/H_0$的元素是有限阶的, 知 $C(H_0)=H$, 即$\forall h\in H$, 存在$r\in \mathbb{N}$, 使得$rh\in H_0$. 故$rf(h)=f(rh)=0$, 从而$f(h)=0$. 由$h$的任意性得$f=0$, 故$i^*$单. 设$g\in H^*_0$, 对任意$h\in H$, 令$r_h=\min\{r \in \mathbb{N}|rh\in H_0\}$, 规定$f: H\rightarrow \mathbb{R}$为$f(h) = \frac{1}{r_h}g(r_h h)$. 若$rh\in H_0$, 则$r_h|r$, 故$f(h)=\frac{1}{r} g(rh)$, 故可验证$f\in H^*$. 显然$i^*(f)=g$, $g$满. 得证.
+
+定义: 当$H$是有限生成交换群时, 称线性空间$H^*$的维数为交换群$H$的秩, 记作$\text{rank}H$.$\text{rank}\mathbb{Z}=1$, 当$F$是有限基自由交换群, 且一个基含$n$个元素时, $\text{rank}F=n$. 故有限基自由交换群的每个基含有相同个数元素. 对一般有限生成交换群$H$, 因$H\cong T_H\oplus (H/T_H)$, 所以由上方命题$H^*=T^*_H\times (H/T_H)^*=(H/T_H)^*$, $\text{rank}H=\text{rank}(H/T_H)$是有限维数. 
+
+定理: 设$H_0$是有限生成交换群$H$的子群, 则$\text{rank}H=\text{rank}H_0+\text{rank}(H/H_0)$. 
+
+证明: 因为$H\cong C(H_0)\oplus (H/C(H_0))$, 故由上方命题$\text{rank}H=\text{rank}(C(H_0))+\text{rank}(H/(C(H_0))$. 由于$H_0\subset C(H_0)$, 且$C(H_0)/H_0$的元素时有限阶的, 从而根据命题, $\text{rank}(C(H_0))=\text{rank} H_0$. 剩下的只用证明$\text{rank}(H/H_0)= \text{rank}(H/C(H_0))$: 由代数学中的定理
+$$H/C(H_0)\cong (H/H_0)/(C(H_0)/H_0),$$
+而且$H/C(H_0)$是自由交换群, 故
+$H/H_0 \cong C(H_0)/H_0\oplus H/C(H_0)$, $\text{rank}(H/H_0)=\text{rank}(H/C(H_0))$. 得证. 
+
+设$F$是秩为$n$的自由交换群. $F$中元素$x$称为可除的, 如果存在自然数$r>1$和$x_1\in F$, 使得$x=rx_1$. 取定$F$的基$\{y_1,\cdots, y_n\}$, 设$x= \sum_{i=1}^n r_iy_i$, 则$x$不可除等价于$r_1,\cdots,r_n$最大公约数为1. 利用前面的引理, 可证:
+
+命题 $x$不可除$\Longleftrightarrow$ $x$是某个基的一个成员; 对任意$x\in F$, 存在唯一自然数$r$和不可除元素$x_1$, 使得$x=rx_1$. 称$r$为$x$的高度, $x_1$为$x$的底. (证: 任取基$\{y_1,\cdots,y_n\}$, 设$x= \sum r_iy_i$, 记$r=(r_1,\cdots,r_n)$(最大公约数), $x_1 =\sum \frac{r_i}{r}y_i$, 则$x_1$不可除, $x=r x_1$ . 再证$x_1$唯一性即可.)
+
+定理: 设$F$是秩为$n$的自由交换群, $F_0$为$F$的子群, 则$F_0$也是有限基自由交换群, 其秩$s\leq n$; 且存在$F$的基$\{x_1,\cdots,x_n\}$, 使$\{k_1x_1,\cdots,k_sx_s\}$为$F_0$的基, 其中$k_i\in \mathbb{N}$, 且$k_i|k_{i+1}(i=1,\cdots,s-1)$. 证明: 归纳法, 略.
+
+ 定理 (有限生成交换群基本定理) 有限生成交换群$H$可分解为
+ $$H \cong F_1\oplus \mathbb{Z}_{k_1}\oplus \cdots \oplus \mathbb{Z}_{k_s},k_i\in \mathbb{N}^+, k_{i+1}|k_i, i=1,\cdots,s-1.$$
+其中$F_1$是秩为$\text{rank} H$的自由交换群; $k_1,\cdots, j_s$由$H$确定, 为$H$的挠系数. 
+
+ 证明: 根据第一个命题, 存在有限基自由交换群$F$和满同态$j: F\rightarrow H$, 记$F_0 = \text{Ker} j$. 根据上一定理, 存在$F$的基$\{x_1,\cdots,x_n\}$, 使得$\{k_1x_1,\cdots, k_sx_s\}$是$F_0$的基, 且$k_{i+1}|k_i (i=1,\cdots,s-1)$(注意大小次序的改变), 故$H\cong F/F_0 \cong F_1\oplus \mathbb{Z}_{k_1}\cdots \oplus \mathbb{Z}_{k_s}$, 其中$F_1$是自由群, 其秩等于$\text{rank}H$. 只需再证$k_1,\cdots,k_s$的确定性: 设$H$的挠子群为$T$, 则$T\cong \mathbb{Z}_{k_1}\oplus \cdots\oplus \mathbb{Z}_{k_s}$. 设$H$还有另一分解$H\cong F'_1\oplus \mathbb{Z}_{k'_1}\oplus\cdots\oplus \mathbb{Z}_{k'_{s'}}$, 则$T\cong Z_{k'_1}\oplus \cdots \oplus \mathbb{Z}_{k'_{s'}}$, 总可假设$s=s'$, 否则在短的一方后加上几个$\mathbb{Z}_1=0$. 若有最小的$r$使得$k_r\neq k'_r$, 不妨设$k_r<k'_r$. 则考虑有限群$k_rT$的阶, 一方面$k_R T\cong k_r\mathbb{Z}_{k_1}\oplus \cdots \oplus k_r \mathbb{Z}_{k_s}$, 其阶为
+ $$\prod\limits_{i=1}^s \frac{k_i}{(k_i,k_r)}= \prod\limits_{i=1}^{r-1}\frac{k_i}{(k_i,k_r)},$$
+ 另一方面, $k_r T\cong k_r \mathbb{Z}_{k'_1}\oplus\cdots\oplus k_r \mathbb{z}_{k'_s}$, 阶为
+ $\prod\limits_{i=1}^s \frac{k'_i}{(k'_s,k_r)} \geq \prod\limits_{i=1}^{r-1}\frac{k_i}{(k_i,k_r)}\cdot \frac{k'_r}{(k'_r,k_r)},$ 矛盾. 
+ 
+\begin{exercise}8. 有限生成交换群的子群也是有限生成的.
+\end{exercise}
+\begin{solution}
+设有限生成交换群为$H$, 它必同构于一个有限基自由交换群$F$的商群(命题1), 它的子群同构于着商群的一个子群, 而这个子群对应着有限基自由交换群的一个子群, 由定理3, 知这个有限基自由交换群的子群是有限基自由交换群, 从而$H$的子群,对应着有限基自由交换群的商群, 再用命题1知为有限生成的. 
+\end{solution}
+
+下面介绍一些概念. 从现在起, 群不必再是交换群. 
+
+定义设$\{G_\lambda|\lambda\in \Lambda\}$ 是一簇群, 规定它们的自由乘积$\Conv_{\lambda \in \Lambda} G_\lambda$ 是一个群, 作为集合
+$$\Conv_{\lambda \in \Lambda} G_\lambda = \{x_1x_2\cdots x_n| n\geq 0, x_i\text{是某个}G_\lambda\text{中的非单位元}, x_i,x_{i+1}\text{不在同一}G_\lambda\text{中}\}$$
+其中$n=0$的元素只有一个, 记为$1$, 乘法规定为: 设$x_1\cdots x_n$和$y_1\cdots y_m$, 如果$i \leq l$时$x_{n-i}$与$y_i$属于同一个$G_\lambda$, 且$x_{n-i}y_i = 1$ 而$x_{n-i}$与$y_{i+1}$不再满足此性质, 则乘积为
+$$(x_1\cdots x_n)\cdot (y_1\cdots y_m) =\left\{ \begin{array}{cc}
+x_1\cdots (x_{n-i}y_{i+1})\cdots y_m,& x_{n-i},y_{i+1}\in G_{\lambda_0},\\
+x_1\cdots x_{n-i} y_{i+1} \cdots y_m, & otherwise.\end{array}\right.$$
+
+命题: 设$H$是一群, $\forall \lambda \in\Lambda$, 有同态$f_\lambda:G_{\lambda}\rightarrow H$, 则存在唯一同态$f: \Conv_{\lambda \in \Lambda} G_{\lambda}\rightarrow H$, 使得$f|_{G_{\lambda}} = f_{\lambda}, \forall \lambda \in \Lambda$. (证: 令$f(x_1\cdots x_n)=f(x_1)\cdots f(x_n)$. 下略.)
+
+记$i_\lambda: G_\lambda \rightarrow \Conv_{\lambda \in \Lambda} G_\lambda$是包含映射, 取定$\lambda_0\in \Lambda$, 作同态$f_\lambda: G_\lambda \rightarrow G_{\lambda_0}$ 为: 若$\lambda \neq \lambda_0$, 则$f_{\lambda}$是平凡的, $f_{\lambda_0} = \text{id}$, 则由上一命题, 得到同态$\varphi_{\lambda_0}: \Conv_{\lambda \in \Lambda} G_\lambda \rightarrow G_{\lambda_0}$, 使得$\varphi_{\lambda_0}\circ i_{\lambda_0} = \text{id}$, $\varphi_{\lambda_0} \circ i_\lambda$平凡, $\forall \lambda\neq \lambda_0$. 
+
+\begin{exercise}9. 设$\varphi_1 : G_1\Conv G_2 \rightarrow G_1$满足$\varphi_1\circ i_1 = \text{id}$, $\varphi_1 \circ i_2$ 平凡, 则$\text{Ker}\varphi_1$是$G_1\Conv G_2$中由$G_2$生成的正规子群. 
+\end{exercise}
+\begin{solution}
+由$\varphi_1\circ i_1=\text{id}$, 故$\varphi_1$为满射, 且$\text{Ker} \varphi_1$为$G_1\Conv G_2$的正规子群. 设$g_1,g_2\in G_1\Conv G_2$ 且$g_1 \in G_1$, $g_2\in G_2$, 则$\varphi(g_2)= \varphi(i_2(g_2)) = e$, $e$为 $G_1$中单位元, 从而$g_2\in \text{Ker} \varphi_1$. 对任意$G_1\Conv G_2$中的元素都可写成有限个$G_1$中的元素和有限个$G_2$中的元素的有限次幂的乘积的形式, 在同态映射$\varphi$下每个元素都会分离, 而所有$G_2$中的元素都映到$e$, 而$G_1$中的非$e$元素都不会映到$e$, 可见$\text{Ker}\varphi_1$中的元素不能含有$G_1$的成分. 从而$\text{Ker}\varphi_1$是由$G_2$生成的正规子群. 
+\end{solution}
+
+下面再补充一些内容:
+
+
+定义: 群$G$称为自由群, 如果有子集$A\subset G$, 使得$\forall x\in G$可唯一地表示成
+$$ x= a^{k_1}_1a^{k_2}_2\cdots a^{k_n}_n, a_i \in A, a_i\neq a_{i+1}, k_i(i=1,\cdots, n)\text{是非零整数},$$
+称$A$是$G$的一个自由生成元组. 当$G$是自由群时, 对任意$x\in G$, 都不是有限阶的, 故任意$x$生成的子群$\langle x\rangle$是自由循环群. 比较自由群与自由乘积的定义, 可以看到:
+
+命题: 如果$G$是自由群, $A$是自由生成元组, 则 
+$$G\cong \Conv_{a\in A} \langle a\rangle.$$
+
+设$X$是一个非空集合, 对任意其中的$x$可构造自由循环群$\mathbb{Z}(x)=\{x^n|n\in \mathbb{Z}\}$, 乘法为$x^n\cdot x^m = x^{n+m}$. 规定自由群 $F(X)\equiv \Conv_{x\in X} \mathbb{Z}(x)$, 则$X\subset F(X)$且是$F(X)$的一个自由生成元组, 称$F(X)$是由$X$生成的自由群. 设$R$是$F(X)$的一组元素, $[R]$是由$R$生成的$F(X)$的正规子群(即含有$R$的最小正规子群), 记
+$$\{X;R\} \equiv F(X)/[R],$$
+它是$F(X)$的一个商群. 设$G$是一个群, $X$是$G$的一个生成元组, 故自由群$F(X)$的每个元素$x^{k_1}_1\cdot x^{k_n}_n (x_i \in X)$ 自然地决定$G$中有同一形式的元素, 从而规定了$F(X)$到$G$的一个满, 从而$G$可看作$F(X)$的一个商群, 记上述同态核为$N$, 则$G=F(X)/N$. 如果$F(X)$的一个元素组$R$生成的正规子群就是$N$, 则$G=\{X;R\}$. 把$X$与$R$一起称为$G$的一个展示(Presentation), 他们分别称为这个展示的母元组和关系组. 当$X$与$R$都是有限集合时, 就称$X$与$R$为$G$的一个有限展示.
+
+ 如果$X$是$G$的自由生成元组, 则$G=F(X)$, 于是$G=\{X;\emptyset\}$, 或简单写成$G=\{X\}$. 例如, $G$是以$a$和$b$为基的自由交换群, 则$G=\{a,b; aba^{-1}b^{-1}\}$. 设$x$是$n$阶循环群$\mathbb{Z}_n$的生成元, 则$\mathbb{Z}_n = \{x; x^n\}$. 用母元和关系来看群的自由乘积, 有很简单的表达式. 当两个群都用母元和关系来表示时, 它们的自由乘积的一个表示可以用以下方式得到: 把两个群的母元组作无交并, 两个群的关系组也作无交并, 分别得到自由乘积的表示中的母元组和关系组. 
+ 
+群的交换化: 设$G$为群, $\forall a,b\in G$, 记 $[a,b]=a^{-1}b^{-1}ab$, 称为$a$与$b$的换位子, 可见$a$,$b$可交换等价于换位子为1. 记
+$G'=\{x\in G|x\text{是又像个换位子的乘积}\},$
+则$G'$是$G$的子群, 称为$G$的换位子群, 且为正规子群($x\in G', y\in G$, 则$y^{-1}xy=[y,x^{-1}]x\in G'$), 记
+$\widetilde{G} = G/G'$, 可知$\widetilde{G}$是一个交换群, 称为$G$的交换化.  
+
+命题: 设$f :G_1\rightarrow G_2$是一个同态, 记$G'_i$是$G_i$的换位子群, $j_i G_i\rightarrow \widetilde{G}_i$是投射, 则$f(G'_i)\subset G'_2$, 并且存在同态$\widetilde{f}: \widetilde{G}_1 \rightarrow \widetilde{G}_2$, 使下面的图表交换. 
+
+\begin{displaymath}
+    \xymatrix{
+        G_1 \ar[r]^f \ar[d]_{j_1} & G_2 \ar[d]^{j_2} \\
+        \widetilde{G}_1 \ar[r]^{\widetilde{f}}       & \widetilde{G}_2 }
+\end{displaymath}
+
+证明: 因为$G'_1$由$G_1$的全图换位子生成, 而对每个换位子$[a,b]$, 由$f([a,b])=[f(a),f(b)]\in G'_2$, 故$f(G'_1)\subset G'_1$, 故$j_2\circ f(G'_1)=0$; 对 $aG'_1 \in \widetilde{G}_1$, 它被映到 $f(a)G'_2$, 这个映射是良定义的, 因为对$aG'_1=bG'_1$, 有$f(a)G'_2=f(b)G'_2$ (这是因为$a$和$b$必定差若干换位子的乘积, 而这若干换位子的乘积映到$G'_2$), 故诱导了$\widetilde{f}: \widetilde{G}_1\rightarrow \widetilde{G}_2$, 使图表可交换. 
+ 
+ 注: 当$G_2$是交换群时, $\widetilde{G}_2=G_2$, 图表变为三角图表, $G'_1\subset \text{Ker} f$. 
+ 
+ 现假设$f: G_1\rightarrow G_2$是满同态, 记$G_0 = \text{Ker} f$, $j_1: G_1\rightarrow \widetilde{G}_1$ 是投射. 设$j: \widetilde{G}_1\rightarrow \widetilde{G}_1 /j_1 (G_0)$是投射, 则$j\circ j_1 (G_0)=0$, 从而诱导出同态$l: G_2 \rightarrow \widetilde{G}_1/j_1(G_0)$, 使$l\circ f = j\circ j_1$. 则有以下命题:
+ 
+命题: $\text{Ker}l=G'_2$, 从而$\widetilde{G}_2 \cong \widetilde{G}_1/j_1(G_0)$. 
+
+\subsection{映射的同伦}
+
+\begin{exercise}1.
+\end{exercise}
+\begin{solution}
+按定义要验证存在连续映射$H:X\times I\rightarrow Y$, 使对任意$x\in X$, $H(x,0)=f(x)$, $H(x,1)=g(x)$. 后者显然. 前者: 由于$f,g$连续, 则显然$H(x,t)$连续.
+\end{solution}
+
+\begin{exercise}2.
+\end{exercise}
+\begin{solution}
+$C(X,Y)$在同伦关系下分成的等价类称为映射类,记为$[X,Y]$. $Y$为$E^n$的凸集时, 只有一个映射类; $[\{x\},Y]$一一对应于$Y$的道路分支. 
+
+按定义, 有连续映射使$H(x,t)$ 使$H(x,0)=y_1$, $H(x,1)=y_2$. 把$H$看成关于$t$的映射, 因为在$X\times I$上连续, 故在$I$上连续, 故存在导论连通$y_1$, $y_2$, $\Rightarrow$得证; $\Leftarrow$显然(因为$I$上连续, 则对于$X\rightarrow Y$的连续函数, 则必有$H:X\times I\rightarrow Y$连续). 
+
+注意: 若$f$同伦于一个常值映射, 则称$f$零伦. 若$C[X,Y]$中任何映射都零伦, 则显然$[X,Y]$只有一个映射类, 反之亦然, 即任意映射都零伦等价于只有一个映射类等价于任意映射都同伦. 当$X$是$E^n$的凸集, 任意$f:X\rightarrow Y$零伦, 也即只有一个映射等价类. (注意, 这个结论很重要: 当$X$是凸集, 对任意$Y$, $[X,Y]$只有一个等价类.)
+\end{solution}
+
+\begin{exercise}3.
+\end{exercise}
+\begin{solution}
+存在点$a\notin f(X)$. 作$g: X\rightarrow \{-a\}$, 则对任意$x\in X$, $f(x)\neq -g(x)$. 由例二即证.
+\end{solution}
+
+\begin{exercise}4. 证: 连续映射$f:X\rightarrow Y$零伦$\Longleftrightarrow$ $f$可扩张到$CX$上.
+\end{exercise}
+\begin{solution}
+对任意拓扑空间$X$, 记$CX\equiv X\times I/X\times \{1\}$, 称为$X$上的拓扑锥. 左推右: 记$H:X\times I\rightarrow Y$连结一个常值映射和$f$, 则由于$H$把$X\times\{1\}$映为一点, 故$H$诱导连续映射$F:CX\rightarrow Y$, 其限制在$X\times\{0\}$上的映射同胚于$f$. 右推左: 记$F:CX\rightarrow Y$为$f$的扩张, $p:X\times I\rightarrow CX$为粘合映射, 则$H=F\circ p$为所求.
+\end{solution}
+
+\begin{exercise}5.
+\end{exercise}
+\begin{solution}显然.
+\end{solution}
+
+\begin{exercise}6.
+\end{exercise}
+\begin{solution}右推左显然. 左推右: $f\circ p$同伦于$g\circ p$, 故存在连续映射$H(x,t)$使$H(x,0)=f(e^{i \pi x}), H(x,1)=g(e^{i \pi x}).$这说明存在连续映射$H'(x,t)=H:S^1\times I\rightarrow X$使$H(x,0)=f(x)$, $H(x,1)=g(x)$, 其中$x\in S^1$. 且可验证$H'(1,t)=f(1)=g(1)$, $H'(1,t)$不动. 得证.
+\end{solution}
+
+\begin{exercise}7.
+\end{exercise}
+\begin{solution}
+道路一: $f(x)$, 道路二: $g(x)$, 则$H(x,t)=tf(x)+(1-t)g(x)$, 满足$H(0,t)=f(0)=g(0)$, $H(1,t)=f(1)=g(1)$.
+\end{solution}
+
+\begin{exercise}8.
+\end{exercise}
+\begin{solution}
+设不存在$x\in S^1$使$f(x)=x$, 记$g(x)=x$为恒同映射, 则不存在$x$使$f(x)=g(x)$, 按例二知$f$与$g$同伦. 
+\end{solution}
+
+\subsection{基本群的定义}
+
+\begin{exercise}1.
+\end{exercise}
+\begin{solution}
+若$Y$是平凡拓扑空间, 或$X$是离散拓扑空间, 则任何映射$f:X\rightarrow Y$都连续(见书P23). 对此题, 道路映射$I\rightarrow Y$, $Y$为平凡, 故任何映射都连续, 故任何有起终点的道路都定端同伦.
+\end{solution}
+\begin{exercise}2.
+\end{exercise}
+\begin{solution}
+现在连续映射$f:I\rightarrow Y$, $Y$是离散拓扑空间, 注意$I$中既是开集又是闭集的只有空集和$I$本身, 而$x_0$本身是开集也是闭集, 故$x_0$的原像只能为$I$本身, 从而$x_0$本身是道路连通分支, 即离散拓扑空间每个点本身是道路连通分支, 且道路只有一条. 得证. 
+\end{solution}
+
+\begin{exercise}3.
+\end{exercise}
+\begin{solution}
+$\tau_2=\overline{\{[a,b)|a<b\}}$. 由于$I$连通, 根据连通空间在连续映射下的像连通, 故$f(I)\subset X$连通. 假设$f(I)$至少含有两个点$x_0$, $x_1$, 则构造开集$U_0=\cup_{n=1}^\infty[-n,(x_0+x_1)/2)$, $U_1=\cup_{n=1}^\infty[(x_0+x_1)/2,n)$, 则$f(I)\cup U_i$为开集, 从而$f(I)$可分为两非空不交闭集的并, 故$f(I)$不连通, 矛盾! 从而$f(I)$中只能含一点, 从而$\tau_2$下每个单点本身是一个道路连通分支. 仿上题即证.
+\end{solution}
+
+\begin{exercise}4. (原题右方的映射, 应写$(f\circ \omega)_\#$. )
+\end{exercise}
+\begin{solution}
+道路连通分支中连接任两点的基本群的映射同构, 故$\omega_\#$, $(f_\pi \circ \omega)_\#$ 为同构. $\pi_1(X,x_0)$中任一闭路$a\in \alpha=\langle a\rangle$, $\alpha$经$f_\pi$得到闭路类$\beta$, 按P110定义也即 $f_\pi\langle a\rangle = \langle f\circ a\rangle$. 又经$(f \circ \omega)_\#$ 得到 $\beta'$, 有$b'= (f \circ \omega)^{-1}b(f \circ \omega)$, 写成道路类的关系也就是
+$\beta'=f_\pi(\langle \omega^{-1} a \omega\rangle )$ (用到P110下方的关系). 得证.
+\end{solution}
+
+\begin{exercise}5.
+\end{exercise}
+\begin{solution}
+收缩核: 拓扑空间$Y$的子集$B$称为$Y$的一个收缩核, 如果存在连续映射$r:Y\rightarrow B$, 使$\forall x\in B, r(x)=x$. 称$r$为$Y$到$B$的一个收缩映射.
+
+设$a\in \pi_1(A,x_0)$, 且$i\circ a$与$e_{x_0}$定端同伦, 则由于$i\circ a=a$, 故$a$与$e_{x_0}$定端同伦, 故$i_\pi$为单. 对任意$\langle a\rangle \in \pi (A,x_0)$, 存在$X$的$x_0$的闭路$b$使$a=r\circ b$, 从而$r_\pi(\langle b\rangle) = \langle a\rangle$, 故$r_\pi$为满.
+
+(事实上: $r_\pi\circ i_\pi=(r\circ i)_\pi$为恒同)
+\end{solution}
+
+\begin{exercise}6.
+\end{exercise}
+\begin{solution}
+单连通故$ab^{-1}=e$, 从而存在$H$使$H(x\in[0,0.5],0)=a$, $H(x\in [0.5,1],0)=b^{-1}$, $H(x,1)=x_0$, 从而令$H'(x,t)=H(x/2,2t)$当$t\in [0,0.5]$; $H'(x,t)=H((1-x)/2, 2(1-t))$. $H'$为连续映射, 是$a$与$b$的同伦映射.
+
+(事实上: $b$定端同伦于$eb$定端同伦于$ab^{-1}b$定端同伦于$a$.)
+\end{solution}
+
+\begin{exercise}7.
+\end{exercise}
+\begin{solution}
+$\omega_\#=\omega'_\#$时, 对任意$\alpha \in \pi_1(X,x_0)$, $\omega^{-1}\alpha\omega=\omega'^{-1}\alpha \omega'$, 移项即得右. 反之亦然.
+\end{solution}
+
+\begin{exercise}8. 
+\end{exercise}
+\begin{solution}
+注意, 给出相同的同构, 也就是$\omega_\#=\omega'_\#$.
+
+交换群, 故$\alpha \beta= \beta\alpha$, 故若$\omega_\#$决定$\omega^{-1}\alpha\omega$, 则$\omega'^{-1}\alpha\omega'=\omega^{-1}\omega\omega'^{-1}\alpha\omega'\omega^{-1}\omega=
+\omega^{-1}\alpha\omega$. 反之, 对任意$\alpha$, $\beta\in \pi_1(X,x_0)$, 取$\omega$, $\omega'$使$\omega\omega'=\beta$, 下略. (注意, 现在$\omega$, $\alpha$等都是道路类, 这就是为什么有等式$\omega\omega'=\beta$.)
+\end{solution}
+
+\begin{exercise}9.
+\end{exercise}
+\begin{solution}
+$(ab)c$: 定义为$g$, $x$在$[0,1/4]$为$a$, $[1/4,1/2]$为$b$, 其余为$c$. $a(bc)$: $[0,1/2]$为$a$, $[1/2,3/4]$为$b$, 其余为$c$. $H(x,t)$, 当$x$在$[0,1/4]$, 定义为$g((1+t)x)$; 当$x$在$[1/4,1/2]$, 定义为$g(x+t/4)$; 当$x$在$[1/2,1]$, 定义为$g(x+(1-x)t/2)$. 即得.
+\end{solution}
+
+\subsection{$S^n$的基本群}
+
+\begin{exercise}1,2.
+\end{exercise}
+\begin{solution}
+1: $f_\pi(\alpha)=-\alpha$. 2: $f_\pi(\alpha)=n\alpha$.
+\end{solution}
+\begin{exercise}3.
+\end{exercise}
+\begin{solution}
+$S^1$中任一闭路类$\alpha$, 有$f_\pi(\alpha)=g_\pi(\alpha)$, 从而对任意$a\in \alpha$, 有$f(a)$同伦于$g(a)$, 从而任意$S^1$的闭路$a$有$f(a)$同伦于$g(a)$, 由第一节第6题知得证.
+\end{solution}
+
+\begin{exercise}4.
+\end{exercise}
+\begin{solution}
+用上题, 分别在左右两个圆周上构造不变$x_0$点的同伦, 拼成所要的同伦. (粘接引理)
+\end{solution}
+
+\begin{exercise}5.
+\end{exercise}
+\begin{solution}
+定理4.4即证.
+\end{solution}
+
+\begin{exercise}6.
+\end{exercise}
+\begin{solution}
+例如取$X=S^1$,$X_1=X\backslash\{1\}$, $X_2=X\backslash\{-1\}$.
+\end{solution}
+
+\begin{exercise}7.
+\end{exercise}
+\begin{solution}
+圆形邻域(去中心点)同胚于平环. 再用第二节习题5. 
+\end{solution}
+
+
+
+\subsection{基本群的同伦不变性}
+
+注: 应当明白这一节的标题讲的是什么意思. 按本节引言: 基本群的同伦不变性, 包含如下两定理:
+
+若$f:X\rightarrow Y$和$g:X\rightarrow Y$同伦, 则该两映射导出的基本群的$f_\pi:\pi_1(X,x_0)\rightarrow \pi_1(Y,f(x_0)=y_0)$和 $g_\pi:\pi_1(X,x_0)\rightarrow \pi_1(Y,g(x_0)=y_1)$是同构的, 满足$g_\pi=\omega_\#\circ f_\pi$, 其中$\omega$为$y_0$到$y_1$的道路(由$f\cong g$决定), $\omega_\#: \pi_1(Y,y_0)\rightarrow \pi_1(Y,y_1)$满足$\langle a\rangle\overset{\omega_\#}{\rightarrow} \langle \omega^{-1} a \omega \rangle$. 
+
+ 若$X$与$Y$同伦等价, 即存在$f:X\rightarrow Y$和$g:Y\rightarrow X$使$g\circ f$和$f\circ g$分别同伦于各自空间的恒等映射, 则$f_\pi:\pi_1(X,x_0)\rightarrow \pi_1(Y,f(x_0))$是同构. (进一步推出: 同伦等价空间若又都是道路连通的, 则它们的空间基本群同构)
+ 
+可以看到, 基本群的同伦不变性讲的是空间$X$, $Y$间基本群的关系: 一个是同伦映射导出的$Y$的两基本群同构, 一个是同伦等价空间的基本群同构.
+
+关于同伦等价空间: 利用形变收缩核的概念可以帮助寻找空间之间的同伦等价. $A$是$X$的子空间, 包含映射为$i$, 收缩映射$r:X\rightarrow A$若存在(定义为$r\circ i=\text{id}_A:A\rightarrow A$), 且使得$i\circ r$同伦于$\text{id}_X$, 则称$A$是$X$的一个形变收缩核. 可见这个定义隐含了$A$同伦等价于$X$. 例如: $S^1$和$S^1\times I$ (平环), 显然同伦等价; 莫比乌斯带也同伦等价于$S^1$(例9), 从而平环, $S^1$和莫比乌斯带三者同伦等价. 但它们不同胚(回忆$X$和$Y$同胚的定义: 存在一一映射$f:X\rightarrow Y$, 使$f$, $f^{-1}$都连续), 因为流形间的同胚保持维数和可定向性(我们现在还无法给出证明. 下一节习题7将给出平环和莫比乌斯带不同胚的证明).
+   
+\begin{exercise}1.
+\end{exercise}
+\begin{solution}
+用定理4.5, 只需注意当$\pi_1(Y,y_0)$可交换时, 对任意$\alpha\in \pi_1(X,x_0)$, $\omega_\#\circ f(\alpha)
+=\omega^{-1}\alpha\omega=\alpha$ (注意因为$f(x_0)=g(x_0)$, 故$\omega\in \pi_1(Y,y_0)$.). 再用定理4.5得证.
+\end{solution}
+\begin{exercise}2.
+\end{exercise}
+\begin{solution}
+由上一题可证左推右. 右推左: 则对任意闭路$\alpha$, $f(\alpha)$与$g(\alpha)$同伦, 取特殊的闭路$e^{i 2\pi t}$, 由第一节第6题知$f$与$g$同伦. 
+\end{solution}
+\begin{exercise}3.
+\end{exercise}
+\begin{solution}
+存在$g:Y\rightarrow X$使$f\circ g$同伦于$\text{id}_Y$, $g\circ f$同伦于$\text{id}_X$. 设另有$g'$也满足此. $g=\text{id}_X\circ g$同伦于$g'\circ f\circ g$同伦于$g'\circ\text{id}_Y=g'$. 另一方面, 若$g'$与$g$同伦, 则显然$f\circ g'$同伦于$f\circ g$同伦于$\text{id}_Y$, 及$g'\circ f$同伦于$\text{id}_X$. 得证.
+\end{solution}
+
+\begin{exercise}4.
+\end{exercise}
+\begin{solution}
+同伦等价$f$及其逆. 对$Y$中任意两点$y_1$, $y_2$, $X$中有道路$a$连通$g(y_1)$, $g(y_2)$. 按定义, 存在$H$使$H(x,0)=\text{id}_Y$, $H(x,1)=f\circ g(x)$, 得到$Y$中道路$b(t)=H(y_1,t)$, $c(t)=H(y_2,1-t)$, 从而$bf(a)c$为连通$y_1$, $y_2$的道路. 
+\end{solution}
+
+\begin{exercise}5.
+\end{exercise}
+\begin{solution}
+由第四题即得.
+\end{solution}
+
+\begin{exercise}6.
+\end{exercise}
+\begin{solution}
+$A$是$X$的形变收缩核可用形变收缩等价地描述. 设$H(x,t)$为$X$到$A$的形变收缩, $H'(x,t)$为$A$到$B$的形变收缩核, 则定义$H''=H(x,2t)$, 当$t\in [0,1/2)$, $H''=H(x,2t-1)$, 当$t\in [1/2,1]$. 可证$H''$为连续映射(因$H$, $H'$连续), 且满足$H''(x,0)=x, \forall x\in X$, $H(x,1)\in B, \forall x\in X$, $H(b,1)=b,\forall b\in B$. 得证.
+\end{solution}
+
+\begin{exercise}7.
+\end{exercise}
+\begin{solution}
+设$H$为$X$到$B$的形变收缩, $H'$是$X$到$A$的形变收缩, 则$H|A\times I$满足P126的三个条件, 但在$A\times I$上不一定为连续映射. 为解决这个问题, 我们定义$H''(x\in A,t\in I)=H(H'(x,1),t)$. 显然$H''$连续, 且可验证$H''$满足P126三条件: $H''(x\in A,0)=x$, $H''(x,1)\in B,\forall x\in A$, $H''(x\in B,1)=x$, 从而$B$是$A$的形变收缩核.
+\end{solution}
+
+\begin{exercise}8.
+\end{exercise}
+\begin{solution}
+存在$r:X\rightarrow X_0$使$i\circ r$同伦于$\text{id}_X$. 现定义$r'(x\in X)=r(x)$当$x\in X\backslash X_1$, $r'(x\in X_1)=X_1$, 有$i\circ r$同伦于$\text{id}_X$ (分段构造同伦映射即可), 从而$X_1$是$X$的形变收缩核. 由上题即证.
+\end{solution}
+
+\begin{exercise}9.
+\end{exercise}
+\begin{solution}
+对任意连续映射$f:X\rightarrow Y$, 则$f$同伦于单点映射: 因为$f=\text{id}_Y\circ f$同伦于$e_{y_0}\circ f$同伦于$e_{y_0}$. 得证. (注: $\text{id}_Y$同伦于$e_{y_0}$是因为, 可缩空间中任一点为$Y$的形变收缩核(命题4.14), 故按定义(P125)即得$\text{id}_Y$同伦于$e_{y_0}$. 注意这里$e_{y_0}$的定义为$Y\rightarrow Y$, $e_{y_0}(y\in Y)=y_0$.)
+\end{solution}
+
+\begin{exercise}10.
+\end{exercise}
+\begin{solution}
+记$B$为腰圆, 其为$X$的强形变收缩核, 设在$f:X\rightarrow B$下同伦等价, 则$\pi_1(X,x_0)$与$\pi_1(B,f(x_0))$同构. 若$i_\pi$导出$A$到$X$的基本群的同构, 则$f_\pi\circ i_\pi = (f\circ i)_\pi$应导出$\pi_1(A,x_0)$到$\pi_1(B,f(x_0))$的同构, 然而经检验这不是同构(因为生成元不映到生成元而是映到两倍的生成元).
+\end{solution}
+
+\begin{exercise}11.
+\end{exercise}
+\begin{solution}
+假设存在收缩映射使得$i\circ r$同伦于$\text{id}_X$, 则$\r_\pi$为同构, 又因为$r\circ i= \text{id}_A$, 故$i_\pi$必为同构, 与上一题矛盾.
+
+注意, 形变收缩核的定义中的收缩映射$r$和包含映射$i$, 都是同伦等价映射, 故按命题4.12, 有$r_\pi$和$i_\pi$都为基本群间同构. 因此, 本题是上一题的直接结论.  
+\end{solution}
+
+\begin{exercise}12.
+\end{exercise}
+\begin{solution}
+从$x_0$发出的射线把$D^n$中的点投到$S^{n-1}$上, 作为收缩映射$r$, 直线映射即证$i\circ r$同伦于$\text{id}_{D^n\backslash\{x_0\}}.$
+\end{solution}
+
+\begin{exercise}13.
+\end{exercise}
+\begin{solution}
+记(d)空间为: 球面, 但北极和南极点粘在一起称为点$A$. 下证(a)-(c)都同伦等价于(d): 对(a): 作(a)到(d)的连续映射$f$为(a)的直径缩为一点. 作(d)到(a)的连续映射$g$为: $A$映到直径中点, 一部分环面映为直径(一圈对一个点地),其他环面映为球面除$A$, 可验证$f\circ g$, $g\circ f$都同伦等价于各自空间的单位映射. 对(b): 作$f$为捏合圆盘为一点; 作$g$为$A$映到圆盘中心, 一部分环面映为圆盘(二对一地), 其余映为环面除交于圆盘的纬圆, 可验证$f\circ g$, $g\circ f$都同伦等价于各自空间的单位映射. .对(c): 作$f$为: 想象沿图中画出的大圆与直面的交线为轴, 转动(a)$\pi$角度, 注意背面点被挤压, 前面点被拉伸 得到的图形就是(c), 把这个映射记为f, 是连续映射. 构造$g$: 圆环向球面''挤压''使得不仅切于一点,而是切于一段, 再作拉伸可得到(a), 这个映射是连续的. 可以验证$f\circ g$, $g\circ f$都同伦等价于各自空间的单位映射(这可从操作的描述方式中看出: 操作是连续的, 故同伦于单位映射). 
+\end{solution}
+\begin{exercise}14, 15.
+\end{exercise}
+\begin{solution}
+若同胚, 则挖去一点的空间也应同胚, 但$S^1$不同伦等价于$S^{n-1}$(这是利用了定理4.6的逆否命题. 两者基本群不同, 但两者都道路连通, 故不空间同伦等价). 15题同理. 
+
+注, 该题问的是$E^2$与$E^n$是否同胚, 答案是否定的, 利用同伦证明的时候是用了$S^1$和$S^{n-1}$不同伦等价. 但注意$E^n$与$E^m$总是同伦等价(低维空间总是高维空间的强形变收缩核即证).
+\end{solution}
+\begin{exercise}16.
+\end{exercise}
+\begin{solution}只需说明$\{x^2+y^2=1,z\}$为形变收缩核. 形变收缩和同伦等价于原空间, 故基本群同构.
+\end{solution}
+
+
+\subsection{基本群的计算与应用}
+\begin{exercise}1.
+\end{exercise}
+\begin{solution}存在性易证, $\varphi$的定义方式也是显然的. 唯一性: 只需注意到$\varphi(a_1a_2\cdots)=\varphi(a_1)\varphi(a_2)\cdots$即可, 故当$\varphi|G_i$给定时就是生成元的映射方式给定, 故整个$\varphi$都被确定了. 
+\end{solution}
+
+\begin{exercise}2.
+\end{exercise}
+\begin{solution}
+利用命题4.11的方法. 对于以$x_0$为基点的任意道路, 总有若干部分位于$X_1\backslash X_0$中, 另有若干部分位于$X_2\backslash X_0$中, 则在线路刚从$X_1\backslash X_0$中出来的''边界点''上设新的一段道路通到$x_0$且这一段都在$X_1$中, 再设该段的逆使得道路从$x_0$出来后又接到原''边界点''. 即证$\varphi$为满同态. 
+
+事实从上面这一具有极其鲜明几何意义的过程, 也可以看到同态中''冗余的信息''(也即如何将''满同态''变为同构):  当$x_0$的闭路的某一段都在$X_0$中时, 任意添加多少上面所构造的道路(即$X_0$中的回到$x_0$又原路返回$x_0$的道路), 虽然对应$\pi_1(X_1,x_0)$与$\pi_2(X_2,x_0)$的自由乘积中的不同元素(因为: 只需把冗余的闭路相邻地归为$\pi_1(X_1,x_0)$中和$\pi_1(X_2,x_0)$, 则可以得到自由乘积中的不同元素. 所以可见, 群的自由乘积的理解要点在于''无交并'', 即即使同一个东西, 当归到不同群下时也当作不同的东西). 在$\varphi$下事实上都映到$X$的同一道路类. 可见, 只要把''无交并''去掉(即同一闭路在不同基本群中也等同), 即可得到同构关系, 也即Van Kampen 定理. 
+\end{solution}
+
+\begin{exercise}3.
+\end{exercise}
+\begin{solution}
+一个点时显然成立. 设$n$个点成立, 并记这个空间为$X_n$, 则第$n+1$个点去掉后, $X_n=X_{n+1}\cup B$, 其中$B$为以第$n+1$个点为圆心的球(球内不包含其它挖去的点), 而$B\cap X_{n+1}$以$S^d$为形变收缩和, 故有平凡基本群, 故$\text{Im}(i)_\pi$也为平凡的, 由Van-Kampen定理的特殊形式(2)和归纳假设即得$X_{n+1}$有平凡基本群.
+\end{solution}
+
+\begin{exercise}4.
+\end{exercise}
+\begin{solution}(1)对$E^2$上挖去$n$个点($n$为有限), 记为空间$X_n$, 总可以作以这些点为圆心的圆环, 使得每一个圆环只与其它某一个圆环相切而与其它的圆环相离. 可证这些圆环的并为$X_n$的强形变收缩核,故与$X_n$同伦, 故有同样的基本群, 再可证这些圆环的并的基本群同构于圆束的基本群(只需借用例1的方法, 利用数学归纳法: $n=2$已由例二证; 对$n$成立时, $n+1$时, 一个圆与图形的其他部分切于一点$x_0$, 同例1地取$x_0$的某开邻域, 它以$x_0$为强形变收缩核, 故由V-K定理的第一种特殊情形即得这些圆环的并的基本群为秩为$n$的有限生成自由群, 也即$n$个$\mathbb{Z}$的自由乘积. 此处$n=3$. 
+
+(2)$S^2$去掉一个点后成为$E^2$(这个并不方便用V-K定理得到; 不过$S^2$去一点同胚于$E^2$是显然的.), 故为$2$个$\mathbb{Z}$的自由乘积. (3)上一节例10已证环面去一点后以两个圆的圆束为强形变收缩核. 这是基于命题4.13, 即商映射前形变收缩和商映射后形变收缩的关系: 满足一定条件下, 商映射前的形变收缩核在商映射后仍然是形变收缩核. 我们先研究矩形去掉$n$个(内)点: 显然以这样的图形为强形变收缩核: (设$n\leq 2$) 作$n-1$条与边$a$同起终点的线, 它们与边界的并构成强形变收缩核, 在商映射过后它变为环面的强形变收缩核, 而且不是别的, 恰是$n-1+2$个圆束(后面的$2$来自于环面原先的经圆纬圆). 从而对$n=3$, 基本群为4个$\mathbb{Z}$的自由乘积.
+\end{solution}
+
+注: 关于例2: 其中$X_1$的生成元也可以选$a$, $ab$, 也就是矩形的一条边$a$和右下到左上的对角线$ab$, 这样选的意思是, 把矩形按对角线$ab$剪开后再粘贴两个$b$边, 则变成了(我们更熟悉的)构造Kelin瓶的方式: 先做成一个圆筒(粘贴两个$a$边, 再反接圆筒的两个圆环(即ab与ab相接). 这时, 记生成元$a,ab=c$,  我们可以用图4-27当作按我们所说的方式构造Klein瓶的粘接前的矩形, 从而它边(逆时针)顺次分别为$a,ab,a, (ab)^{-1}$, 也可以进一步将$X$分为例2所给的两个区域$X_1$和$X_2$. 注意这时$d$的路径变为: $\omega_\#(\langle d\rangle)=aca^{-1}c=aaba^{-1}(ab)=aabb$, 故$\pi_1(X)=F(\langle 
+a\rangle,\langle c\rangle )/[cdc^{-1}d]=F(\langle a\rangle,\langle c\rangle)/[a^2b^2]=F(\langle a\rangle, \langle b\rangle)/[a^2b^2]$.
+例二已讲到按这种方法可以计算任何闭曲面的基本群. 由我们的分析可见, 我们所有的自由度只是''分子''$F(\alpha_1,\cdots\alpha_m)$中生成元的选取方式(一个群当然有若干选取生成元的方式而不是唯一的), 然而''分母''(也即模掉的部分)的写法是唯一的(即不同生成元写法下, 若都变换到同一种生成元的写法时, 只有唯一形式). 
+
+\begin{exercise}5.
+\end{exercise}
+\begin{solution}
+(1)以$z=0$平面上去掉两点为强形变收缩核(形变收缩定义为: 不妨设一条直线在$y=0$平面而另一条直线在$y=1$平面, 且与$z=0$平面夹角为$\theta$和$-\theta$, 则存在$y$轴上的一系列直线使得上面说的两条直线沿这些直线的轨迹可以连续变到对方直线. 每条直线决定了一个直线上的点到直线与$z=0$的交点的投影映射. 把这个映射扩大到整个$z=0$平面即可. 从而所求空间同伦于$E^2$上去掉两点, 故基本群为两个$\mathbb{Z}$的自由乘积. (2)该空间以$S^2$上挖去上下左右前后六个点为形变收缩核. 注意球面挖去一个点后为$D_2$, $D_2$上挖去5个点后同伦于5个圆的圆束, 从而原图形基本群为5个$\mathbb{Z}$的自由乘积. (3)同伦于4个圆的圆束. 故为4个$\mathbb{Z}$的自由乘积. 
+\end{solution}
+
+\begin{exercise}6.
+\end{exercise}
+\begin{solution}
+用V-K定理. 中间挖去一个圆盘记为$X_2$, 其余部分记为$X_1$, 则$X_0=X_1\cap X_2$为圆盘边界为圆环. 显然三角形的三边是$X_1$的强形变收缩核, 可见$X$的基本群同构于$\pi_1(X_1,x_0)/\text{Im} i_{\pi} \langle d\rangle$, 其中$i$为圆环到$X_1$的嵌入映射. 由于$X_1$是道路连通的, 故其基本群与基点无关, 从而可作道路$\omega$得到$\omega_\#: \omega \langle d\rangle \omega^{-1}$与$\langle d\rangle$同构, 而$\omega d\omega$为$aaa$, 可见$\text{Im} i_\pi \langle d\rangle = [a^3]$, 而从$X_1$的形变收缩核可以看出其边界就是一个圆环, 故$\pi_1(X,x_0)=F(\langle a\rangle)$, 从而整个图形的基本群为$\mathbb{Z}/3\mathbb{Z}$, 其中分母表示的是正规子群$\{3n|n\in \mathbb{Z}\}$. 
+
+注: 这个题很像例2(P137), 要注意的是: 三角形的边界(粘合之后)是$X_1$的强形变收缩核, 例二中矩形的边界粘合后为$X_1$的强形变收缩核. 这两个例子中的圆环都不是$X_1$的形变收缩核! 原因: 在粘合(商映射之前, 圆环的确是三角形去掉$X_2$或矩形去掉$X_2$的形变收缩核, 但商映射之后不是了, 因为命题4.13无法满足: 找不到$H$使得在商映射下等价的点在任意时刻$t$时仍为商映射等价. 
+\end{solution}
+
+\begin{exercise}7.
+\end{exercise}
+\begin{solution}
+注: $X$与$Y$同胚, 定义为存在一个一一对应$f:X\rightarrow Y$, 使$f$和$f^{-1}$都为连续映射. 
+
+按流形同胚定义, 可推出流形的边界点必映到边界点. 否则, 假设边界点$x\in X$映到$f(y)$是$Y$的内点, 则存在$y$的邻域$V$同胚于$E^n$, 该邻域映回$X$得到$f^{-1}(V)=U$, 则$f|U$显然是$U$到$V$上的同胚, 从而$V$也应同胚于$E^n$, 与$x$是边界点矛盾. (注: 边界点定义为$X$中没有同胚于$E^n$的开邻域(从而只有同胚于$E^n_+$)的点). 还可推出同胚流形维数必相同(只需注意到$E^m$同胚于$x$的开邻域$U$同胚于$f(U)=V$同胚于$E^n$, 但$E^n$与$E^m$同胚当且仅当$n=m$.), 但这需要以''$E^n$与$E^m$同胚当且仅当$n=m$''为前提.
+
+当然, 上面有两点我们没有论证: 一是如果流形上一个点有同胚于$E^n_+$的开邻域, 则它不可能存在同胚于$E^n$的开邻域. 这个命题的特殊情形($n=2$)在命题4.15中给出. 二是$E^n$与$E^m$同胚当且仅当$n=m$. 在我们学完(单纯)同调理论后, 在第八章我们将得以证明$E^n$与$E^m$的不同胚关系, 以及$E^n_+$与$E^n$的不同胚关系. 
+
+上面已证$f$把边界映到边界, 从而易得边界同胚. 平环边界为两个环而莫比乌斯带是一个环, 显然不同胚.
+\end{solution}
+
+\begin{exercise}8. 
+\end{exercise}
+\begin{solution}
+假设$f$无边界点, 则不存在$f(x)=x$, 作$g=\frac{x-f(x)}{||x-f(x)||}$, 为$D^n$到$S^{n-1}$的映射, 且$g$连续. 到此都与Brouwer不动点定理相同. 接下来我们需要说明$g_0|gS^{n-1}:S^{n-1}\rightarrow S^{n-1}$满足$g_0(x)\neq -x, \forall x\in S^{n-1}$. 注意这个等式的意思是$f(x)$同向平行于$x-0$,也即$f(x)$, $x$, $0$
+三点共线且$x$在中间. 原定理中这个命题成立, 是因为$||f(x)||<1$故总不可能$x$在中间. 本题中的(1)直接使该命题成立. (2)直接说不共线, 该命题成立. (3): 从而对任意$S^1$上的$x$, $0,x,f(x)$总共线. 如果存在$x=f(x)\in S^1$, 则不动点命题得证. 否则不存在, 则必有$||f(x)||<1,\forall x\in S^1$, 或$||f(x)||>1, \forall x\in S^1$, 前者归于(1); 后者只需令$g=\frac{f(x)-x}{||f(x)-x||}$, 从而总有$g_0(x)\neq -x, \forall x\in S^{n-1}$(因为这个式子(若为等式)意为$f(x),x,0$三点共线且$f(x)$在中间), 下面证法相同.
+
+注: 上面说明了Brouwer不动点定理的条件总可满足, 现在把后半部分补上. 由于总有$g_0(x)\neq -x$, 故作$H(x,t)=\frac{(1-t)g_0(x)+tx}{||(1-t)g_0(x)+tx||}$, 可知$g_0$同伦于$S^{n-1}$的单位映射. 但另一方面$g_0=g\circ i$, 其中$i$为$S^{n-1}$到$D^n$的包含映射, 它同伦于一个常值映射(因为$D^n$单连通), 故为零伦的(零伦是映射的性质: 如果$f$同伦于常值映射则称$f$为零伦), 从而$g_0 = g\circ i$也为零伦的; 但$S^{n-1}$的单位映射不同伦于常值映射(因为否则它们应该导出相同的$S^{n-1}$的基本群同构(即基本群的同伦不变性的第一个内涵: $f\cong g:X\rightarrow Y$则$f,g$给出$Y$的基本群同构)), 矛盾.
+\end{solution}
+
+\begin{exercise}9.
+\end{exercise}
+\begin{solution}
+若存在$x_0\in D^2\backslash S^1$, 使$f(x)\neq x_0, \forall x\in D^2\backslash$, 则作映射$g(x)=f(x)+x-x_0$, 从而对于任意$x\in S^1$, $g(x)=2x-x_0$总在$S^1$外部, 从而归结为上一题(3)的第二种情形, 只总有不动点$g(x_1)=x_1$, 从而$f(x_1)=x_0$.
+\end{solution}
+
+\begin{exercise}10.
+\end{exercise}
+\begin{solution}
+用$z=0$平面将整个图形截成上下两部分, 其交为$z=0$的部分即一系列圆圈, 这两部分都单连通, 且其交道路连通(V-K定理之需要), 故由V-K定理即证. 
+\end{solution}
+
+\subsection{Jordan 曲线定理}
+
+总结: 同伦与基本群这一章介绍了基本的同伦论的概念. 在应用层面, 我们计算了$S^n$的基本群, 莫比乌斯带的基本群(与平环, $S^1$的一样, 都为$\mathbb{Z}$); 用Van-Kampen定理计算了所有闭曲面的基本群(P137), 是用生成元的关系表示的, 从中可推出$P^2$的基本群是$\mathbb{Z}/2\mathbb{Z}=\mathbb{Z}_2$为二阶循环群, $T^2$(环面)的基本群是$\mathbb{Z}\times \mathbb{Z}$, 但$2T^2$的基本群表示起来就有些复杂了, 为$F(\alpha_1,\beta_1,\alpha_2, \beta_2)/[\alpha_1\beta_1\alpha^{-1}_1\beta^{-1}_1\alpha_2\beta_2\alpha^{-1}_2\beta^{-1}_2]$. 我们还利用可缩空间(用闭曲面的标准表示, 粘合映射)说明了任何闭曲面去掉一点后都为圆束(也即闭曲面基本群表示中去掉"模掉"的部分).
+
+\subsection{复叠空间及其基本性质}
+
+\begin{exercise}1. 设$p:E\rightarrow B$是复叠映射, 证明$p$是开映射(从而是商映射).
+\end{exercise}
+\begin{solution}
+定义: 设$E$, $B$都是道路连通, 局部道路连通的拓扑空间, $p:E\rightarrow B$是连续映射. 如果对任意$b\in B$, 有开邻域$U$, 使得$p^{-1}(U)$是$E$的一族两两不相交的开集$\{V_a\}$的并集, 并且$p$把每个$V_a$同胚地映成$U$, 则称$p:E\rightarrow B$是复叠映射, $E$和$p$一起称为$B$上的复叠空间, 记作$(E,p)$, 把$B$称为它的底空间. $U$称为基本邻域. $V_a$称为$p^{-1}(U)$的分支. 对任意$b\in B$, 称$p^{-1}(b)$是$b$点上的纤维. 
+
+注: 开映射定义为把开集映到开集的映射. 商映射定义(命题3.2): 连续的满映射如果还是开映射则是商映射.
+
+$p:E\rightarrow B$为复叠映射, 则对任意$E$中的开集$V$, $U=p(V)$, 对任意$x\in U$, 取$e\in V$使$p(e)=x$, 下证$e$为$p(V)$的内点. $x$存在开邻域$U_x$(即基本邻域)使得其逆像为$E$中不交开集的并, 设$V_a$为其中包含$e$的分支, 则$p|V_a:V_a\rightarrow U$为同胚, 则$p|V\cap V_a:V\cap V_a\rightarrow p(V\cap V_a)$ 也是同胚映射(易证. 此处略), $V\cap V_a$ 是开集从而$p(V\cap V_a)$是开集, 而$p(V\cap V_a)=p(V)\cup p(V_a)=U\cup U_x$故$x\in p(V\cap V_a)$, 从而$x$是$p(V\cap V_a)$的内点, 从而$x$是$p(V)=U$的内点, 从而$U$为开集, 从而$p$为开映射. 
+
+注: 简单地说, 上面的证明思路是: 为证$p(V)$是开集, 只须证其中的点都是内点. 已知$V$, $V_a$为开集, 则只需证$p(V\cap V_a)$为开集, 从而其内点也必为$p(V)$的内点. 而已知$V$, $V_a$为开集来证$p(V\cap V_a)$为开集事实上是证明$p$在$V\cap V_a$范围内是开映射; 而这是由$p$在$V_a$范围内是同胚而保证了的. 
+\end{solution}
+
+\begin{exercise}2. 设$p:E\rightarrow B$是复叠映射, 证明纤维的势(基数)$\# p^{-1}(b)$与$b\in B$的选择无关.
+\end{exercise}
+\begin{solution}
+若$U$是一个基本邻域, 则对任意$b\in U$, $p^{-1}(b)$的叶数为其分支数, 从而同一基本邻域内的诸点的纤维有相同的势. 取与$b$有相同势的$B$中的所有点作成集合$A$, 则对$A$中任一点, 都存在其基本邻域全部在$A$中, 从而$A$是开集. 且$A^c$中的点都与$A$中的点式不同, 则$A^c$中的点的基本邻域都不在$A$中, 从而$A^c$也是开集, 与$B$连通矛盾. 得证.
+\end{solution}
+
+\begin{exercise}3. 设$p:E\rightarrow B$是复叠映射, $U\in B$是开集, 设$h:U\rightarrow E$是 $U$上的一个截面(即$h$是包含映射$i:U\rightarrow B$的提升), 证明$h(U)$是$E$的开集. 
+\end{exercise}
+\begin{solution}
+设$X$是道路连通, 局部道路连通的空间. 设$f:X\rightarrow X$是同胚映射, 并且$f^n=\text{id}$, 当$0<m<n$时, $f^m$没有不动点. 规定$X$上等价关系为: $x$与$x'$等价, 若存在$l$使$f^l(x)=x'$. 记商空间为$X/f$, $p:X\rightarrow X/f$是粘合映射. 
+
+命题: 若$X$是道路连通, 局部道路连通的Hausdorff空间, 则$p:X\rightarrow X/f$是叶数等于$n$的复叠映射. (证: 对任意$y\in X/f$, 记$p^{-1}(y)=\{x,f(x),\cdots, f^{n-1}(x)\}$, 因$X$是Hausdorff空间, 故可取$x$的开邻域, 使$V,f(V),\cdots, f^{n-1}(V)$两两不交(对$x$和$f(x)$, 存在各自邻域$U$, $U'$使$U$, $U'$不交. 注意到$f$为同胚, 取$V=U\cap f^{-1}(U')$即可保证$V, f(V)$不交. 以此类推). 记$U=p(V)$, 则$p^{-1}(U)=\cup^{n-1}_{l=0}f^l(V)$, 从而$U$是开集, 并且$p$把$f^l(V)$同胚地映为$U$, 故$U$是$y$的基本邻域. )
+
+注: 证明是复叠映射, 按定义就是要证任意底空间中的点, 存在基本邻域(即其逆为若干个不交开集的并, 且每一个与基本邻域同胚).
+
+
+设$p:E\rightarrow B$是复叠映射, $X$是一个拓扑空间. 两个连续映射$f:X\rightarrow B$和$\tilde{f}:X\rightarrow E$如果满足$p\circ \tilde{f}= f$, 就称$\tilde{f}$是$f$的一个提升. 
+
+定理5.1(提升唯一性定理) 设$X$连通, $\tilde{f}_1,\tilde{f}_2:X\rightarrow E$都是$f:X\rightarrow B$的提升(关于复叠映射$p:E\rightarrow B$的), 并且在某一点$x_0\in X$, $\tilde{f}_1(x_0)=\tilde{f}_2(x_0)$, 则$\tilde{f}_1=\tilde{f}_2$.  (证明: 记$A=\{x\in X|\tilde{f}_1(x)=\tilde{f}_2(x)\}$, 要证$A=X$. 因为$X$是连通的, 故$A\neq \emptyset$($x_0\in A$), 从而只用证$A$是开集也是闭集. (1)$A$是开集: 设$x_1\in A$, 要证$x_1$是$A$的内点. 设$e=\tilde{f}_1(x_1)=\tilde{f}_2(x_1)$, 由于$p$是局部同胚(见下方习题6), 故存在$e$的开邻域$V$, 使得$p|V$是嵌入映射. 记$W=\tilde{f}_1^{-1}(V)\cap\tilde{f}_2^{-1}(V)$, 它是$x_1$的开邻域. 对任意$x\in W$, $\tilde{f}_1(x),\tilde{f}_2(x)\in V$, 且$p(\tilde{f}_1(x))=p(\tilde{f}_2(x))$, 由于$p|V$是嵌入, 得$\tilde{f}_1(x)=\tilde{f}_2(x)$, 从而$W\in A$, $x_1$是$A$的内点. 再证(2)$A$是闭集: 即$A^c$是开集. 设$x_1\in A^c$, 要证$x_1$是$A^c$的内点. 记$e_i=\tilde{f}_i(x_1)$, 则$e_1\neq e_2$, 又$p(e_i)=f(x_1)$, $i=1,2$. 由复叠映射定义知, 存在$e_1,e_2$的不相交的开邻域$V_1,V_2$, 记$W=\tilde{f}_1^{-1}(V_1)\cap \tilde{f}_2^{-1}(V_2)$, 则$W$是$x_1$的开邻域, 对任意$x\in W$, $\tilde{f}_1(x), \tilde{f}_2(x)$分别在$V_1$, $V_2$中, 因此不相同. 故$W\subset A^c$, $x_1$是$A^c$的内点.)
+
+回原题: 设$U_b$是$b=p(e)$的一个道路连通的基本邻域, 并且$U_b\in U$. 记$V_a$是$p^{-1}(U_b)$的包含$e$的分支, 则$V_a$是$E$的开集, 且由定理5.1知$(p|V_a)^{-1}:U_b\rightarrow V_a$在$U_b$上与$h$重合. 得证.
+\end{solution}
+
+\begin{exercise}4. 验证命题5.1中的$p$是开映射.
+\end{exercise}
+\begin{solution}
+注意: 本题要求验证$p$是开映射. $p$定义为粘合映射, 从而它是商映射; 但商映射并不一定是开映射(见商映射一节). 对命题5.1, 为证$U$是开集, 则必须证明$p$是开映射(再由$U=p(V)$得$U$开集). 一旦$p$为开映射, 则有$p$把$f^l(V)$同胚地映为$U$(因为$p$只在每个$f^l(V)$上为一一对应). 
+
+设$U$为$X$开集, 对$U$中任一点$x$, 设$y=p(x)$, 取$x$的开邻域$V$, 使$V,f(V),\cdots,f^{n-1}(V)$两两不交, 且$V\subset U$, 故$p(V)$是含于$p(U)$的开集, 且含$y$, 从而$y$是$p(U)$的内点. 
+\end{solution}
+
+\begin{exercise}5. (复叠映射的可乘性)
+\end{exercise}
+\begin{solution}
+定义即证.
+\end{solution}
+
+\begin{exercise}6. 设$p:E\rightarrow B$是复叠映射, 证明$p$是局部同胚的(即对任意$e\in E$, 有$e$的开邻域$V$, 使得$p|V:V\rightarrow p(V)$是同胚).
+\end{exercise}
+\begin{solution}
+对任意$e\in E$, 设$p(e)=x\in B$, 取基本邻域即证. 
+\end{solution}
+
+\begin{exercise}7.
+\end{exercise}
+\begin{solution}
+先利用粘合映射来构造原图形$2T^2$: 两个中心带洞的正方形, 左边一个上下两边画向左箭头, 左右两边画向上箭头; 右边一个上下两边画向左箭头, 左右两边画向下箭头, 左边的正方形先(向左卷)粘合左右两边, 再(将形成的圆柱面的上下两未封口的洞向左卷)粘合上下两边; 右边的正方形的方法与左边的正方形折法镜面对称(左右对称). 在这种折法下, 左,右两正方形中间的洞分别为顺时针, 逆时针. 在粘合映射$f$下, 事实上是右边的正方形中心旋转180度后贴到左边的正方形上(完全重合), 且中心洞的对径点粘合. 这样, 我们得到的图形事实上是一个环面$T^2$开一洞后安一个交叉帽(莫比乌斯圈)得到的图形. 凡是有交叉冒的都是$mP^2$型. 下面我们用闭曲面的表示法来证明其为$3P^2$. 作与该图形同胚的图形: 中心带正方形洞的大正方形, 设中心洞的四边顺时针依次为$d,c,d,c$, 外面四边顺时针依次为$-b,-a,b,a$, 通过在正方形左上角剪一刀(从而添了两边$e$, $-e$)的方式得到标准表示$ec^{-1}d^{-1}c^{-1}d^{-1}e^{-1}b^{-1}a^{-1}ba$, 则有$l=10$条边, $k=3$个顶点类, 从而按P101页可求出标准化表示的边数为$l-2k+2=6$条, 从而为$3P^2$.
+\end{solution}
+
+ \begin{exercise}8,9.
+ \end{exercise}
+ \begin{solution}
+ 不是. $S^1$上的点$e^{i 2\pi a}$和$e^{i2\pi b}$无基本邻域: 因为任意$e^{i 2\pi a}$的邻域$U$在$p$下的原像$V=p^{-1}(U)$, 在映射$p$下都不与$U$同胚(在$p$不是$V$到$U$的一一对应).
+ \end{solution} 
+
+\begin{exercise}10.
+\end{exercise}
+\begin{solution}
+$T^2$到Klein瓶: 设$T^2$粘合之前为$|x|<1,|y|<1$的正方形, 左右两边箭头向上, 上下两边箭头向右, 粘合时右边卷到左边使左右两边粘合, 再将形成的圆柱的上下两端向左拉粘合上下两边, 从而左, 右两边分别为$T^2$的腰圆内侧圆环和腰圆外侧圆环. 现将远点放于$T^2$重心, 令$f$为中心反射, 则在$f$下等价的点为(利用正方形坐标) $(x,y)\sim (-x,y+1)$ ($y\equiv y-2$). 这样, 粘合效果等价于将正方形沿$y=0$剪开后(并赋予该剪开的线向左的箭头), 将下方的长方形沿$y$轴转180度后与上方的长方形重叠粘合, 而这时得到的新长方形左右两边箭头向上, 上边箭头向右, 下边箭头像左, 粘合之后将得到Klein瓶. 
+
+$T^2$到$T^2$: 利用上方的正方形, 作映射$f: (x,y)\mapsto (x,y+1)$($y\equiv y-2$),即得(细节略). 
+\end{solution}
+
+\begin{exercise}11.
+\end{exercise}
+\begin{solution}
+题目应该是把该图形作为底空间$B$而不是空间$B$, 因为不存在以该空间为$E$的4叶复叠映射(注意复叠映射中不交并的条件, 这一条件使得叶数与圆的交点密切相关: 如本节例5图中为4叶(当然也可以为2叶)恰是因为五个圆交于4个点; 例4中为3叶恰是因为4个圆交于3个点.)那么任何5个圆(且恰有5个切点)的图形都可以用作空间$E$来得到4叶的复叠映射, 得到该图形.
+\end{solution}
+
+\begin{exercise}12.
+\end{exercise}
+\begin{solution}
+设$X$到$B$的常值映射为$f$, 其一个提升为$\tilde{f}$, 则按定义$p\circ \tilde{f}=f$为常值映射. 由于$\tilde{f}$连续, $X$连通, 故$\tilde{f}(X)$连通, 设$f(X)=\{b\}$, 则$p^{-1}(b)$在$\tilde{f}(X)$(连通)内只是一点(因$b$的邻域的逆向在一个连通分支内是$p$同胚的), 记为$e$, 则必有$\tilde{f}(X)=e$.
+\end{solution}
+
+\begin{exercise}13.
+\end{exercise}
+\begin{solution}
+命题5.2: 设$a$是$B$中的道路, $a(0)=b$, $e\in p^{-1}(b)$, 则存在$a$的唯一提升$\tilde{a}$, 使得$\tilde{a}(0)=e$. 
+
+由命题5.2, 对$U$中任一点$b$, 存在$U$中道路$a$使$a(0)=b$, 则存在$e\in V$使$e\in p^{-1}(b)$(这是因为道路分支数等于$b$的叶数), 从而存在道路$\tilde{a}$使$\tilde{a}(0)=e$, 则$p\circ\tilde{a}(0)=b$. 从而$p(V)=U$.
+\end{solution}
+
+\begin{exercise}14. 设$p:E\rightarrow B$是复叠映射, $V$是$E$的道路连通开子集, $U=p(V)$. 如果包含映射$i:U\rightarrow B$诱导的基本群同态$i_\pi:\pi_1(U)\rightarrow \pi_1(B)$是平凡的, 则$p|V:V\rightarrow U$是同胚映射.
+\end{exercise}
+\begin{solution}
+只要证明$p|V:V\rightarrow U$是单的(因$p$为连续映射且为开映射). 用反证法: 设$p|V$不单, 它把$V$中两个不同点$e_0$和$e_1$映为$U$中同一点$b_0$, 取$\tilde{a}$是$V$中从$e_0$到$e_1$的道路, 则$a=p\circ \tilde{a}$在$U$中是$b_0$的闭路, 因为$i_\pi:\pi_1(U)\rightarrow \pi_1(B)$平凡, 所以$a$在$B$中定端同伦于$b_0$处的点道路, 从而它在$e_0$处的提升$\tilde{a}$一定是闭路, 与假设矛盾. 
+\end{solution}
+
+\begin{exercise}15.
+\end{exercise}
+\begin{solution}
+利用上题结论. 对底空间的半单连通开子集$A$, 则$p^{-1}(A)$为若干个连通分支的并, 且每个连通分支在$p$下映到$U$(连续映射包连通性).  再由上题结论即证.
+\end{solution}
+
+\begin{exercise}16.
+\end{exercise}
+\begin{solution}
+利用上两题的基本邻域在$p$下同胚即得.
+\end{solution}
+
+\begin{exercise}17.
+\end{exercise}
+\begin{solution}
+对$B$中任一点$b$, 由于$B$局部半单连通, 则由上题$p^{-1}(b)$也有局部半单连通邻域, 这些邻域中的每一个$V_a$在$\tilde{p}$下的原像$\tilde{p}^{-1}(V_a)$的每个连通分支都与$V_a$同胚, 也就与$p(V_a)$同胚. 从而$p\circ \tilde{p}$为复叠映射.
+\end{solution}
+
+\begin{exercise}18.
+\end{exercise}
+\begin{solution}
+对任意$b\in B$, 设基本邻域为$U$, 则$p^{-1}(U)$为若干不交$V_a$的并, 且$p|V_a:V_a\rightarrow U$为同胚映射. 设$e_a=p^{-1}(b)\cap V_a$, 则存在$e_a$的基本邻域$W_a$使$\tilde{p}^{-1}(W_a)$为$E_1$中两两不交的开集的并且每个同胚于$W_a$. 则$p(\cap W_a)$ 为$B$中$b$的基本邻域(注意$p$是有限叶的).
+\end{solution}
+
+\begin{exercise}19.
+\end{exercise}
+\begin{solution}
+$H_e$定义为$p_\pi(\pi_1(E,e))$. 左推右显然. 右推左: 只需用命题5.4, 知路径$a\overline{a'}$在$E$中有原像, 从而$\tilde{a}$与$\tilde{a}'$必有相同终点.
+\end{solution}
+
+\subsection{两个提升定理}
+
+\begin{exercise}1. 设$p: E\rightarrow B$是复叠映射, $X$连通. 设$f:X\rightarrow B$是零伦的连续映射, 证明$f$有提升, 且每个提升都是零伦的.
+\end{exercise}
+\begin{solution}
+本节提升的第一个定理: 
+
+定理5.2(同伦提升定理) 设$\tilde{f}:X\rightarrow E$和$F:X\times I\rightarrow B$都连续, 且满足$F(x,0)=p\circ \tilde{f}(x),\forall x\in X$, 则存在$F$的提升$\tilde{F}:X\times I\rightarrow E$, 使得$\tilde{F}(x,0)=\tilde{f}(x), \forall x\in X$.
+
+由于$f$是零伦的连续映射, 故存在$F(x,t)$使$F(x,0)=e_{x_0}$, $F(x,1)=f(x)$. 由于$X$连通, 故任意点映射$e_{e_0}: X\rightarrow e_0\in E$为连续映射, 从而存在$e_{x_0}$的提升$\tilde{e_{x_0}}$, 从而由定理5.2, 存在$F$的提升$\tilde{F}$, 定义$\tilde{f}(x)\equiv\tilde{F}(x,1)$就有$p\circ \tilde{f}=f$, 且显然$\tilde{f}$按$\tilde{F}$同伦于点映射, 故为零伦的. 得证.
+\end{solution}
+
+\begin{exercise}2. 设$p:E\rightarrow B$是复叠映射, $U$是$B$的道路连通开集, 并且包含映射$i:U\rightarrow B$导出基本群同态$i_\pi: \pi_1(U)\rightarrow \pi_1(B)$是平凡的, 则$U$是基本邻域.
+\end{exercise}
+\begin{solution}
+同上一节15题. 
+\end{solution}
+
+\begin{exercise}3. 设$f:S^2\rightarrow T^2$连续, 证明$f$零伦.
+\end{exercise}
+\begin{solution}
+例: 证明$P^2$到$S^1$的每个连续映射都零伦: 设$f:P^2\rightarrow S^1$连续, 导出两者基本群间的映射$f_\pi$(同态). 因为前者基本群为$\mathbb{Z}_2$, 后者为$\mathbb{Z}$无二阶元素, 故$\text{Im} f_\pi$为$S^1$基本群的平凡子群, 因而$f_\pi(\pi_1(P^2,x_0))\in H_{e_0}$, 其中$H_{e_0}\equiv p_\pi(E,e_0)$, $e_0\in p^{-1}(f(x_0))$, 这里$E$为$S^1$的复叠空间$E^1$. 故由定理5.3, 存在$f$的提升$\tilde{f}$使$\tilde{f}(x_0)=e_0$, $\tilde{f}$是$P^2$到$\mathbb{R}$的连续映射, 显然是零伦的. 从而$f$是零伦的(上节命题5.4: $p_\pi$为单同态).
+
+回此题: 由于$\pi_1(S^2)$平凡, 故$\text{Im}f_\pi$为$T^2$的平凡子群, 故$f_\pi(\pi_1(S^2,x_0)) \in H_{e_0}$, 其中$H_{e_0}\equiv p_\pi(E,e_0)$, $e_0 \in p^{-1}(f(x_0))$, 这里$E$选为$T^2$的复叠空间, $E^2$. 故有定理5.3, 存在$\tilde{f}:S^2\rightarrow E^2$, 使$\tilde{f}(x_0)=e_0$, 显然$\tilde{f}$是零伦的, 从而$f$是零伦的(注意到$p_\pi$为单同态). 
+\end{solution}
+
+\begin{exercise}4. 证明$P^2$到$T^2$只有一个映射类.
+\end{exercise}
+\begin{solution}
+例: 证明当$n\geq 2$, $S^n$到$S^1$只有一个映射类. 证: 设$f,g$都为连续映射, 因为$S^n$为单连通的, 故$f_\pi(\pi_1(S^n,x_0))$, $g_\pi(\pi_1(S^n,x_0))$都属于$H_{e_0}$, 从而它们都存在关于$p$的提升$\tilde{f}, \tilde{g}:S^n\rightarrow E^1$, 而$E^1$是凸集, 故两个提升同伦, 从而$f,g$同伦. 
+
+回原题. 注意到$P^2$的基本群为$\mathbb{Z}_2$, 而$T^2$的基本群为$\mathbb{Z}\times \mathbb{Z}$, 无二阶子群, 故映射$f,g$诱导的基本群映射为平凡的(映到$T^2$的单位元), 从而在$H_{e_0}$中, 故利用定理5.3知存在$f$, $g$映到$E^2$的提升$\tilde{f}$, $\tilde{g}$, 由于$E^2$是单连通的, 故两提升同伦, 故$f,g$同伦. 
+\end{solution}
+
+\begin{exercise}5.
+\end{exercise}
+\begin{solution}
+$p_2\circ h = p_1$, $E_2$任一点$e$, 存在邻域$U$与$p_2(e)=b$的邻域$p_2(U)$同胚, 且存在$b$关于$E_1$的基本邻域$V$. 取$p_2(U)\cap V$, 可证$U\cap p^{-1}_2(V)$为$E_2$关于$E_1$的基本邻域(显然$p^{-1}_1(V\cap p_2(U))$是$E_1$中不相交开集$V_a$的并, 每个开集都含$h^{-1}(e)$的一个点. 再经$h=p^{-1}_2\circ p_1$知存在同胚$V_a\rightarrow V\cap p_2(U)\rightarrow U\cap p^{-1}_2(V)$($V_a$经$p^{-1}_2\circ p_1$要么映到$U\cap p^{-1}(V)$, 要么映到$p^{-1}(V)\backslash U$)). 故$h$是复叠映射.
+\end{solution}
+
+\begin{exercise}1.
+\end{exercise}
+\begin{solution}
+$X$局部半连通: 如果拓扑空间$X$的每一点都有半连通的邻域. 拓扑空间$X$的子集$A$称为半连通子集, 如果$A$道路连通, 并且包含映射诱导的基本群同态$i_\pi:\pi_1(A)\rightarrow \pi_1(X)$是平凡的. 
+
+对本题, 先证每一点$b\in B$有半连通邻域. 对任意一点$b$取基本邻域$U$, $p^{-1}(U)$的一个连通分支为$V$, 由于$E$为泛复叠空间, 则$U$中任意道路在$V$中的像可缩, 从而$U$中任意道路可缩. 故$U$为半连通子集, 故$B$为局部半连通的, 也证明了基本邻域$U$是半连通的. 另一半已在第一节15题中证明了.
+\end{solution}
+
+\begin{exercise}2. (显然, 略)
+\end{exercise}
+
+\begin{exercise}3. 
+\end{exercise}
+\begin{solution}
+显然这些分支都映到$U$($p\circ h= p$); 其次由于正则复叠空间$H_e=H_{e'}$, 其中$e,e'$为任意$p^{-1}(b)$中两元素, 故由命题5.8存在$h\in \mathfrak(E,p)$使$h(E)=e'$. 则两方面都得证.
+\end{solution}
+
+\begin{exercise}4. 设$p:E\rightarrow B$是泛复叠映射, $G$是$\mathfrak{D}(E,p)$的子群, 记$E_1=E/G, \tilde{p}:E\rightarrow E_1$为投射, $p_1:E_1\rightarrow B$是$p$导出的映射. 证明$\tilde{p}$与$p_1$都是复叠映射. 
+\end{exercise}
+\begin{solution}
+注: 本题很好地揭示了泛复叠映射与一般复叠映射的关系. 
+
+认为$E/G$定义为商空间, 其中的元素是由$E$中不等价的点组成的, 并定义等价为$e'\sim e\Leftrightarrow$存在$h\in G$使$e'=h(e)$. 对$B$中任一点$b$, 其基本邻域在$E$中的原像$\cap U_a$, 经映射$\tilde{p}$映到$E_1$中得到若干不交的并$V_a$(因为每个映射$f$为同胚, 再由$p\circ f= p$知$p(U_a)=p\circ f(U_a)=U$, 从而$f(U_a)=U_b$, 从而得到若干不交的$V_a$), 且显然每个$V_a$(由于是由某个$U_a$同胚映过来的)同胚于$U$, 从而证明了$p_1$是复叠映射, 再只需验证$\tilde{p}$为复叠映射: 略.
+\end{solution}
+
+\begin{exercise}5.
+\end{exercise}
+\begin{solution}
+由命题5.3知有$\tilde{a}_1$与$\tilde{a}_2$道路同伦, 故当然有终点相同. 反之若终点相同, 由于$E$为泛复叠映射(单连通), 故显然$a$与$a'$定端同伦.
+\end{solution}
+
+\begin{exercise}6.
+\end{exercise}
+\begin{solution}
+由于$E$是单连通的, 故$\rho$为满的. 对任意两个$a,a'$的以$e$为起点的提升, 由上题知若提升的终点相同, 则$a$, $a'$道路同伦, 从而属于同一个道路类. 从而$\rho$是单的. 从而$\rho$为一一对应. 
+\end{solution}
+
+\subsection{复叠空间存在定理}
+
+定理: 如果拓扑空间$B$道路连通和局部道路连通, 并且还局部半单连通, 则$B$有泛复叠空间. 
+
+回顾一下本章用到的各个概念.
+
+$C(X,Y)$记为$X$到$Y$的所有连续映射的集合, 则其在同伦关系下分成的等价类称为映射类. 
+
+连通分支: 拓扑空间$X$的一个子集称为$X$的连通分支, 如果它是连通的, 且不是$X$的其他连通子集的真子集.  (等价地, 连通分支就是极大连通子集.)
+
+局部连通: 拓扑空间$X$称为局部连通的, 如果$\forall x\in X$, $x$的所有连通邻域构成$x$的邻域基. 
+
+邻域基: 设$x\in X$, 把$x$的所有邻域的集合称为$x$的邻域系; 其一个子集$\mathscr{U}$称为$x$的一个邻域基, 如果$x$的每个邻域至少包含该$\mathscr{U}$中的一个成员. 
+
+拓扑空间$X$定义: $X$, $\emptyset$, 在$\tau$中; $\tau$中任意多成员的并以及有限多成员的交仍在$\tau$中. 注意, 后两个条件事实是限制由开集得到闭集, 而允许由闭集得到开集: 因为$\cup_n(-\infty, 1-\frac{1}{n}]=(-\infty, 1)$, $\cap_n[-1,\frac{1}{n}) = [-1,0]$, 从而拓扑允许前者, 排除后者. 注意拓扑中的开集是开区间的抽象, 我们不允许开集是闭区间的抽象, 所以我们不允许开集得到闭集, 从而不能允许后者发生, 从而不能允许若干个开集的交仍为开集, 而只能允许有限个开集的交为开集. 
+
+
+本章的核心概念--复叠空间--是研究拓扑空间$X$的基本群的一个思路, 这个思路是代数的, 又有直观的几何意义. 对任意两拓扑空间$X$和$Y$, 连续映射$f$都诱导了对应点$x_0$和$y_0=f(x_0)$的基本群的同态$f_\pi$(若$X$与$Y$又都是道路连通的, 则这个同态是$X$和$Y$的基本群的同态). 然而同态毕竟给出的信息太少, 而同构则要求$X$与$Y$同伦等价, 很苛刻. 复叠空间$p:E\rightarrow B$给出了一个单同态的条件, 这个"单"来源于$E$与$B$的局部同胚的特性. 
+
+一个数学, 物理中的基本问题就是两拓扑空间映射$f:X\rightarrow Y$分类的问题. 本章并不能解决这个问题, 但已可以对一些简答的情形作出回答, 例如第二解中已经提到的: $n\geq 2$时$S^n$到$S^1$只有一个映射类(也即零伦), $P^2$4
+
+
+
+
+
+
+
+\end{document} 
