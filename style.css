@@ -119,7 +119,7 @@ p {
 
 /* Year/Event List Environment */
 .year-event-list {
-  list-style: none;
+  list-style: disc inside;
   margin: 0;
   padding: 0;
 }
@@ -133,7 +133,8 @@ p {
 /* Styling for the year portion */
 .year-event-list .year {
   font-family: 'Crimson Pro', serif;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.2rem;
   margin-right: 0.5rem;
   /* Optional: adjust width if you want a fixed column effect */
   /* width: 80px; */
