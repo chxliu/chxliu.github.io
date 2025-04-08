@@ -116,6 +116,35 @@ p {
   border-left: 3px solid #333;
 }
 
+
+/* Year/Event List Environment */
+.year-event-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.year-event-list li {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: baseline;
+}
+
+/* Styling for the year portion */
+.year-event-list .year {
+  font-family: 'Crimson Pro', serif;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  /* Optional: adjust width if you want a fixed column effect */
+  /* width: 80px; */
+}
+
+/* Styling for the event description */
+/* (Assumes body text is already set to Zen Maru Gothic) */
+.year-event-list .event {
+  font-family: 'Zen Maru Gothic', sans-serif;
+}
+
 /* Footer styling */
 footer {
   text-align: center;
