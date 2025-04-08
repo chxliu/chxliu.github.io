@@ -103,21 +103,9 @@ p {
   margin-left: 20px;
 }
 
+
+
 /* Timeline list styling */
-.timeline {
-  list-style: none;
-  margin-top: 20px;
-  padding-left: 0;
-}
-
-.timeline li {
-  margin-bottom: 10px;
-  padding-left: 10px;
-  border-left: 3px solid #333;
-}
-
-
-/* Year/Event List Environment */
 .year-event-list {
   list-style: none;
   margin-top: 20px;
