@@ -134,6 +134,27 @@ p {
   font-family: 'Zen Maru Gothic', sans-serif;
 }
 
+
+/* Environment for personal interest topic lists */
+.topic-list {
+  font-size: 0.85em;    /* Smaller font size relative to your base text */
+  line-height: 1.4;     /* Moderate line spacing */
+  margin-left: 1.5em;   /* Indentation for list items */
+  margin-bottom: 1em;   /* Space below the list */
+  list-style-type: disc; /* You can change this to your preferred list style */
+}
+
+/* Optional: style links within these lists */
+.topic-list a {
+  text-decoration: none;
+  color: inherit;       /* Inherit color from the parent, or set your desired color */
+}
+
+.topic-list a:hover {
+  text-decoration: underline;
+}
+
+
 /* Footer styling */
 footer {
   text-align: center;
