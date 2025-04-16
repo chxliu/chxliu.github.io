@@ -169,12 +169,13 @@ p {
 }
 
 .subtopic-list {
-  list-style-type: none;     /* a different bullet shape */
+  list-stylee: none;     /* a different bullet shape */
   margin: 0.5em 0 0 1.5em;      /* indent and small top margin */
   padding: 0;
 }
 
 .subtopic-list li {
+  list-style: none;
   font-family: 'Zen Maru Gothic', serif;
   font-weight: 600;
   font-size: 1.1rem;            /* slightly smaller than main topics */
