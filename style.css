@@ -169,7 +169,7 @@ p {
 }
 
 .subtopic-list {
-  /*list-style: circle inside;*/    /* a different bullet shape */
+  list-style: none;     /* a different bullet shape */
   margin: 0.5em 0 0 1.5em;      /* indent and small top margin */
   padding: 0;
 }
