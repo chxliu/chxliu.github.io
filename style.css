@@ -167,8 +167,10 @@ p {
 .research-list li p {
   font-family: 'Zen Kaku Gothic New', sans-serif;
   font-size: 0.8em;        /* as requested */
+  font-weight: 300;
   line-height: 1.4;
-  margin: 0.3em 0 0 0;     /* small gap above the paragraph */
+  padding-left: 10px;
+  margin: 0.5em 0 0 0;     /* small gap above the paragraph */
 }
 
 
