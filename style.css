@@ -135,6 +135,43 @@ p {
 }
 
 
+
+
+/* ──────────────────────────────────────────────────────────────────────
+   Research List: EB Garamond for titles, Zen Maru Gothic for details
+   ──────────────────────────────────────────────────────────────────────*/
+
+/* Ensure you’ve loaded both fonts in your <head>:
+<link href="https://fonts.googleapis.com/css2?
+  family=EB+Garamond:wght@600&
+  family=Zen+Maru+Gothic&display=swap"
+  rel="stylesheet">
+*/
+
+/* Container for the research bullets */
+.research-list {
+  list-style: disc inside;
+  margin-left: 1.5em;
+  padding: 0;
+}
+
+/* Each topic title (the “Quantum magnetism”, etc.) */
+.research-list li {
+  font-family: 'EB Garamond', serif;
+  font-weight: 600;
+  font-size: 1.2rem;       /* a bit smaller than your Research heading */
+  margin-bottom: 1em;
+}
+
+/* The explanatory paragraph under each topic */
+.research-list li p {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 0.9em;        /* as requested */
+  line-height: 1.4;
+  margin: 0.3em 0 0 0;     /* small gap above the paragraph */
+}
+
+
 /* Environment for personal interest topic lists */
 .topic-list {
   font-size: 0.85em;    /* Smaller font size relative to your base text */
