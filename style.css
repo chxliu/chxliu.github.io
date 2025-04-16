@@ -166,7 +166,7 @@ p {
 /* The explanatory paragraph under each topic */
 .research-list li p {
   font-family: 'Zen Maru Gothic', sans-serif;
-  font-size: 0.9em;        /* as requested */
+  font-size: 0.8em;        /* as requested */
   line-height: 1.4;
   margin: 0.3em 0 0 0;     /* small gap above the paragraph */
 }
