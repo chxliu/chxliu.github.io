@@ -141,12 +141,6 @@ p {
    Research List: EB Garamond for titles, Zen Maru Gothic for details
    ──────────────────────────────────────────────────────────────────────*/
 
-/* Ensure you’ve loaded both fonts in your <head>:
-<link href="https://fonts.googleapis.com/css2?
-  family=EB+Garamond:wght@600&
-  family=Zen+Maru+Gothic&display=swap"
-  rel="stylesheet">
-*/
 
 /* Container for the research bullets */
 .research-list {
@@ -165,6 +159,29 @@ p {
 
 /* The explanatory paragraph under each topic */
 .research-list li p {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 0.8em;        /* as requested */
+  font-weight: 300;
+  line-height: 1.5;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin: 0.8em 0 0 0;     /* small gap above the paragraph */
+}
+
+.subtopic-list {
+  list-style: circle inside;    /* a different bullet shape */
+  margin: 0.5em 0 0 1.5em;      /* indent and small top margin */
+  padding: 0;
+}
+
+.subtopic-list li {
+  font-family: 'EB Garamond', serif;
+  font-weight: 600;
+  font-size: 1.1rem;            /* slightly smaller than main topics */
+  margin-bottom: 0.5em;
+}
+
+.subtopic-list li p {
   font-family: 'Zen Kaku Gothic New', sans-serif;
   font-size: 0.8em;        /* as requested */
   font-weight: 300;
