@@ -1,0 +1,2678 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+
+\usepackage{graphicx}
+\usepackage{amsmath,amsthm}
+\usepackage{amssymb}
+\usepackage{amsbsy}
+\usepackage{amsfonts}
+\usepackage[letterpaper,margin=0.6in]{geometry}
+\usepackage{xypic}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage{adjustbox}
+\usepackage{bm}
+
+\newcommand{\verteq}{\rotatebox{90}{$\,=$}}
+\newcommand{\equalto}[2]{\underset{\scriptstyle\overset{\mkern4mu\verteq}{#2}}{#1}}
+
+
+
+
+%\usepackage{ulem}
+\usepackage{cancel}
+\usepackage{lscape}
+\usepackage{makecell}
+%\usepackage[normalem]{ulem}
+\usepackage{wasysym}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{stmaryrd}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+
+
+
+
+
+
+\tikzset{
+curarrow/.style={
+rounded corners=8pt,
+execute at begin to={every node/.style={fill=red}},
+to path={-- ([xshift=50pt]\tikztostart.center)
+  |- (#1) node[fill=white] {$\scriptstyle d^*$}
+  -| ([xshift=-40pt]\tikztotarget.center)
+  -- (\tikztotarget)}
+  }
+}
+
+%\theoremstyle{theorem}
+%\newtheorem{theorem}{Theorem}[section]
+
+%\theoremstyle{lemma}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{proposition}[theorem]{Proposition}
+
+
+%\theoremstyle{definition}
+
+
+\newtheoremstyle{mystyle}%                % Name
+  {}%                                     % Space above
+  {}%                                     % Space below
+  {}%                                     % Body font
+  {}%                                     % Indent amount
+  {\bfseries}%                            % Theorem head font
+  {.}%                                    % Punctuation after theorem head
+  { }%                                    % Space after theorem head, ' ', or \newline
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}%                                     % Theorem head spec (can be left empty, meaning `normal')
+
+\theoremstyle{mystyle}
+\newtheorem*{definition}{Definition}%[section]
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem*{corollary*}{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem*{example}{Example}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\numberwithin{equation}{section}
+
+
+\title{Equivariant Cohomology}
+
+\author{Chunxiao Liu}
+
+\begin{document}
+
+\maketitle
+
+
+
+
+\tableofcontents
+
+\section{An introduction to equivariant cohmology by Loring Tu}
+
+\begin{itemize}
+\item Video lectures: \url{https://www.youtube.com/watch?v=0hwDePh2RoY&list=PLQZfZKhc0kiAgfFYCdSQ3px6rHc9SMCXY&index=2&ab_channel=NCTSMathDivision}
+\item Book: \emph{Introductory Lectures on
+Equivariant Cohomology} by Loring W. Tu.
+\end{itemize}
+
+ 
+\subsection{Lecture 1: Overview}
+
+
+Equivariant cohomology is essentially the algebraic topology of a space with a group action.
+
+Cohomology (with any kind of coefficients) is a functor $\{\text{topological spaces},\text{continuous maps}\}\rightarrow \mathbf{Rings}$. It gives invariants of topological spaces.
+
+In this course, not only topological spaces, but topological spaces with a group action.
+
+Def. An action of group on a topological space $X$ is a continuous map $G\times X\rightarrow X$, $(g,x) \mapsto g\cdot x$ s.g. $1\cdot x = x$, $g\cdot(h\cdot x) = (gh)\cdot x$, $\forall g,h\in G$. 
+
+Equivariant cohomology $H^*_G(\cdot)\colon \{G\text{-space}\}\rightarrow \mathbf{Rings}$.
+
+
+De Rham theorem: For a $C^\infty$ manifold $M$, there is an isomorphism $H^*(M;\mathbb{R})\simeq H^*\{\Omega(M)\}$, where $\Omega(M)$ is the complex of $C^\infty$ forms on $M$. 
+
+In equivariant cohomology, there is an analog of the de Rham theorem:
+
+The equivariant de Rham theorem: let $G$ be a Lie group and $M $ a $C^\infty$ $G$-manifold. 
+
+It is possible to construct a differential complex $\Omega_G(M)$ out of $C^\infty$ forms on $M$ and the Lie algebra $g\in G$, s.t. $H^*_G(M) = H^*\{\Omega_G(M)\}$. The complex $\Omega_G(M)$ is called the \emph{Cartan complex}. the elements of the Cartan complex $\Omega_G(M)$ is the equivariant differential forms.
+
+For example, if $G = S^1$, then $\Omega_{S^1}(M) = \{ \sum \alpha_i u^i|\alpha_i \in \Omega(M)^{S^1}\}$.
+
+(If $X$ is in the Lie algebra of $S^1$, which is $\mathbb{R}$, or $T_1(S^1)$ (the tangent space at origin of $S^1$), $u$ is the dual basis, i.e. the basis for $T_1^*(S^1)$)
+
+
+Equivariant cohomology is very useful because it can be used to calcualte ordinary integrals on a manifold (which is usually very hard). We have
+
+Equivariant localization theorem (Atiyah, Bott, Berligne, Vergne): Let $G$ be a torus ($S^1\times \cdots \times S^1)$ and $M$ a compact oriented $G$-manifold with isolated $G$ fixed points. If $\omega$ is an equivariantly closed form, then 
+$$\int_M \omega =\sum_{p \in M^G} \frac{r_p^*\omega}{e_G(\nu_p)} ,$$
+where $\nu_p$ is the normal bundle of $p$ (which is the tangent space), and $e_G$ is the equivariant Euler class.
+
+This theory gives a method for calculating the integral of an ordinary differential form.
+
+The main theorems of this course is The equivariant de Rham theorem: and the Equivariant localization theorem.
+
+\subsection{Lecture 2: Definition of equivariant cohomology}
+
+\begin{definition}[$G$-space] A $G$-space $X$ is a topological space $X$ with continuous action of a topological group $G$.
+\end{definition}
+
+
+\begin{definition}[$G$-equivariance] If $X$ and $Y$ are $G$-spaces, a \emph{morphism} is a continuous map $f\colon X\rightarrow Y$ s.t. 
+$$f(g\cdot x) = g\cdot f(x), ~~~\forall g\in G,x\in X.$$
+Such a map is called \emph{$G$-equivariant}.
+\end{definition}
+
+Candidates for $H^*_G(-)$: 1) $H^*(X/G)$, where $X/G = \{G\text{-orbits}\}$. 
+
+Example: $G=\mathbb{Z}$ acts on $M=\mathbb{R}$ by $n\cdot x = x+n$, then $M/G = S^1$, $H^*(M/G) = H^*(S^1) = \left\{\begin{array}{ll} \mathbb{R}, &\text{degree 1,2}\\ 0& \text{otherwise}\end{array}\right.$
+
+Example: $G = S^1$ acts on $M=S^2$ by rotation. $M/G = I$, so the quotient space cohomology is trivial, which is off of our expectation of the definition of equivariant cohomology.
+
+Crucial difference between the two examples: in the 1st example the $G$ action is \emph{free}, where in the 2nd example it is not. ``When you have a free action, and you take the quotient, you get something nice; otherwise, what you get can be something weird.''
+
+\begin{definition}[Free action] If $G$ acts on $X$, the stabilizer $\text{Stab}(x) := \{g\in G|g\cdot x = x\}$. The action is \emph{free} if $\text{Stab}(x) = \{1\}\forall x \in X$. 
+\end{definition}
+
+Every left action of $G$ on $X$ can be converted to a right action. (Suppose $G$ acts on the left on $X$, then $x\cdot g := g^{-1}\cdot x$ suffices.)
+
+If $G$ acts on $P$ and $M$ on the left. Then the \emph{diagonal action} of $G$ on $P\times M$ is
+$$g\cdot (p,m) := (g\cdot p,g\cdot m).$$
+If $G$ acts on $P$ on the right but on $M$ on the left, then the \emph{diagonal action} is
+$$g\cdot (p,m):=(p\cdot g^{-1},g\cdot m).$$
+
+\begin{lemma*} If $G$ acts freely on $P$ on the right, then no matter how it acts on $M$ on the left, the diagonal action of $G$ on $P\times M$ is free.
+\end{lemma*}
+
+
+Proof: look at the stabilizer: suppose $g\cdot (p,m) = (p,m)\Leftrightarrow (p\cdot g^{-1},g\cdot m) = (p,m)\Leftrightarrow p\cdot g^{-1} = p$ and $g\cdot m = m$, but as $G$ acts freely on $P$ so we must have $g=e$ from the first. 
+
+
+For any topological group $G$, there exists a contractible space $P$ on which $G$ acts freely. We denote such a space as $EG$ (there can be many such spaces).
+
+
+
+If $P$ is a contractible space on which $G$ acts freely, then $P\times M$ will have the same homotopy type as $M$, and $G$ will act freely on $P\times M$. It turns out that such a space $P$ exists for any topological group $G$, and it is deoted by $EG$.
+
+
+\begin{definition}[Homotopy quotient, equivariant cohomology]. The \emph{homotopy quotient} of $M$ by $G$ is defined as $M_G:=(EG\times M)/G$, and we define \emph{equivariant cohomology} as $$H^*_G(M):=H^*(M_G).$$
+\end{definition}
+
+(Need to prove that this definition is independent of the choice of $EG$.)
+
+
+Let $G = S^1$. $S$ acts on $\mathbb{C}^{n+1}$ by $\lambda(z_0,z_1,...,z_n) = (\lambda z_0,...,\lambda z_n)$. If $\sum |z_i|^2=1$, then it defines $S^{2n+1}$. $S^1$ acts on $S^{2n+1}$. Def: $S^{2n+1}/S^1 = \mathbb{C}P^n$. We have $S^1\subset S^3\subset S^5\subset\cdots$, and taking the quotient of each place with respect to $S^1$ gives $\mathbb{C}P^1$, $\mathbb{C}P^2$,...
+
+Let $S^\infty = \bigcup_{n=0}^\infty S^{2n+1}$.  There is an action of $S^1$ on $S^\infty$, which is a free action: $\lambda\cdot (z_0,...,z_n) = (z_0,...,z_n)$, i.e. $\lambda z_i = z_i$, since there's at least one $j$ s.t. $z_j\neq 0$, so from $\lambda z_j = z_j$ we get $\lambda=1$. Therefore, $S^1$ acts freely on $S^\infty$. 
+
+
+
+
+
+\begin{definition}[Weakly contractible] A space $X$ with $\pi_q(X,x_0) = 0$ for all $q\geq 0$ is called \emph{weakly contractible}.
+\end{definition}
+it's easy to show that this definition does not depend on the choice of $x_0$.
+
+\begin{theorem*}[Whitehead's theorem] If a continuous map $f\colon X\rightarrow Y$ of CW complexes induces an isomorphism in all homotopy groups $\pi_q$, then $f$ is a homotopy equivalence.
+\end{theorem*}
+
+\begin{corollary*} A weakly contractible CW complex $X$ is contractible.
+\end{corollary*}
+
+We will show that $S^\infty$ is contractible by showing that $S^\infty$ has vanishing homotopy groups at all positive degrees. See next lecture.
+
+$\pi_1(X,x_0) = \{[\text{continuous maps } f(S^1,1)\rightarrow (X,x_0)]\}$
+
+$\pi_q(X,x_0) = \{[\text{continuous maps } f(S^q,(1,0,...,0))\rightarrow (X,x_0)]\}$
+
+
+
+
+\subsection{Lecture 3: Homotopy groups and CW complexes}
+
+\begin{definition}[Fiber bundle] A \emph{fiber bundle} with fiber $F$ is a subjection $\pi\colon E\rightarrow B$ which is locally a product $U\times F$, o.e. every point $b\in B$ has a neighborhood $U$ s.t. there is a fiber-preserving homeomorphism $\phi_U\colon \pi^{-1}(U)\rightarrow U\times F$.
+\end{definition}
+
+Example: (1) Covering space $\pi\colon E\rightarrow B$; (ii) $\pi\colon \mathbb{R}\rightarrow S^1$ is a bundle with fiber $\mathbb{Z}$; (iii) $\pi\colon S^{2n+1}\rightarrow \mathbb{C}P^n$ is a fiber bundle with fiber $S^1$.
+
+
+\begin{theorem*}[Homotopy exact sequence of a bundle]
+Suppose $\rho\colon (E,x_0)\rightarrow (B,b_0)$ is a fiber bundle with fiber $F = \rho^{-1}(b_0)$. Assume $B$ is path-connected. Let $x_0$ be a base point of $F$, and $i\colon (F,x_0)\rightarrow (E,x_0)$ the inclusion. Then $\exists$ exact sequence
+$$
+\cdots \rightarrow \pi_k(F,x_0)\xrightarrow{i_*}\pi_k(E,x_0)
+\xrightarrow{\rho_*}\pi_k(B,x_0)
+\rightarrow\pi_{k-1}(F,x_0)\rightarrow\cdots\rightarrow F_0(F,x_0)\rightarrow \pi_0(E,x_0).
+$$
+\end{theorem*}
+
+Example: $\pi_k(S^1)$. By the homotopy exact seuqnce of $\pi\colon \mathbb{R}\rightarrow S^1$ above, it is easy to get $\pi_k(S^1) = \left\{\begin{array}{ll} 0 & k\geq 2,\\\mathbb{Z},&k=1,\\
+\{0\}, & k = 0.\end{array}\right.$
+
+Def. (Attaching cells): let $D^n$ be the $n$-dimensional closed unit disk. Let $A$ be a topological space. $\phi\colon \partial D^n\rightarrow A$ the attaching map. $X$ is obtained from $A$ by attaching an $n$-cell via $\phi$ if $X = (A\amalg D)/\sim$, where $x\in \partial D^n\sim \phi(x) \in A$. 
+
+Denote $e^n = \text{int}(D^n)$ to be the (image of the) interior of $D^n$ in $X=(A\amalg D^n)/\sim$. We write $X = A\cup_\phi e^n = A\cup e^n$. We can attach infinitely many cells all at once:
+$$X = \left(A\amalg(\amalg_\lambda D^n_\lambda)\right)/\sim = A \cup \left(\bigcup\limits_\lambda e^n_\lambda\right),$$
+
+\begin{definition}[CW complex] A \emph{CW complex} is a Hausdorff space $X$ with an increasing sequence of closed subspaces $X^0\subset X^1\subset X^2\subset \cdots$ s.t.  (i) $X^0$ is a discrete set of points, (ii) for $n\geq 1$, $X^n$ is obtained from $X^{n-1}$ by attaching $n$-cells $e^n_\lambda$, (iii) $X$ has the \emph{weak} topology: $S$ is closed in $X$ if and only if $S\cap X^n$ is closed in $X^n$, for all $n\geq 0$.
+\end{definition}
+
+Theorem (closure-finite condition). The closure of each cell in a CW complex conains only finitely many cells of lower dimensions.
+
+Example. $S^\infty:= \bigcup_{n=0}^\infty S^n = \bigcup_{k=0}^\infty S^{2k+1}$  is a CW complex with weak topology. Now we show $S^\infty$ is contractible: last time we proved $\pi_k(S^n) = 0$ for $k<n$. 
+
+Theorem: $\pi_k(S^\infty) = 0$ $\forall k$. 
+
+(Proof: $S^\infty$ has the same homotopy type as the ``telescope'', see te video lecture. It's shown in the lecture that the telescope defines a deformation retraction of the telescope to $S^\infty$. Next, it's shown in the lecture that The telescope has a projection to $\mathbb{R}$: $\pi\colon \text{Telescope}\rightarrow \mathbb{R}$. Since $S^k$ is compact, $(\pi\circ f)(S^k)$ is compact in $\mathbb{R}$, so is closed and bounded. So it lies in $[0,N]$ for some $N\in \mathbb{Z}^+$.  Thus, $f(S^k)\subset \pi^{-1}([0,N]) =\text{a finite telescope}$, ending in $S^N$, which has the same homotopy type as $S^N$. One can choose $N >k$, Then $f(S^k)$ is null-homotopic. This proves that 
+$\pi_k(S^\infty) = 0$ $\forall k$.)
+
+This shows the CW complex $S^\infty$ is weakly contractible so is also contractible (by the corollary in the last lecture).
+
+
+\subsection{Lecture 4: Principal bundles}
+
+
+[Large part of the lecture is missing from the video.]
+
+
+\begin{definition}[Principal $G$-bundle] A \emph{principal $G$-bundle} is a fiber bundle $\pi\colon P\rightarrow B$ with fiber $G$ and an open cover $\{(U,\phi_U)\}$ of $B$ s.t. (i) $G$ acts freely on the right on $P$; (ii) for each $U$, the fiber-preserving homeomorphism $\phi_U\colon \pi^{-1}(U)\rightarrow U\times G$, where $G$ acts on the right on $U\times G$ by $(u,x) g=  (u,xg)$, is $G$-equivariant.
+\end{definition}
+
+Note that the base space $B$ has trivial $G$ action.
+
+\begin{definition}[$G$-bundle map] Let $P\rightarrow M$ and $E\rightarrow B$ be two principal $G$-bundles. A \emph{morphism} of principal $G$-bundles, or a {$G$-bundle map}, from $P\rightarrow M$ to $E\rightarrow B$ is a morphism of fiber bundles
+$$
+\begin{tikzcd} P\ar[r,"f"]\ar[d] & E\ar[d]\\M \ar[r,"h"] & B\end{tikzcd}
+$$
+in which $f\colon P\rightarrow E$ is $G$-equivariant.
+\end{definition}
+
+\begin{definition}[Pullback bundle] Let $\pi\colon E\rightarrow B$ be a fiber bundle with fiber $F$ and $h\colon M\rightarrow B$ a continuous map. the total space $h^*E$ of the \emph{pullback bundle} is defined as $h^*E:=(\{(m,e)\in M\times E|h(m) = \pi(e)\}$. Define the projections $p_1$ and $p_2$ of $M\times E$ to $M$ and $E$, respectively, then the pullback bundle is a bundle that fits into the diagram
+$$
+\begin{tikzcd}\color{red}{h^*E}\ar[r,"p_2"]\ar[d,"p_1"'] & E\ar[d,"\pi"]\\M \ar[r,"h"] & B\end{tikzcd}.
+$$
+\end{definition}
+
+\begin{proposition*} The first projection map $p_1\colon h^*E\rightarrow M$, $p_1(m,e) = m$, is a fiber bundle with fiber $F$.
+\end{proposition*}
+(Suffices to show that the pullback $h^*(U\times F)$ of a product bundle over $U$ is a product bundle $h^{-1}(U)\times F$ over $h^{-1}(U)$. This is indeed true, as we have the isomorphism $h^*(U\times F) \xrightarrow{\simeq} h^{-1}(U)\times F$ given by $(m,h(m),f)\mapsto (m,f)$. )
+
+\begin{proposition*}[Universal property of the pullback] Given a bundle map 
+$\begin{tikzcd}[column sep = small, row sep = small] P\ar[r,"q_2"]\ar[d,"q_1"'] & E\ar[d,"\pi"]\\M \ar[r,"h"] & B\end{tikzcd}$, there is a unique bundle map $\phi\colon P\rightarrow h^*E$ over $M$ such that the following diagram commtes:
+$$\begin{tikzcd}
+\exists!~P\ar[rrd,"q_2"]\ar[rd,"\phi"]\ar[rdd,"q_1"']
+&&\\
+&h^*E \ar[r,"p_2"] \ar[d,"p_1"] & E\ar[d,"\pi"]\\ & M \ar[r,"h"] & B\end{tikzcd}
+$$
+\end{proposition*}
+
+
+
+Cartan's mixing space and diagram (\S 4.3):
+
+
+\begin{definition}[Cartan mixing space] If $\alpha \colon P\rightarrow B$ is a principle $G$-bundle, and $M$ a left $G$-space. Then one can form the \emph{mixing space} (Borel construction)
+$P\times_G M:=(P\times M)/G=(P\times M)/\sim$, where $(p,m) \sim (p,m)\cdot g = (pg,g^{-1}m)$. If $y = g^{-1}m$, then $m = gy$, so $(p,gy) \sim (pg,y)$. 
+\end{definition}
+
+Let $[p,m]:=\text{equivalence class of }(p,m)$.
+
+Define $\tau_1\colon P\times _GM\rightarrow B$ by $\tau_1([p,m]) = \alpha(p)$. ($\tau_1$ is well defined: $\tau_1([p,m]) = \tau_1([pg,g^{-1}m]) = \alpha(pg) = \alpha(p)$.)
+
+\begin{proposition*}[4.5] $\tau_1\colon P\times_G M\rightarrow B$ is a fiber bundle with fiber $M$. 
+\end{proposition*}
+
+(The claim that the fiber is $M$ can be rationalized by setting $P$ to be a product bundle $P = B\times G$, in which case $P\times_GM \simeq (B\times G)\times_GM \simeq B\times M$ so this is indeed a fiber bundle, with base space $B$ and fiber $M$. For why we have $(B\times G)\times_GM = B\times M$, see the proof below.)
+
+[Proof: due to the local trivialization property of fiber bundle, we only have to prove the case for when $P$ is a direct product bundle: $P = U\times G$. For $U=B$. (Otherwise we choose an open set $U\subset B$ on which $\pi^{-1}(U) = U\times G$ and proceed in the same way.) We have $\tau_1^{-1}(U) = \alpha^{-1}(U)\times_G M \simeq (U\times G)\times_G M = U\times M$, completing the proof. Note that here $\tau_1^{-1}(U) = \alpha^{-1}(U)\times_G M$ follows from the definition of $P\times_GM$; $\alpha^{-1}(U)\times_GM\simeq (U\times G)\times_GM$ follows the functoriality of $(-)\times_GM$, and $(U\times G)\times_G M\simeq U\times M$ can be proven using the explicit map $[(u,g),m]\mapsto (u,gm)$ and show that it has an inverse $(u,gm)\mapsto [(u,id),gm]$.]
+
+This proposition can be nicely characterized by the \emph{Cartan's mixing diagram:}
+
+
+\begin{equation}\label{Cartan_mixing_diagram}
+\begin{tikzcd}
+P  \ar[d,"\alpha"] & \ar[l,"\pi_1"']P\times M \ar[r,"\pi_2"]\ar[d,"\beta"] & M \ar[d,"\gamma"]\\
+B & \ar[l,"\tau_1"']P\times_G M \ar[r,"\tau_2 "] & M/G ,
+\end{tikzcd}
+\end{equation}
+where (by the hypothesis of the proposition) $P\rightarrow B$ is a principal bundle. On general setting, one can prove that if $P\rightarrow B$ is a principal bundle then $\tau_1\colon P\times_G M\rightarrow B$ is a fiber bundle. Furthermore, the fact that the fiber is $M$ (what's in the upper-right corner) comes from the fact that $G$ acts freely on $P$ ((i) in the definition of principal $G$-bundle).
+
+\textcolor{red}{Summary: in Cartan's mixing diagram, if the vertical map $P\xrightarrow{\alpha} B$ is a principal bundle, then the lower horizontal map $P\times_G M\xrightarrow{\tau_1} B$ is a fiber bundle, whose fiber is $M$ in the far corner of the other square.} This pattern will be repeatedly used later.
+
+\begin{theorem*}[4.10] In the category of CW complexes, suppose $G$ acts on the left on $M$, and $E,E'$ are weakly contractible spaces on which $G$ acts freely. Then
+$E\times_G M$ and $E'\times_G M$ are weakly homotopy equivalent. 
+\end{theorem*}
+
+(This shows that equivalent cohomology is well-defined, independent of the contractible space on which $G$ act freely that you choose.)
+
+\subsection{Lecture 5: Universal bundles}
+
+In defining $H^*_G(M)$, we chose a contractible space $E$ on which $G$ acts freely.
+
+Such a space is the \emph{total space} of a \emph{universal bundle}.
+
+$$\begin{tikzcd} P \ar[r,"\simeq "]  \ar[dr] & h^*E\ar[d] \ar[r]& E \ar[d]\\
+&X\ar[r,"h"] & BG \end{tikzcd}
+$$
+
+\begin{definition}[Universal $G$-bundle] A \emph{universal $G$-bundle} is a principal $G$-bundle $EG\rightarrow BG$ if (i) for any principle $G$-bundle $P$ over a CW complex $X$, $\exists$ a map $h\colon X\rightarrow BG$ s.t. $P\simeq h^*(EG)$; (ii) if $h_0,h_1\colon X\rightarrow B$ are two maps s.t. $h^*_0(EG)\cong h_1^*(EG)$, then $h_0$ and $h_1$ are homotopic.
+\end{definition}
+
+\begin{theorem*}[Homotopic maps pull back to isomorphic bundles] If $h_0,h_1\colon X\rightarrow B$ are homotopic, and $E\rightarrow B$ is a principal $G$-bundle, then $h_0^*E\simeq h_1^*E$. 
+\end{theorem*}
+
+Let $P_B(X) = \{\text{isomorphism classes of principle }G\text{-bundles over }X\}$.  The above theorem says that: Fixing a universal bundle $EG\rightarrow BG$, the map 
+$$\varphi\colon [X,BG]\rightarrow P_G(X)$$ is well defined. Here $[X,BG]=\{\text{homotopy classes of maps }h\colon X\rightarrow BG\}$. 
+
+(i) in the definition of universal $G$-bundle $\Leftrightarrow$ surjectivity of $\varphi$.
+
+(ii) in the definition of universal $G$-bundle $\Leftrightarrow$ injectivity of $\varphi$.
+
+So $\varphi\colon [X,BG]\rightarrow P_G(X)$ is a (set-theoretic) bijection.
+
+$(h\colon X\rightarrow BG)\mapsto h^*(EG)$. 
+
+$P_G(-)$ is a contravariant function on CW complexes; $[_,BG]$ is also a contravariant functor, and $P_G(-) = [-,BG]$ as functors, i.e. $P_G(-)$ is a \emph{representable} functor.
+
+\begin{definition}[Classifying slace] $BG$ is called a \emph{classifying space} for $G$.
+\end{definition}
+
+\begin{example}
+$S^\infty\rightarrow \mathbb{C}P^\infty$, is a universal $S^1$-bundle ( $S^\infty$ is contractible), i.e. $ES^1 = \mathbb{C}P^\infty$, and $BS^1 = \mathbb{C}P^\infty$.
+\end{example}
+
+
+%Def. A topological space $X$ is \emph{weakly contractible} if $\pi_k(X,x_0) = 0$ for all $k$.
+
+Theorem. A principal $G$-bundle $E\rightarrow B$ is universal in the category of CW complexes if $E$ is weakly contractible.
+
+Grassmannian is the set of all planes in Eucliean space;
+
+(Recall that every compact Lie group is a subgroup of the orthogonal group. All frames -- called Stiefel variety. Replace $S^\infty$ with the infinite Stiefel variety will give the unversal bundle for any compact Lie group.)
+
+
+\begin{example}
+$\pi\colon \mathbb{R}\rightarrow \mathbb{R}/\mathbb{Z} = S^1$ is a universal $\mathbb{Z}$-bundle, i.e. $E\mathbb{Z} = \mathbb{R}$, and $B\mathbb{Z} = S^1$.
+\end{example}
+
+
+
+Below we want to show that equivariant cohomology is well defined.
+
+Using the Cartan mixing diagram in Eq.~\eqref{Cartan_mixing_diagram}, with $P\equiv E$: as $E\rightarrow B$ is a principal $G$-bundle, and $M$ is a left $G$-space, there we proved $\tau_1\colon (E\times M)/G\rightarrow B$ is a fiber bundle with fiber $M$.
+
+$E\times M\rightarrow (E\times M)/G$ is a principal $G$-bundle.
+
+\begin{lemma*} If $E$ is a weakly contractible space on which $G$ acts freely, and $P\rightarrow B$ is a principal $G$-bundle, then $E\times P/G \sim P/G = B$ (have the same homotopy type). 
+\end{lemma*}
+
+(Proof: we have another Cartan's mixing diagram
+
+\begin{equation}\label{Cartan_mixing_diagram1}
+\begin{tikzcd}
+E  \ar[d,"\alpha"] & \ar[l,"\pi_1"']E\times P \ar[r,"\pi_2"]\ar[d,"\beta"] & P \ar[d,"\gamma"]\\
+B & \ar[l,"\tau_1"']E \times P /G \ar[r,"\tau_2 "] & P/G 
+\end{tikzcd}
+\end{equation}
+
+By homotopy exact sequence of a fiber bundle,
+
+$\pi_k(E)\rightarrow \pi_k(E\times P/G) \rightarrow \pi_k(P/G)\rightarrow \cdots$, 
+
+we prove the lemma.)
+
+
+\subsection{Lecture 6: Equivariant cohomology, spectral sequences}
+
+
+
+First, continue the proof in the last lecture: 
+
+Fact [Hatcher, Pro 4.21] Weak homotopy equivalence $f\colon X\rightarrow Y$ (i.e. $f_*\colon \pi_k(X,x_0)\xrightarrow{\simeq} \pi_k(Y,f(x_0))$, $\forall k$) induces an isomorphism in homology $f_*\colon H_k(X,A)\xrightarrow{\simeq} H_k(Y,A)$ and cohomology $f^*\colon H^k(Y,A)\xrightarrow{\simeq } H^k(X,A)$ $\forall$ $k$ and all coefficient groups $A$.
+
+Suppose $E_1$ and $E_2$ are contractible spaces on which $G$ acts freely. So that $E_1\rightarrow E_1/G$, and $E_2\rightarrow E_2/G$ are principal $G$-bundles.
+
+Let $P = E_2 \times M$. We know $E_2\times M\rightarrow (E_2\times M)/G$ is a principal $G$ bundle Applying lemma to $E_1$ and $P$, we get $E_1\times (E_2\times M)/G \sim E_2\times M/G$ (weakly homotopy equivalent). By symmetry, $E_2\times (E_1\times M)/G \sim E_2\times M/G$. But $E_1\times (E_2\times M)/G$ and $E_2\times (E_1\times m)/G$ are homeomorphic (just exchanging coordiates), they are weakly homotopy equivalent. Therefore $E_1\times M/G \sim E_2\times M/G$. By [Hatcher, Prop 4.21), we have $H^*(E_1\times M/G) \simeq  H^*(E_2\times M/G)$ for any coefficient.  
+
+This proves that equivariant cohomology is well defined, independent of the choice of $E$. 
+
+
+(For CW complexes, if two spaces are weakly homotopy equivalent, then they are homotopy equivalent (Whitehead theorem).)
+
+
+
+
+
+
+
+
+
+
+Now: spectral sequences
+
+
+
+
+
+
+
+Spectral sequences: referred to as ``\emph{less digestible aspect of algebraic topology}'' by Raoul Bott.
+
+
+
+
+
+A differential group is a pair $(\mathcal{E},d)$ where $\mathcal{E}$ is an abelian group and $d\colon \mathcal{E}\rightarrow \mathcal{E}$ is a group homomorphism s.t. $d^2 = 0$, so $\mathrm{im}d\subset \mathrm{ker}d$. 
+
+A \emph{spectral sequence} is a sequence $\{(E_r,d_r)\}$ of differential groups s.t. $E_r = H^*(E_{r-1},d_{r-1})$ for $r\geq 1$. 
+
+We assume $E_r = \bigoplus_{p,q \in \mathbb{Z}} E_r^{p,q}$, and usually we assue $E_r^{p,q} = 0$ for $p<0$ or $q<0$. $d_r\colon E_r^{p,q}\rightarrow E_r^{p+r,q-r+1}$. This means, for fixed $(p,q)$, if $r\geq q+2$, then $d_r$ is a zero map, then $E_r^{p,q} = E_{r+1}^{p,q} = E_{r+2}^{p,q} = \cdots =  E_\infty^{p,q}$, where we called the stationary value $E_\infty^{p,q}$. 
+
+(We have $E_{r+1} = H^*(E_r,d_r) = \frac{\mathrm{ker}d_r\colon E^{p,q}_r\rightarrow E_r^{p+r,q-r+1}}{\mathrm{im}d_r\colon  E^{p-r,q+r-1}\rightarrow E_r^{p,q}}$)
+
+
+A \emph{filtration} on an abelian group $M$ is a decreasing sequence of subgroups $M = D_0\supset D_1\supset D_2 \supset \cdots$, the \emph{associated graded group} of $\{D_i\}$ is $GM = \frac{D_0}{D_1}\oplus \frac{D_1}{D_2}\oplus + \cdots$ 
+
+
+If $E = \bigoplus_{p,q\in \mathbb{Z},p,q\geq 0}E^{p,q}$ then the filtration by $p$ is $D_p = \bigoplus_{i\geq p,q\geq 0} E^{i,q}$. 
+
+Leray's theorem: see next lecture.
+
+Let $\pi\colon E\rightarrow B$ be a fiber bundle with fiber $F$ over a simply connected basis space $B$ (the original spectral sequence is more general and did not assume simply connectedness; here we assume simply connected for simplicity). Assume that in every dimension $n$, $H^n(F)$ is of finite rank and free. Then $\exists$ a spectral sequence $\{E_r,d_r)\}$, with
+$$E^{p,q} = H^p(B)\otimes H^q(F),$$
+and a filtration $\{D_i\}$ on $H^*(E)$ s.t. $E_\infty = \bigoplus_{p,q} E^{p,q}_\infty \simeq GH^*(E)$, i.e. 
+
+
+
+\subsection{Lecture 7: Computation using spectral sequence}
+
+
+\begin{theorem*}[Leray's theorem] Let $\pi\colon E\rightarrow B$ be a fiber bundle with fiber $F$ over a simply connected  base space $B$. Assume $H^n(F)$ is free, of finite rank, for any $n\geq 0$. Then there exists spectral sequence $\{(E_r,d_r)\}$ with 
+$$E^{p,q}_2 = H^p(B)\otimes H^q(F),$$
+which is an equality as rings, and a filtration $\{D_i\}$ on $H^*(E)$ s.t. $E_\infty = GH^*(E)$. Moreover, $d_r:E_r\rightarrow E_r$ is an antiderivation, i.e. $d_r(\alpha\beta) = (d_r\alpha)\beta+(-1)^{\text{deg}~\alpha} \alpha d\beta$. 
+\end{theorem*}
+``A filtration $\{D_i\}$ on $H^*(E)$ s.t. $E_\infty = GH^*(E)$'' means that there is a filtration $H^*(E)=D_0\supset D_1\supset D_2\supset \cdots \supset D_n\supset \cdots$,  $GH^*(E) = \frac{D_0}{D_1}\oplus \frac{D_1}{D_2}\oplus \frac{D_2}{D_3}\oplus \cdots$. For each $n$, there is an induced filtrartion $\{D_i\cap H^n\} \subset H^n(E):=H^n$ s.t. $H^n(E) = (D_0\cap H^n)\supset (D_1 \cap H^n) \supset (D_2\cap H^n\supset) \cdots$, where $E^{0,n}_\infty = D_0\cap H^n/D_1\cap H^n$, $E_\infty^{1,n-1} = D_1\cap H^n/D_2\cap H^n$, ... 
+
+
+(Example: $G\supset \mathbb{Z}_2\supset 0$, with $G/\mathbb{Z}_2=\mathbb{Z}_2$, then $G$ can still be $\mathbb{Z}_4$ or $\mathbb{Z}_2\times \mathbb{Z}_2$.) 
+
+(Lemma: If $0\rightarrow A\rightarrow B\rightarrow C$ is an exact sequence of abelian groups, and $C$ is free, then $B\simeq A\oplus C$.)
+
+Example: $H^*(\mathbb{C}P^2)$.  Use $\begin{tikzcd}[column sep = small, row sep = small] S^1\ar[r]  & S^5 \ar[d]\\ &\mathbb{C}P^2
+\end{tikzcd}$, the homotopy exact sequence $\rightarrow \pi_1(S^1)\rightarrow \underbrace{\pi_1(S^5)}_{=0}\xrightarrow{\rightarrow 0} \pi_1(\mathbb{C}P^2) \xrightarrow{\simeq} \pi_0(S^1)\rightarrow \pi_0(S^5)$ says $\pi_1(\mathbb{C}P^2)=0$, so $\mathbb{C}P^2$ is simply connected:
+
+Then we can apply Leray's theorem and we have $E_2 = H^*(\mathbb{C}P^2)\otimes H^*(S^1)$. 
+
+We have $H^0(S^1) = \langle 1\rangle$, and $H^1(S^1) = \langle x\rangle$, so the $0$th column is $E_2^{0,q} = H^0(\mathbb{C}P^2) \otimes H^q(S^1) = \mathbb{Z}\otimes H^q(S^1) = H^q(S^1)$, where we used $\mathbb{Z}\otimes A = A$. So we have
+
+$$
+E_2 = \begin{array}{c|ccccccc}
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
+q=2 & 0 & 0 & 0 & 0 & 0 & 0 &  \cdots\\
+q=1 & x & ? & ? & ? & ? & 0 & \cdots \\
+q=0 & 1 & ? & ? & ? & ? & 0& \cdots \\
+\hline
+& p=0 & p=1 & p=2 & p=3 & p=4 & p=5 & \cdots 
+\end{array}
+$$
+
+
+
+
+
+
+
+
+Considering the differentials, we have $E_3 = E_4=\cdots = E_\infty = GH^*(S^5) = \mathbb{Z}$ when the degree is $0$ and $5$, and vanishes otherwise.
+
+
+
+
+On $H^5(S^5)$, there is a filtration $H^5(S^5)  = (D_0 \cap H^5) \supset (D_1\cap H^5) \subset (D_2\cap H^5)\cdots \cdots D_5 \cap H^5)\supset 0$, where $E^{0,5}_\infty = \frac{D_0\cap H^5}{D_1\cap H^5}$, $E^{1,4}_\infty = \frac{D_1\cap H^5}{D_4\cap H^5}$, 
+$E^{2,3}_\infty = \frac{D_2\cap H^5}{D_3\cap H^5}$, and so on. 
+
+
+
+
+
+and we have $H^0(S^4) = \langle 1\rangle$ and $H^4(S^4)=\langle u\rangle$, where all other degrees of $H^*(S^4)=0$. So we have
+
+$$
+E_3 = \begin{array}{c|ccccccc}
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
+q=2 & 0 & 0 & 0 & 0 & 0 & 0 &  \cdots\\
+q=1 & 0 & 0 & 0 & 0 & \mathbb{Z} & 0 & \cdots \\
+q=0 & \mathbb{Z} & 0 & 0 & 0 & 0 & 0& \cdots \\
+\hline
+& p=0 & p=1 & p=2 & p=3 & p=4 & p=5 & \cdots 
+\end{array}
+$$
+
+Using $d_2$, we see that there must be a $u$ in the $(p,q) = (2,0)$ entry. Using the tensor product structure, we know that $(p,q)=(2,1)$ entry has $ux$. Again using $d_2$ we see that there must be a $u^2$ in the $(p,q) =(4,0)$ entry, then the tensor product structure says there's a $u^2 x$ in the $(p,q)=(4,1)$ entry. So we have
+
+
+$$
+E_2 = \begin{array}{c|ccccccc}
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
+q=2 & 0 & 0 & 0 & 0 & 0 & 0 &  \cdots\\
+q=1 & x & 0 & \color{red}{ux} & 0 & \color{red}{u^2x} & 0 & \cdots \\
+q=0 & 1 & 0 & \color{red}{u} & 0 & \color{red}{u^2} & 0& \cdots \\
+\hline
+& p=0 & p=1 & p=2 & p=3 & p=4 & p=5 & \cdots 
+\end{array}
+$$
+
+So 
+$$H^*(\mathbb{C}P^2) = \mathbb{Z}\oplus \mathbb{Z}u\oplus \mathbb{Z}u^2 = \mathbb{Z}[u]/(u^3).$$
+
+
+\subsection{Lecture 8: Equivariant cohomology of $S^2$ under rotation}
+
+$G = S^1$, $M = S^2$, where $G$ acts on $M$ as a rotation along the polar axis. We want to compute 
+$$H^*_{S^1}(S^2) = H^*((S^2)_{S^1}) = H^*((ES^1\times S^2)/S^1) = H^*(S^\infty \times_{S^1} S^2).$$
+
+By Cartan's mixing diagram, we have
+
+\begin{equation}\label{cartanS2}
+\begin{tikzcd}
+S^\infty\ar[d] & \ar[l] S^\infty \times S^2 \ar[d] \ar[r] & S^2 \ar[d]\\
+\mathbb{C}P^\infty & \ar[l] S^\infty\times_{S^1} S^2 \ar[r] &  S^2/S^1\end{tikzcd}
+\end{equation}
+
+there is a fiber bundle 
+$$\begin{tikzcd}
+M \ar[r] &M_G\ar[d] \\& BG\end{tikzcd}
+=
+\begin{tikzcd}
+S^2\ar[r] & S^\infty\times_{S^1}S^2 \ar[d] \\&\mathbb{CP}^\infty
+\end{tikzcd}
+$$
+Fact: $H^*(\mathbb{C}P^n) = \mathbb{Z}[u]/(u^{n+1})$, then $H^*(\mathbb{C}P^\infty) = \mathbb{Z}[u]$. 
+
+By Leray, $E_2^{p,q} = H^p(\mathbb{C}P^\infty)\otimes H^q(S^2)$ 
+
+
+$$
+E_2 = \begin{array}{c|cccccccc}
+q=3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \cdots \\
+q=2 & y & 0 & uy & 0 & u^2y & 0 &  u^3 y & \cdots \\
+q=1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \cdots \\
+q=0 & 1 & 0 & u & 0 & u^2 & 0& u^3 & \cdots \\
+\hline
+& p=0 & p=1 & p=2 & p=3 & p=4 & p=5 & p=6 & \cdots 
+\end{array}
+$$
+
+Let's easy to see that $d_2=d_3=0$, as well as the differential on later pages. So $E_2=E_3=\cdots = E_\infty$.
+
+This shows that $E_\infty  = GH^*((S^2)_{S^1})$, with
+$$H^0((S^2)_{S^1}) = \mathbb{Z},\quad
+H^1((S^2)_{S^1}) = 0,\quad
+H^2((S^2)_{S^1}) = (D_0\cap H^2) \supset (D_1\cap H^2)\supset (D_2\cap H^2) \supset 0,
+$$
+where 
+$E^{0,2}_\infty = \frac{D_0\cap H^2}{D_1\cap H^2} = \mathbb{Z}y$, 
+$E^{1,1}_\infty = \frac{D_1\cap H^2}{D_2\cap H^2} = 0$, and $E^{2,0}_\infty = \frac{D_2\cap H^2}{D_3\cap H^2} = \mathbb{Z}u$, therefore we have an exact sequence
+$$0\rightarrow \mathbb{Z}u\rightarrow H^2\rightarrow \mathbb{Z}y \rightarrow 0,$$
+Since $\mathbb{Z}y$ is free, $H^2((S^2)_{S^1}) = \mathbb{Z}u\oplus \mathbb{Z}y$. 
+
+Then we have $H^3((S^2)_{S^1})=0$, and $H^4((S^2)_{S^1})= \mathbb{Z}uy \oplus \mathbb{Z}u^2$.
+
+In general, $H^{\text{odd}}((S^2)_{S^1}) = 0$, $H^{2n}((S^2)_{S^1}) = \mathbb{Z}u^{n-1}y\oplus \mathbb{Z}u^n$. 
+
+So 
+\begin{equation}\label{S1S2ab}
+H^*_{S^1}(S^2) = \mathbb{Z}[u]\oplus \mathbb{Z}[u]y = \mathbb{Z}[u,y]/(y^2=a uy+b u^2),
+\end{equation}
+for some $a$, $b$. 
+where $\text{deg}~u = \text{deg}~v = 2$, as abelian groups. 
+
+\textcolor{red}{[We will find the coefficients $a$, $b$ in Lecture 29, after introducing the Borel localization theorem.]}
+
+We will compute the cohomology of the space $(S^2)_{S^1}$ directly in the next lecture. Before that, let's introduce some general results:
+
+\begin{theorem*} If $G$ acts on $M$ with at least one fixed point, then $H^*(BG)$ injects into $H^*_G(M)$. 
+\end{theorem*}
+
+Proof (This was actually done in lecture 10): The inclusion map $i\colon \{p\}\hookrightarrow M$ is a $G$-map if $p$ is a fixed point. Let $\pi\colon M\rightarrow \{p\}$ be the constant map. Then $\pi\circ i = \mathbb{I}\colon \{p\}\rightarrow \{p\}$. By functoriality (see lecture 10), $i^*_G\circ \pi^*_G = \mathbb{I}^*\colon H^*_G(\{p\})\rightarrow H^*_G(M)\rightarrow
+H^*_G((\{p\})$, hence $\pi^*_G\colon H^*_G(\{p\}) = H^*(BG)\rightarrow H^*_G(M)$ is injective.
+
+We need to develop some tools to figure out what the ring structure is.
+
+General theorems about equivariant cohomology: 
+
+ $N$, $M$ be left $G$-spaces. If $f\colon N\rightarrow M$ is equivariant, then there is an induced map $f_G\colon N_G\rightarrow M_G$, given by
+
+$EG\times N\rightarrow EG\times M$,  gives $[e,n)\mapsto [e,f(n)]$, 
+
+$EG\times_GN\rightarrow EG\times_GM$, $[eg,g^{-1}n] \mapsto [eg,f^(g^{-1}n)]
+= [eg,g^{-1}f(n)]$,
+
+Consider $f\colon M\rightarrow pt$, which is $G$-equivariant. 
+
+$pt_G = EG\times pt/G = EG/G  = BG$. $f_G$ induces a map in cohomology 
+$\begin{tikzcd}[row sep = -0.1pt]H^*(pt_G)\ar[r] & H^*(M_G)\\
+\verteq & \verteq \\
+H^*(BG) & H^*_G(M) 
+\end{tikzcd}$, 
+
+This makes $H^*_G(M)$ into an $H^*(BG)$-module, so $H^*_G(M)$ is an $H^*(BG)$-algebra.
+
+BG is the base of a universal bundle $EG\rightarrow B$ for $G$, and is called \emph{the} \emph{classifying space} for $G$. 
+
+
+Examples: $BS^1 = \mathbb{C}P^\infty$, $B\mathbb{Z} = S^1$.
+
+Example $BO(k)?$ 
+
+
+\begin{definition}[Stiefel varieties] $V(k,n) = \{\text{orthonomal }k \text{ frames in } \mathbb{R}^n\}$;
+$k$-frame is an ordered set of $k$-linear independent vectors.
+A $k$-frame spans a $k$-plane.
+\end{definition}
+
+So there exists a map $V(k,n)\xrightarrow G(h,n)$, whose fiber is all the orthogonal bases of a $k$-plane, i.e. fiber = $O(k)$.
+
+$V(1,n) = \{\text{unit vectors in }\mathbb{R}^n\} = S^{n-1}$
+
+$G(1,n) = \mathbb{R}P^{n-1}$
+
+
+
+\subsection{Lecture 9: General properties of equivariant cohomology}
+
+
+\begin{proposition*} If a topological group $G$ acts freely on a topological space $M$ s.t. $M\rightarrow M/G$ is a principal $G$-bundle, then $M_G$ is weakly homotopy equivalent to $M/G$. 
+\end{proposition*}
+
+(Recall that action is free $\Leftrightarrow$ any point has trivial stabilizer group; weakly homotopy equivalent $\Leftrightarrow$ homotopy group agree at all degrees.)
+
+Proof: By Cartan's mixing diagral,
+
+$$
+\begin{tikzcd}
+EG \ar[d] & \ar[l]EG\times M\ar[r]\ar[d] & M \ar[d]\\
+BG& \ar[l] M_G \ar[r] & M/G 
+\end{tikzcd}
+$$
+Since $M\rightarrow M/G$ is a principal $G$-bundle, $M_G\rightarrow M/G$ is a fiber bundle with fiber $EG$. Then, by the homotopy exact sequence of the fiber bundle, $\cdots \rightarrow \underbrace{\pi_k(EG)}_{=0}\rightarrow \pi_k(M_G)\xrightarrow{\simeq} \pi_k(M/G)\rightarrow \pi_{k-1}(EG)\rightarrow \cdots$ where $\pi_k(EG)=0$ (for $k>0$) as $EG$ is contractible.
+
+
+\begin{example}$S^1$ acts on $S^1$ by $\lambda\cdot x = \lambda x$, where $\lambda, x\in S^1 \in \mathbb{C}$. For each $x\in S^1$, $\lambda x = x\Rightarrow \lambda=1$, i.e. the action is free. Then, the proposition above says that $(S^1)_{S^1}$ is weakly homotopy equivalent to $S^1/S^1 = pt$. 
+
+To further show that $(S^1)_{S^1}$ is homotopy equivalent to $S^1/S^1 = pt$ (using Whitehead's theorem), we need to show that $(S^1)_{S^1}$ is a CW complex. We have $(S^1)_{S^1} = (ES^1\times S^1)/S^1 = (S^\infty\times S^1)/S^1\rightarrow S^\infty$, by $[e,s]\mapsto es$ which has an inverse map $[e]\mapsto [e,1]$ (so $[e,s]\mapsto [es] \mapsto [es,1] = [e,s]$, so $(S^1)_{S^1}=S^\infty$, which is a CW complex, so by Whitehead's theorem $(S^1)_{S^1}$ has the homotopy type of a point.
+\end{example}
+
+\begin{example}
+Now, going back to the example in the last lecture, $(S^2)_{S^1}$. By the Cartan's mixing diagram in \eqref{cartanS2}, the homotopy quotient $(S^2)_{S^1}\rightarrow BS^1=\mathbb{C}P^\infty$ is a fiber bundle with fiber $S^2$. 
+
+Another picture: The orbit space is $S^2/S^1 = [-1,1]$; if we take out the north and south poles $p,q$, then the action of $S^1$ on $S^2-\{p,q\} = (-1,1)\times S^1$ is free.
+
+So we set $S^2 = \{p\}\amalg (S^2-\{p,q\})\amalg \{q\}$.
+
+We have $(S^2-\{p,q\})_{S^1} = ((-1,1)\times S^1)_{S^1} = (-1,1)\times (S^1)_{S^1} = (-1,1)\times S^\infty$ (because $S^1$ acts trivially on $(-1,1)$ and we just proved above that $(S^1)_{S^1} = S^\infty$), has the homotopy type as $(-1,1)$. 
+
+Then, $\{p\}_{S^1} = (ES^1\times \{p\})/S^1
+ \simeq (ES^1)/S^1 = BS^1 = \mathbb{C}P^\infty$. 
+ 
+Therefore $(S^2)_{S^1} = \{p\}_{S^1}\amalg (S^2-\{p,q\})_{S^1} \amalg \{q\}_{S^1} = \mathbb{C}P^\infty \amalg (-1,1)\times S^\infty \amalg \mathbb{C}P^\infty $ ``a dumbbell'') has the same homotopy type as $\mathbb{C}P^\infty \vee \mathbb{C}P^\infty$ (``two $\mathbb{C}P^\infty$'s joining at one point).
+
+[The fiber above $p$ and $q$ is $\mathbb{C}P^\infty$, and the fiber over $(-1,1)$ is $S^\infty$.]
+ 
+Cohomology of $X : = \mathbb{C}P^\infty \amalg (-1,1)\times S^\infty \amalg \mathbb{C}P^\infty$: use the Mayer--Vietoris sequence. Set $U = \mathbb{CP}^\infty \amalg (-1,1/2)$ and $V = (-1/2,1)\amalg \mathbb{C}P^\infty$, 
+ 
+ 
+We have
+
+
+$$
+\begin{tikzcd}[cells={nodes={text height=2ex,text depth=0.75ex}}]
+& {} & &  X & U\amalg V & U\cap V \\
+H^4 & {} & & \color{red}{\mathbb{Z}\oplus \mathbb{Z}} \arrow{r}{i^*} & \mathbb{Z} \oplus \mathbb{Z} \ar{r}{j^*} &\cdots \cdots \\
+H^3  & {} & & \color{red}{0} \arrow{r}{i^*} & 0 \arrow{r}{j^*}
+  \arrow[draw=none]{u}[name=Y, shape=coordinate]{}
+  \arrow[draw=none]{u}[name=Z,shape=coordinate]{}
+  & 0 \arrow[curarrow=Y]{ull}{} \\
+H^2 & {} & & \color{red}{\mathbb{Z}\oplus \mathbb{Z}} \arrow{r}{i^*} & \mathbb{Z} \oplus \mathbb{Z} \arrow{r}{j^*}
+  \arrow[draw=none]{u}[name=Y, shape=coordinate]{}
+  \arrow[draw=none]{u}[name=Z,shape=coordinate]{}
+  & 0 \arrow[curarrow=Y]{ull}{} \\
+H^1   & {} & & \color{red}{0} \arrow{r}{i^*} & 0 \oplus 0 \arrow{r}{j^*}
+  \arrow[draw=none]{u}[name=Y, shape=coordinate]{}
+  & 0 \arrow[curarrow=Y]{ull}{} \\
+H^0 & {} & & \mathbb{Z} \arrow{r}{i^*} & \mathbb{Z}  \oplus \mathbb{Z}  \arrow{r}{j^*}
+  \arrow[draw=none]{u}[name=Y, shape=coordinate]{}
+  & \mathbb{Z}  \arrow[curarrow=Y]{ull}{} \\
+\end{tikzcd}
+$$
+(from $H^*(\mathbb{C}P^\infty)=\mathbb{Z}[u]$ where $u$ is a degree-2 element.)
+
+So we have
+$$H^k(X) = \left\{\begin{array}{ll} \mathbb{Z}& \text{for }k=0,\\
+0 & \text{for }k\text{ odd},\\
+\mathbb{Z}\oplus \mathbb{Z}, & \text{for }k\text{ even}\end{array}\right.$$
+Last time we showed that $H^k((S^2)_{S^1})
+ = \mathbb{Z}[u]\oplus y \mathbb{Z}[u]$, where $\text{deg}(u) = \text{deg}(y) = 2$. 
+\end{example}
+
+Functoriality:
+
+$G$-map $=$ $G$-equivariant map.
+
+A $G$-map $f\colon N\rightarrow M$ of $G$-spaces induces $f_G\colon N_G\rightarrow M_G$.
+
+(Let's show that the map $f_G$ is well defined: $N_G = EG\times N/G$, $M_G = (EG\times M)/G$, by sending $[e,n]\mapsto [e,f(n)]$.
+But sine $[e,n] = eg,g^{-1}n]\mapsto [eg,f(g^{-1}n)] = [eg,g^{-1}f(n)]$,
+
+Hence, $f_G$ further induces a ring homormophism in cohomology
+$$f^*_G\colon H^*(M_G)\rightarrow H^*(N_G)$$
+where
+
+\begin{equation}\label{induce3}
+\begin{tikzcd}[column sep = small]
+N\ar{rr}{f}\ar[dr] && M \ar[dl]\\
+&pt &
+\end{tikzcd}
+\leadsto
+\begin{tikzcd}[column sep = small]
+N_G\ar{rr}{f_G}\ar[dr,"\pi_N"'] && M_G \ar{dl}{\pi_M}\\
+&pt_G=BG &
+\end{tikzcd}
+\leadsto
+\begin{tikzcd}[column sep = tiny]
+H_G^*(N)&& H_G^*(M)\in x \ar[ll,"f^*_G"']\\
+&H^*(BG)\in u \ar[ul,"\beta"] \ar[ur,"\alpha"'] & 
+\end{tikzcd}
+\end{equation}
+
+$\alpha$ and $\beta$ give the algebra structure, where elements of $H^*(BG)$ serve as scalars:
+
+For any $u\in H^*(BG)$ and $x \in G_H^*(M)$, we have
+$f^*_G(u\cdot x) = f^*_G(\alpha(u)x) = f^*_G(\alpha(u))f^*(x) = \beta(u)f^*_G(x) = u\cdot f^*_G(x)$. This shows that $f_G^*$ is a $H^*(BG)$-homomorphism, i.e. $H^*(BG)$ is the \emph{scalar} in the algebra.
+
+So: $f^*_G\colon H^*_B(M)\rightarrow H^*_B(N)$ is an $H^*(BG)$-algebra homomorphism.
+
+Hence, $H^*_G(-)$ is a contravariant functor from $\{G\text{-spaces},G\text{-maps}\}$ to $\{H^*(BG)\text{-algebras},H^*(BG)\text{-homorphisms}\}$. 
+
+It is the composition of two functors: $H^*_G(-) = (-)^* \circ (-)_G$. 
+
+
+
+\subsection{Lecture 10: Functoriality}
+
+Proposition. Let $f\colon N\rightarrow M$ be a $G$-map of $G$-spaces. 
+
+(i) $f$ injective $\Rightarrow f_G\colon N_G\rightarrow M_G$ is injective. 
+
+(ii) $f$ surjective $\Rightarrow f_G$ is surjective. 
+
+(iii) If $\mathbb{I}\colon M\rightarrow M$ is the identity, then $\mathbb{I}_G\colon M_G\rightarrow M_G$ is the identity. 
+
+(iv) $(h\circ f)_G = h_G\circ f_G$. 
+
+(v) If $f\colon N\rightarrow M$ is a fiber bundle with fiber $F$, then $f_G\colon N_G\rightarrow M_G$ is also a fiber bundle with fiber $F$. 
+
+(Proof: (i)-(iv) is straightforward so we only show (v): From \eqref{induce3}, $N_G\rightarrow BG$ is a fiber bundle over $N$; $M_G \rightarrow BG$ is a fiber bundle over $M$. So every point $b\in BG$ has a neighborhood $U$ over which $\pi^{-1}N(U)\simeq U\times N$, $\pi^{-1}_M(U)\simeq U\times M$.  $f_G\colon N_G\rightarrow M_G$ is locally $U\times N\rightarrow U\times M$, which is locally trivial with fiber $F$.)
+
+Classifying spaces:
+
+\begin{example} $\mathbb{Z}_2$ on $S^n$ by the antipodal map: $S^n\rightarrow \mathbb{R}P^n$ is a principal $\mathbb{Z}_2$-bundle, 
+$$
+\begin{tikzcd}
+S^1 \ar[r,hook] \ar[d]& S^2 \ar[r,hook]\ar[d] & S^3 \ar[r,hook]\ar[d] & \cdots \\
+\mathbb{R}P^1 \ar[r,hook] & \mathbb{R}P^2 \ar[r,hook] & \mathbb{R}P^3 \ar[r,hook] & \cdots
+\end{tikzcd}
+$$
+let $S^\infty = \bigcup_{n=1}^\infty S^n$, $\mathbb{R}P^\infty = \bigcup_{n=1}^\infty \mathbb{R}P^n$, there is a $\mathbb{Z}_2$-action on $S^\infty$ with quotient $\mathbb{R}P^\infty$, because $S^\infty$ is contractible, so $S^\infty\rightarrow \mathbb{R}P^\infty$ is the universal $\mathbb{Z}_2$-bundle. And $B\mathbb{Z}_2 = \mathbb{R}P^\infty$.
+\end{example}
+
+Closed subgroups:
+
+Let $H\subset G$ be a closed subgroup of a topological group $G$. If $G$ acts freely on $EG$, then so does $H$. Let $B = EG/H$. 
+
+Proposition: Then $EG\rightarrow B$ is locally trivial with fiber $H$. 
+
+(Proof: Since $EG\rightarrow BG$ is locally trivial it is locally $U\times G$. So $EG/H$ is locally $(U\times G)/H = U\times (G/H)$, so $EG\rightarrow EG/H$ is locally $U\times H\rightarrow U\times (G/H)$, 
+
+Theorem (Frank Warner's book, \emph{Foundations of Differentiable Manifolds and Lie Groups}). If $H$ is a closed subgroup of Lie group, then $G\rightarrow G/H$ is a principle $H$-bundle. 
+
+This means that locally, $G\rightarrow G/H$ becomes $V\times H\rightarrow V$ for some open set $V \in G/H$.
+
+Therefore $U\times G\rightarrow U\times (G/H)$ is locally $U\times V\times H \rightarrow U\times V$, so $EG\rightarrow EG/H$ is locally trivial with fiber $H$. We can take $BH = EG/H$.
+
+This implies that if we have a universal bundle for a Lie group, then we have the universal bundle for any of its closed subgroup, i.e. the following theorem
+
+
+\begin{theorem*} If a Lie group $G$ has a universal bundle $EG\rightarrow BG$, then any closed subgroup has a universal bundle $EG\rightarrow EG/H$.
+\end{theorem*}
+
+\begin{theorem*} If $\pi_i\colon EG_i\rightarrow BG_i$ are universal bundle for $i=1,2$, then $\pi_1\times \pi_2 \colon EG\times EG_2 \rightarrow BG_1\times BG_2$, $(e_1,e_2)\mapsto (\pi_1(e_1),\pi_2(e_2))$ is a universal bundle for $G_1\times G_2$.
+\end{theorem*}
+
+(Proof by definition: $(g_1,g_2)(e_1,e_2) = (e_1,e_2)\Leftrightarrow g_1e_1=e_1, g_2e_2=e_2\Leftrightarrow g_1=1, g_2=1$, so $G_1\times G_2$ acts freely on $EG_1\times EG_2$. $(\pi_1\times \pi_2)^{-1}(b_1,b_2) = \{(e_1,e_2)|e_1 \in \pi^{-1}(b_1),e_2 \in \pi^{-1}(b_2)\} = G_1\times G_2$.)
+
+Corollary: $B(G_1\times G_2) = BG_1\times BG_2$.  (Here equality is in the sense of up to homotopy equivalence.)
+
+
+\begin{example} A torus $T$ is $S^1\times \cdots \times S^1$, therefore $BT = BS^1\times \cdots \times BS^1 = \mathbb{C}P^\infty\times \cdots \times \mathbb{C}P^\infty$. By the Künneth formula, $H^*(BT) = H^*(BS^1)\otimes \cdots \otimes H^*(BS^1) = \mathbb{Z}[u_1]\otimes \cdots \otimes \mathbb{Z}[u_n] = \mathbb{Z}[u_1,...,u_n]$ ( Since $H^*(\mathbb{C}P^\infty)$ is free abelian).
+\end{example}
+
+Well known theorem: Every compact Lie group can be embedded as a closed subgroup of some orthogonal group $O(k)$.
+
+A universal bundle for $O(k)$:
+
+Let $V(k,n) = \{\text{orthonormal }k\text{ frames in }\mathbb{R}^n\} = \{n\times k\text{ matrices}|\text{columns are orthonormal}\}$,  can multiply on the right by $A\in O(k)$. A $k$-frame in $\mathbb{R}^n$ spans a $k$-plane in $\mathbb{R}^n$, and multiplying on the right by $A$ is just changing the basis. So the quotient $V(k,n)$ by $O(k)$ is the Grassmannian $G(k,n)$.
+
+Fact: $V(i,n)\rightarrow G(k,n)$ is a principal $O(k)$-bundle.
+
+
+Then we have
+
+$$
+\begin{tikzcd}
+V(k,n) \ar[r,hook] \ar[d]& V(k,n+1) \ar[r,hook]\ar[d] & V(k,n+2) \ar[r,hook]\ar[d] & \cdots \\
+G(k,n) \ar[r,hook] & G(k,n+1) \ar[r,hook] & G(k,n+2) \ar[r,hook] & \cdots
+\end{tikzcd}
+$$
+Let $V(k,\infty) = \bigcup_{n=k}^\infty V(k,n)$, $G(k,\infty) = \bigcup_{n=k}^\infty G(k,n)$. Then $V(k,\infty)$ is weakly contractble; and in fact it is a CW complex so it is contractible. 
+
+Therefore, $V(k,\infty)\rightarrow G(k,\infty)$ is the universal $O(k)$-bundle. From this , we arrive at
+
+\begin{theorem*} 
+Every compact Lie group $G$ has a universal bundle.
+\end{theorem*}
+
+
+Starting from next time, we will assume all the topological spaces are smooth manifolds and the groups are Lie groups; and we will show equivariant cohomology can be computed using differential forms. This will give us the ring structure of $H^*_{S^1}(S^2)$, which we have not fully determined yet.
+
+
+\subsection{Lecture 11: Review of differential geometry}
+
+New chapter today: use differential forms to calculate equivariant cohomology.
+
+de Rham theorem: If $M$ is a $C^\infty$ manifold, and $\Omega^*(M) = \{C^\infty \text{ differential forms on }M\}$, then 
+$H^*(M;\mathbb{R})\simeq H\{\Omega^*(M),d\}$, where $H^*(M;\mathbb{R})$ is singular cohomology, and $\Omega^*(M)$ is de Rham complex.
+
+Equivariant de Rham theorem: if a Lie group $G$ acts smoothly on a manifold $M$, then $H^*_G(M;\mathbb{R}) \simeq H^*\{\Omega^*_G(M),D\}$, where $H^*_G(M;\mathbb{R})$ is singular equivariant cohomology, and $\Omega^*_G(M)$ is called Cartan complex of equivariant differential forms.
+
+Lie derivative of a vector field:
+
+Let $X,Y\in \mathfrak{X}(M) = \{C^\infty \text{ vector field on }M\}$, $p\in M$, $X$ has an integral curve $\varphi_t(p)$ through $p$:
+
+$\varphi_t(p)\colon (-\epsilon,\epsilon)\rightarrow M$, $\varphi_0(p) = p$, $\frac{d}{dt}\varphi_t(p) = X_{\varphi_t(p)}$, 
+
+Actually, $\exists \epsilon>0$, and a neighborhood $U$ of $p$ in $M$, s.t. $\varphi\colon (-\epsilon,\epsilon)\times U \rightarrow M$ and $\varphi_0(q) = q$, $\forall q\in U$, $\frac{d}{dt}\varphi_t(q) = X_{\varphi_t(q)}$, $\varphi_t\colon U\rightarrow \varphi_t(U)\subset M$. And we have $\varphi_t\circ \varphi_s = \varphi_{t+s}$, $\varphi_t \colon U\rightarrow \varphi_t(U)$, have inverse $\varphi_{-t}\colon \varphi_t(U)\rightarrow U$. 
+
+\begin{definition}[Lie derivative of a vector field]
+$\left(\mathcal{L}_XY\right)_p:= \lim\limits_{t\rightarrow 0}
+\frac{(\varphi_{-t})_*Y_{\varphi_t(p)}-Y_p}{t} = \frac{d}{dt}(\varphi_{-t})_*Y_{\varphi_t(p)} \in T_pM$.
+\end{definition}
+
+Lie derivative of a differential form:
+
+
+
+\begin{definition}[Lie derivative of a differential form]
+Let $\omega \in \Omega^k(M)$. $\left(\mathcal{L}_X\omega\right)_p = \lim\limits_{t\rightarrow 0} \frac{\varphi_t^*\omega_{\varphi_t(p)} - \omega_p}{t}$.
+\end{definition}
+
+Recall if $v_1,...,v_k \in T_pM$, then
+$\left(\varphi^*_t\omega_{\varphi_t(p)}\right)
+(v_1,...,v_k)
+:=
+\omega_{\varphi_t(p)}\left(\varphi_{t*}v_1,...,\varphi_{t*}v_k\right)$.
+
+
+
+\begin{definition}[Lie derivative of a function]
+$\left(\mathcal{L}_X\right)f = \lim\limits_{t\rightarrow 0} \frac{f(\varphi_t(p))-f(p)}{t} = X_p f$.
+\end{definition}
+
+\begin{theorem*} $\mathcal{L}_XY = [X,Y]$.
+\end{theorem*} 
+(The proof is a somewhat messy computation.)
+
+Interior multiplication on a vector space: Let $V$ be a vector space. A $k$-covector on $V$ is an alternating $k$-linear function on $V$: $\alpha\colon V\times \cdots \times V \rightarrow \mathbb{R}$.
+
+We write $\alpha \in A_k(V) = \Lambda^k(V^\vee)$.
+
+Def. If $v\in V$, then $\iota_v\alpha \in \Lambda^{k-1}(V^\vee)$, $\iota_v\alpha)(v_1,...,v_{k-1}) = \alpha(v_1,...,v_{k-1})$. We have $((\iota_v\circ \iota_v)\alpha)(v_1,...,v_{k-2}) = (\iota_v\alpha)(v,v_1,...,v_{k-2}) = \alpha(v,v,v_1,...,v_{k-2}) = 0$. 
+
+ 
+
+\begin{definition}[Interior multiplication on a manifold]
+If $X \in \mathfrak{X}(M)$, $\omega \in \Omega^k(M)$, $Y_1,...,Y_{k-1} \in \mathfrak{X}(M)$, then $(\iota_X\omega)(Y_1,...,Y_{k-1}) = \omega(X,Y_1,...,Y_{k-1})$. 
+\end{definition}
+
+
+\begin{definition}[Derivation, self-defined]
+A map $D\colon \Omega^*(M)\rightarrow \Omega^*(M)$ is a \emph{derivation} if 
+$D(\omega\wedge \tau) = (D\omega) \wedge \tau + \omega \wedge D\tau$
+\end{definition}
+
+
+\begin{theorem*}[Properties of $\mathcal{L}_X$]
+Theorem (i) $\mathcal{L}_X\colon \Omega^*(M)\rightarrow \Omega^*(M)$ is a \emph{derivation} of degree $0$. (Derivation means that $\mathcal{L}_X(\omega\wedge \tau) = (\mathcal{L}_X\omega) \wedge \tau + \omega \wedge \mathcal{L}_X\tau$).
+
+(ii) $\mathcal{L}_X$ commutes with $d$: $\mathcal{L}_X\cdot d = d\circ \mathcal{L}_X$.
+
+(iii) (Product formula) if $\omega \in \Omega^k$, $\mathcal{L}_X(\omega(Y_1,...,Y_k)) = (\mathcal{L}_X\omega)(Y_1,...,Y_k) + \sum_{i=1}^k \omega(Y_1,...,\mathcal{L}_XY_i,...,Y_k)$.
+\end{theorem*}
+
+\begin{theorem*}[Properties of $\mathcal{L}_X$ and $\iota_X$] (i) $\iota_X\colon \Omega^*(M)\rightarrow \Omega^*(M)$ is an antiderivation of degree-1: $\iota_X(\omega\wedge \tau) = (\iota_X\omega)\wedge \tau   + (-1)^{\text{deg }\omega}\omega \wedge \iota_X\tau$,
+
+(ii) $\iota_X\circ \iota_X = 0$
+
+(iii) (Cartan's homotopy formula) $\mathcal{L}_X = d\iota_X + \iota_X d$. 
+
+(iv) $\iota_X\colon \Omega^*(M)\rightarrow \Omega^*(M)$ is $\mathcal{F}$-linear: $\iota_X(f\omega) = f\iota_X\omega$ for $f\in C^\infty(M) = \mathcal{F}$. (But $\mathcal{L}_X$ is not $\mathcal{F}$ linear, as $\mathcal{L}_X(f\omega) = (\mathcal{L}_Xf) \omega + f\mathcal{L}_X\omega$.)
+\end{theorem*}
+
+
+
+\subsection{Lecture 12: Basic forms and invariant forms}
+
+Let $G$ be a Lie group, $\pi\colon P\rightarrow M$ a $C^\infty$ principal $G$-bundle. 
+
+$\pi\colon P\rightarrow M$ is surjective, so $\pi_*\colon T_pP\rightarrow T_{\pi(p)}M$ is also surjective, $\pi^*\colon \Omega^*(M)\rightarrow \Omega^*$ is unjective. 
+
+\begin{definition}[Basic form]
+$\pi^*\Omega^*(M)\subset \Omega^*(P)$ is called the subspace of \emph{basic forms.}
+\end{definition}
+
+Example: $\pi\colon \mathbb{R}^2\rightarrow \mathbb{R}$, $(x,y)\mapsto x$
+
+$r\cdot (x,y) = (x,y+r)$, $\omega \in \Omega^1(\mathbb{R}^2)$ is $f(x,y)dx+g(x,y)dy$. 
+
+The basic 1-forms are $\pi^*(h(x)dx) = \pi^*(h(x)) \pi^*(dx) = \pi^*(h(x)) dx$.
+
+$\omega = fdx+gdy$ is basic if and only if $g=0$ and $f(x,y)$ does not depend on $y$. 
+
+$(i) \iota_{\partial_y} \omega = \iota_{\partial_y} (fdx + gdy)
+=f \iota_{\partial_y} dx + g\iota_{\partial_y} dy =  g$, where we used $\iota_{\partial_y} dx = dx(\partial_y) = \frac{\partial x}{\partial y}=0$, and $\iota_{\partial_y} dy = 1$.  
+
+(ii) $\mathcal{L}_{\partial_y}\omega = \mathcal{L}_{\partial_y}(fdx+gdy) = (\partial_{\partial_y}f)dx + f\mathcal{L}_{\partial_y} dx + (\mathcal{L}_{\partial_y} g)dy + g \mathcal{L}_{\partial_y} (dy) = \frac{\partial f}{\partial y} dx + \frac{\partial g}{\partial y}dy$, where we used $\mathcal{L}_{\partial_y} dx = d( \mathcal{L}_{\partial_y} x) = d (0) = 0$, and $\mathcal{L}_{\partial_y} dy = d(1) = 0$.  We see that if $g=0$ is already guaranteed by $\iota_{\partial_y} \omega=0$, then $\mathcal{L}_{\partial_y}\omega$ further guarantees that $\partial_y f(x,y)=0$, i.e. $f(x,y)$ does not depend on $y$. So we have the following proposition:
+
+Proposition. $\omega = f dx + gdy \in \Omega^1(\mathbb{R}^2)$ is basic for $\pi\colon \mathbb{R}^2\rightarrow \mathbb{R}$, if and only if $\iota_{\partial_y} \omega = 0 $ and $\mathcal{L}_{\partial_y} \omega = 0$.
+
+Now, our task is how to generalize this proposition to an arbitrary principal $G$-bundle.
+
+Vertical vectors on a principal bundle:
+
+Let $\pi\colon P\rightarrow M$ be a principal $G$-bundle, and $p\in P$. Then $\pi_*\colon T_pP\rightarrow T_{\pi(p)}(M)$. 
+
+\begin{definition}[Vertical vector] $\mathfrak{V}_p := \{\text{vertical tangent vectors at }p\} := \mathrm{ker} \pi_*$.
+\end{definition}
+
+An element $A \in \mathfrak{g}$ gives a curve $e^{tA} \in G$. Then $e^{tA}$ defines a curve in $M$. 
+
+\begin{definition}[$\underline{A}_p$] If $G$ acts on $M$ smoothly on the left, and $A\in \mathfrak{g}$, the Lie algebra of $G$, for $p\in M$, define the vector field at $p$, $\underline{A}_p = \frac{d}{dt}\Big|_{t=0} e^{-tA}\cdot p$. (If $G$ acts on $M$ on the right then the definition changes to $A_p = \frac{d}{dt}\Big|_{t=0} e^{tA}\cdot p$.)
+\end{definition}
+
+Theorem: $\underline{[A,B]}  =  [\underline{A},\underline{B}]$ for $A,B \in \mathfrak{g}$. (This sign convention agrees with the sign convention above. Also note that $[A,B]$ is the lie bracket, whereas  $[\underline{A},\underline{B}]$ is the commutator for vector fields.) 
+
+Theorem. $\underline{A}$ is a $C^\infty$ vector field on $M$.
+
+\begin{theorem*}[Integral curve] The \emph{integral curve} of $\underline{A}$ through $p\in M$ is $\varphi_t(p) = e^{-tA}\cdot p$. (Colloquially, ``left multiplication by $e^{-tA}$''.)
+\end{theorem*}
+
+(Proof. We need to show $\frac{d}{dt} \varphi(t) = \underline{A}_{\varphi_t(p)}$ for all $t$. ($\frac{d}{dt} \varphi_t(p) = \frac{d}{ds}|_{s=0} e^{-(t+s)A}\cdot p = \underline{A}_{e^{-tA}\cdot p} = \underline{A}_{\varphi_t(p)}$.)
+
+\begin{theorem*}$\underline{A}_p$ is a vertical vector.
+\end{theorem*} 
+
+Fix $p\in P$ and define $j_p\colon G\rightarrow P$ by $g\mapsto p\cdot g$. Then $j_{p*}\colon T_eG = \mathfrak{g}\rightarrow T_pP$ is given by $j_{p*}(A) = 
+\frac{d}{dt}\Big|_{t=0}j_p(e^{tA}) = \frac{d}{dt}\Big|_{t=0}p\cdot e^{tA} = \underline{A}_p$. 
+
+Then $\pi_*(\underline{A}_p) = \pi_*j_{p*}(A) = (\pi\circ j_p)_*(A) = 0$ ($\pi\circ j_p = \pi(p)$, a constant map), so $\underline{A}$ is a vertical vector field.
+
+Invariant forms:
+
+Recall that a basic form on $P$ for a principal bundle $\pi\colon P\rightarrow M$ is $\pi^*\omega$ for some $\omega \in \Omega^*(M)$. 
+
+We have $r_g^*(\pi^*\omega) = (\pi\circ r_g)^*\omega = \pi^*\omega$. 
+
+($(\pi\circ r_g)(p) = \pi(pg) = \pi(p)$.)
+
+
+
+If $G$ acts on $M$ on the left, each $g\in G$ defines a differential $l_g\colon M\rightarrow M$.
+
+\begin{definition}[Invariant form]
+A form $\omega \in \Omega^*(M)$ is \emph{$G$-invariant} if $l^*_g\omega = \omega$ for all $g \in G$. 
+\end{definition}
+
+So a basic form on $P$ for $\pi\colon P\rightarrow M$ is $G$-invariant.
+
+\begin{theorem*}[Characterization of invariant forms] Assume $G$ connected, and acts on $M$. Then $\omega \in \Omega^*(M)$ is $G$-invariant if and only if $\mathcal{L}_{\underline{A}}\omega = 0 $ for all $A\in \mathfrak{g}$, the Lie algebra of $G$.
+\end{theorem*}
+
+Proof. First prove ``$\Rightarrow$'': If $\omega$ is $G$-invariant, then $l_g^*\omega = \omega$ for all $g \in G$. This implies $\rho^*_{e^{-itA}} \omega = \omega$, for any $A \in \mathfrak{g}$.  This is the same as $\varphi_t^*(\omega)$, $\mathcal{L}_{\underline{A}}\omega = \frac{d}{dt}\Big|_{t=0} \varphi^*_t\omega
+ = \frac{d}{dt}\Big|_{t=0}\omega = 0$. 
+
+The ``$\Leftarrow$'' part of the prove will be given in the next lecture.
+
+
+\subsection{Lecture 13: Basic forms}
+
+Today we want to characterize basic forms using differential forms.
+
+
+The homotopy quotient $M_G$ is the base space of a principal $G$-bundle $EG\times M\rightarrow M_G$. Let $G$ be a Lie group. We work in the $C^\infty$ category.
+
+Definition of invariant forms -- see last lecture.
+
+Continue the proof in the last lecture: $\Leftarrow$: suppose $\mathcal{L}_{\underline{A}} \omega = 0$. 
+
+Let $p \in M$. An integral curve of $\underline{A}$ through $p$ is $\varphi_t(p) = e^{-tA}\cdot p = l_{e^{-tA}}(p)$. 
+
+We have $\mathcal{L}_{\underline{A}} \omega = 0\Rightarrow (\mathcal{L}_{\underline{A}}\omega)_p = \frac{d}{dt}\Big|_{t=0} (\varphi_t^*\omega)_p = \frac{d}{dt} (l_{e^{-tA}}^*\omega)_p  = 0$, define $h(t):= (l_{e^{-tA}}^*\omega)_p\colon \mathbb{R} \rightarrow \Lambda^k(T_p^*(M))$ is constant. (Here we have assumed that $\omega$ is a $k$-form.) We want to show $h(t) = h(0) = \omega_p$ is constant.
+
+$h'(t) = \frac{d}{ds}\big|_{s=0} l_{e^{-(t+s)A}}^*\omega = \frac{d}{ds}\big|_{s=0}l_{e^{-tA}}^* \left(l_{e^{-sA}}^* \omega\right)_{e^{-tA}\cdot p}
+ = l_{e^{-tA}}^* \frac{d}{ds}\big|_{s=0} \left(l_{e^{-sA}}^* \omega\right)_{e^{-tA}\cdot p}$ (the pullback of differential forms commutes with $\frac{d}{ds}$ because $l_{e^{-tA}}^*$ is linear.) But we have $
+ \frac{d}{ds}\big|_{s=0} \left(l_{e^{-sA}}^* \omega\right)_{e^{-tA}\cdot p}
+ = (\mathcal{L}_{\underline{A}}\omega)_{e^{-tA}p}=0$, so $h'(t)=0$, $h(t) = \omega_p$ is constant. Since $G$ is connected, $G$ is generated by any neighborhood of the identity. $\exists$ a neighborhood $U$ of the identity s.t. $e^(-)\colon \mathfrak{g}\rightarrow G$ is a diffeomorphism on $U$, so every $g\in G$ is a product of finitely many exponentials
+
+Thus $(l_g^*\omega)_p = \omega_p$ for all $g\in G$, $p\in M$. 
+
+Vertical vectors: let $\pi\colon E\rightarrow M$ be a fiber bundle with fiber $F$. $p\in E$, then $\pi_*\colon T_pE\rightarrow T_{\pi(p)}M$ is surjective.
+
+In last lecture we defined the set of vertical vectors at $p$ to be $\mathrm{ker}\pi_* : = \mathfrak{V}_p$.
+
+We have also defined $j_p$ and $j_{p*}$, which acting on $A$ gives the fundamental vector field: $(j_p)_*(A) = \underline{A}_p \in \mathfrak{V}_p$. 
+
+
+This defines a map $(j_p)_* \colon \mathfrak{g}\rightarrow \mathfrak{V}_p$.
+
+\begin{lemma*} 
+Let $A\in \mathfrak{g}$. Then $\underline{A}_p=0$ if and only if $p$ is a fixed point of the curve $\{e^{tA}\in G\}$. 
+\end{lemma*}
+
+Proof: ``$\Leftarrow$'': $\underline{A}_p = \frac{d}{dt}\big|_{t=0} p\cdot e^{tA} = \frac{d}{dt}\big|_{t=0}p = 0$ (if $p$ is a fixed point of $e^{tA}$. ``$\Rightarrow$'': suppose $\underline{A}_p=0$, an integral curve of $\underline{A}$ through $p$ is $\varphi_t(p) = p\cdot e^{tA}$. Let $c(t) =p$. Then $c'(t)=0 = \underline{A}_p = \underline{A}_{c(t)}$, so that $c(t)$ is another integral curve of $\underline{A}$ through $p$. By the uniqueness of integral curves, $\varphi_t(p)=p$ for all $t\in \mathbb{R}$, i.e. $p\cdot e^{tA} = p$ for all $t\in \mathbb{R}$. If $(j_p)_*(A) = \underline{A}_p = 0$, then $p$ is a fixed point of $e^{tA}$, so $\text{Stab}(p) \supset \{e^{tA}|t\in \mathbb{R}\}$. Since $P$ is a principal bundle, $G$ acts freely on $P$, so $\text{Stab}(p) = \{1\}$, so $\{e^{tA}|t\in \mathbb{R}\} = \{1\}$, hence $A=0$. So $(j_p)_*\colon \mathfrak{g}\rightarrow \mathcal{V}_p$ is injective.
+
+Since $\mathrm{dim}\mathfrak{g} = \mathrm{dim}G = \mathfrak{V}_p$, $(j_p)_*$ is an isomorphism.
+ 
+Horizontal forms:
+
+Let $\pi\colon E\rightarrow M$ be a fiber bundle. 
+\begin{definition}[Horizontal form] A form $\omega \in \Omega^*(E)$ is \emph{horizontal} if at any $p\in E$, $\iota_{Y_p}\omega = 0$, $\forall Y_p\in \mathfrak{V}_p$.
+\end{definition}
+
+Basic forms are horizontal: if $\omega = \pi^*(\tau) \in \Omega^k(E)$ and $v_1,...,v_{k-1}\in T_p(E)$, then
+$(\iota_{Y_p} \omega) (v_1,...,v_{k-1}) = \omega(Y_p,v_1,...,v_{k-1}) = (\pi^*T)_p (Y_p,...) = T_{\pi(p)}(\pi_*Y_p,...) = T_{\pi(p)}(0,...) = 0$. 
+
+
+
+\subsection{Lecture 14: Basic forms, ring structure on $H^*(E)$.}
+
+
+Characterization of basic forms:
+
+\begin{theorem*}[Basic $\Leftrightarrow$ invariant $+$ horizontal] Let $G$ be a connected Lie group, and $\pi\colon P\rightarrow M$ a principal $G$-bundle. A form $\omega \in \Omega^k(P)$ is basic if and only if it is horizontal, i. $\iota_{\underline{A}} \omega =0$, and $\mathcal{L}_{\underline{A}}\omega =0$ for all $A\in \mathfrak{g}$.
+\end{theorem*}
+
+Proof: ``$\Rightarrow$'' has been done in the last lecture. Now, ``$\Leftarrow$'': Suppose $\iota_{\underline{A}} \omega =0$, and $\mathcal{L}_{\underline{A}}\omega =0$ for all $A\in \mathfrak{g}$, since $G$ is connected, $\omega$ is $G$-invariant, let $m\in M$, $w_1,...,w_k \in T_mM$, pick any $p\in \pi^{-1}(m)\subset P$, and $v_1,...,v_k \in T_pP$, s.t. $\pi_*v_i = w_i$, for all $i$. Then define $\tau_m(w_1,...,w_k) =  \omega_p(v_1,...,v_k)$. Then $\omega = \pi^* \tau$, because 
+\begin{equation}\label{taudef}
+\tau_m(w_1,...,w_k) = \tau_m(\pi_*v_1,...,\pi_*v_k) = (\pi^*\tau)_p(v_1,...,v_k),
+\end{equation}
+therefore we have found the form downstars on $M$. To show that it is a basic form, we still need to show that the form is well-defined, i.e. we need to show that $\tau$ is independent of the choice of $v_i$ and $p$:
+
+prove independence of $v_i$: suppose $v'_1 \in T_pP$ is another vector s.t. $\pi_*v'_1 = w_1 = \pi_*v_1$, then $ \pi_*(v'_1 - v_1) =0 $, so $v'_ 1-v_1$ is vertical, so $v'_1 - v_1 = \underline{A}_p$ for some $A \in \mathfrak{g}$. Since $\iota_{\underline{A}}\omega =0$, $0 = \omega_p(\underline{A}_p,v_2,...,v_k) = \omega_p(v'_1,v_1,v_2,...,v_k)$, so $\omega_p(v'_1,v_2,...) = \omega_p(v_1,v_2,...)$, showing that the definition \eqref{taudef} is independent of the choice of $v_1$, and simiarly independent of the choice of $v_2,v_3,...$.
+
+Then prove independence of point: suppose $p'\in \pi^{-1}(m)$ is another point in $P$ above $m$. Then because $G$ acts freely and transitively, so $p' = pg$ for some $g\in G$. Let $v'_1,...,v'_k \in T_{p'}P$ s.t. $\pi_*v'_i = w_i$, then $\omega_{p'}(v'_1,...,v'_k) = \omega_{pg}(v'_1,...,v_k') = (r^*_{g^{-1}}\omega)_{pg}(v'_1,...,v'_k)$ (because $\omega$ is $G$-invariant), so $ \omega_{p'}(v'_1,...,v'_k)= r^*_{g^{-1}}(\omega_{pgg^{-1}})(v'_1,...,v'_k)
+=\omega_p(r_{g^{-1}*}v'_1,...,r_{g^{-1}*}v'_k)$, since $\pi_*r_{g^{-1}*} v'_i = \pi_*v'_i = w_i$, so $\omega_{p'}(v'_1,...,v'_k) = \omega_p (v_1,...,v_k)$. This shows that the definition \eqref{taudef} is independent of the choice of $p \in \pi^{-1}(m)$. 
+ 
+Thus $\tau$ is well-defined, and $\omega = \pi^*\tau$ is basic.
+
+
+
+\textcolor{red}{[Summary of lecture 12-14: an element is basic (meaning that it comes from the base) iff it is horizontal and invariant. If the group $G$ is connected, it is invariant if and only if its Lie derivative is zero with respect to all vertical vector fields.]}
+
+
+
+
+
+
+Ring structure on $H^*(E)$: 
+
+Product structure on associated graded module: Let $\pi\colon E\rightarrow B$ be a fiber bundle with fiber $F$. Let $H^*(-)$ be cohomology with coefficients in any commutative ring $R$ with identity $1$.
+
+Leray's theorem: There is a filtration $H^*(E) = F_0\supset F_1 \supset F_2\supset \cdots$ so that multiplication in $H^*(E)$ induces a map $F_k\times F_l \rightarrow F_{k+l}$. 
+
+It follows that $F_k\times F_{l+1} \rightarrow F_{k+l+1}$, and $F_{k+1}\times F_l \rightarrow F_{k+l+1}$, therefore there is an induced map
+$$\frac{F_k}{F_{k+1}}\times \frac{F_l}{F_{l+1}} \rightarrow \frac{F_{k+l}}{F_{k+l+1}},$$
+This is the product structure on $GH^*(E) = \bigoplus_{k=0}^\infty \frac{F_k}{F_{k+1}}$. 
+
+\begin{theorem*}[Spectral sequence of a filtered complex] $E_\infty \simeq GH^*(E)$ as isomorphic rings. 
+\end{theorem*}
+See Lecture 22 and 23 of the Bott-Tu notes.
+
+
+Example: Cohomology ring of $U(2)$.
+
+$U(2)$ acts on $\mathbb{C}^2$: it preserves the unit sphere $S^3 \subset \mathbb{C}^2$. 
+
+$U(2)$ acts transitively on $S^3$; $\text{Stab}((1,0))\simeq S^1$. By the orbit-stabilizer group, $U(2)/U(1) \simeq \text{Orbit}((1,0)) = S^3$ (as $U(2)$ acts on $S^3$ transitively). Since $U(1)$ is a closed subgroup of the Lie group $U(2)$, there is a fiber bundle
+$$
+\begin{tikzcd} U(1) \ar[r] & U(2) \ar[d] \\& S^3
+\end{tikzcd}.$$
+
+Since $S^3$ is simply connected, we have
+$$E_2 = H^*(S^3)\otimes H^*(S^1),$$
+we have the spectral sequence 
+$$
+E_2 = \begin{array}{l|llllll} q=2 & \cdots & \cdots & \cdots & \cdots & \cdots &\cdots \\
+q=1 & \bar{x} & 0 & 0 & \bar{x} \bar{y} & 0 &\cdots \\
+q=0 & 1 & 0 & 0 & \bar{y} & 0  &\cdots\\
+\hline
+& p=0 & p=1 & p=2 & p=3 & p=4  & \cdots  \end{array},
+$$
+where all the $\cdots$ are zero entries. All the differentials $d_2$ are forced to zero. Using $E_2=\cdots = E_\infty = GH^*(U(2))$.
+
+$H^0(U(2)) = \mathbb{Z}\cdot 1$,
+
+$H^1(U(2)) = F^1_0\supset F^1_1 \supset F^1_2 = 0$, where $F^1_0/F^1_1 = \mathbb{Z}x$, $F^1_1/F^1_2 = 0$, so $F^1_1=0$, and $H^1(U(2)) = F^1_0 = \mathbb{Z}\bar{x}$. (since $\bar{x}$ is actually in $H^1(U(2))$, we will write $x = \bar{x}$.)
+
+Similarly, $\bar{y} \in H^3(U(2))$, and $\bar{x}\bar{y} \in H^4(U(2))$, 
+so we can write $y = \bar{y}$, and $xy = \bar{x}\bar{y}$. So we get 
+$$H^k(U(2)) = \left\{\begin{array}{ll} \mathbb{R}\cdot 1 & k=0\\\mathbb{R}\cdot x & k=1 \\
+\mathbb{R}\cdot y & k=3\\ 
+\mathbb{R}\cdot xy & k=4 \\
+0 & \text{otherwise}\end{array}\right.
+= \mathbb{R}(x,y)/(x^2,y^2,xy+yx) = \Lambda(x_1,x_2),$$
+where $\mathbb{R}(x,y)$ is the free algebra generated by $x,y$, and $\Lambda(x_1,x_2)$ is the \emph{free exterior algebra} defined as follows:  $\Lambda (x_1,...,x_k) = \frac{\mathbb{R}(x_1,...,x_k)}{(x_ix_j -(-1)^{\text{deg}x_i\cdot \text{deg}x_j} x_jx_i)}$. 
+
+
+
+
+\subsection{Lecture 15: Vector-valued forms}
+
+Let's assume all vector spaces are finite dimensional and are over $\mathbb{R}$.
+
+
+A $k$-\emph{covector} on a vector space $T$ is a $k$-linear alternating function $T^k= \underbrace{T\times T}_{k\text{ times}}\rightarrow \mathbb{R}$.
+
+Let $V$ be a vector space. A $V$-valued $k$-covector on $T$ is a $k$-linear alternating function $f\colon  \underbrace{T\times T}_{k\text{ times}}\rightarrow V$.
+
+By the universal orpoerty of $\Lambda^k T$,
+
+$$
+\begin{tikzcd}
+\Lambda^kT \ar[dr,dotted, "\exists!\text{ linear }\tilde{f}"] &\\
+T^k\ar[u]\ar[r,"f"] &V
+\end{tikzcd}
+$$
+
+Notation: $A_k(T,V) = \{V\text{-valued }k\text{-covectors}\} \simeq \mathrm{Hom}(\Lambda^kT,V) \simeq (\Lambda ^kT)^\vee \otimes V \simeq (\Lambda^kT^\vee )\otimes V$, where the last two follows from linear algebra.
+
+
+Def. A $V$-valued $k$-form on a manifold $M$ is a function that assigns to each $p\in M$ a $V$-valued $k$-covector in $(\Lambda^kT^*_pM)\otimes V$, i.e. it is a section of the bundle $(\Lambda^kT^*M)\otimes V$. 
+
+Notation. $\Omega^k(M;V) = \{C^\infty~V\text{-valued }k\text{-forms}\}$. If $e_1,...,e_n$ is a basis for $V$, and $\omega \in \Omega^k(M;V)$, $v_1,...,v_k \in T_pM$, 
+then $\omega_p(v_1,...,v_k)
+= \sum_{i=1}^n \omega^i_p(v_1,...,v_k)e_i$, i.e. $\omega = \sum \omega^ie_i$, where $\omega^i$ are $\mathbb{R}$-valued $k$-forms on $M$. 
+
+Def. $d\omega = \sum (d\omega^i)e_i$ if $\omega = \sum \omega^ie_i$. 
+
+(This definition is independent of the basis $e_1,...,e_n$.)
+
+$\mathfrak{g}$-valued forms:
+
+Let $\mathfrak{g}$ be a finite dimensional Lie algebra, $\omega \in \Omega^k(M;\mathfrak{g})$ and $\tau \in \Omega^l(M,\mathfrak{k})$. 
+
+Def. $[\omega,\tau ] (v_1,...,v_k,v_{k+l})
+=\sum_{(k,l)\text{-shuffles }\sigma \in S_{k+l}}
+ \text{sgn} (\sigma)
+ \left[\omega_p(v_{\sigma(1),...,\sigma(k)})
+ \tau_p(v_{\sigma(k+1)},...,v_{\sigma(k+l)})\right]$,
+here $(k,l)$-shuffles denote the $\sigma$ satisfying $(\sigma(1)<\cdots \sigma(k)$, $\sigma(k+1)<\cdots < \sigma(k+l)$. 
+
+Example. If $\omega,\tau \in \Omega^1(M,\mathfrak{g})$, then $[\omega,\tau](X,Y) = 
+[\omega(X),\tau(Y)]
+-[\omega(Y),\tau(X)]$. 
+ 
+Proposition. If $X_1,...,X_n$ is a basis for the Lie algebra $\mathfrak{g}$, and $\omega = \sum \omega^iX_i$, $\tau = \sum \tau^j X_j$, then (i) $[\omega,\tau]  = \sum\omega^i\wedge \tau^j[X_i,X_j]$. 
+
+(ii) $[\tau,\omega]  = (-1)^{(\text{deg}\omega)(\text{deg}\tau)+1} [\omega,\tau]$ (note the extra plus one in the sign). (iii) $d[\omega,\tau] = [d\omega,\tau] + (-1)^{\text{deg}\omega} [\omega,d\tau]$. 
+
+$\mathfrak{gl}(n,\mathbb{R})$-valued forms:
+
+
+$\mathfrak{gl}(n,\mathbb{R})$ has two multiplications: $[-,-]$ and matrix product. 
+
+A basis for $\mathfrak{gl}(n,\mathbb{R})$ is $\{e_{ij}\}_{1\leq i,j\leq n}$, where $e_{ij}$ is the $n\times n$ matrix with $1$ in the $(i,j)$ position, and zero anywhere else.
+
+We have $e_{ij}e_{hl} = \delta_{jk}e_{il}$, 
+
+Def. If $\omega = \sum \omega^{ij} e_{ij}$ and $\tau = \sum \tau^{kl} e_{kl}$, then we define $\omega \wedge \tau = \sum \omega^{ij}\wedge \tau^{kl} e_{ij}e_{kl}=
+\sum \omega^{ik}\wedge \tau^{kl}e_{il}$. 
+
+
+
+
+
+
+Proposition. If $\omega,\tau \in \Omega^*(M,\mathfrak{gl}(n,\mathbb{R}))$, then $[\omega,\tau] = \omega \wedge \tau - (-1)^{\text{deg}\omega \text{deg}\tau} \tau \wedge \omega$ (note that the sign does not contain extra minus one).
+
+Corollary: $[\omega,\omega]  = \left\{\begin{array}{ll} 0 & \text{if deg}\omega\text{ is even,}\\
+2\omega \wedge \omega &\text{if deg}\omega \text{ is odd}.\end{array}\right.$ 
+
+Fundamental vector field:
+
+Suppose a Lie group $G$ acts on a manifold $P$ on the right. 
+
+\begin{proposition*}
+For $A\in \mathfrak{g}=\mathrm{lie}(G)$, $p\in P$, $g\in G$, 
+$$r_{g*}(\underline{A}_p) = \underline{(\mathrm{Ad}g^{-1})A}_{pg}.$$
+\end{proposition*}
+
+Let $c(g)\colon G\rightarrow G$ be conjugation by $g$, $c(g)(x) = gxg^{-1}$.
+
+Def. The differential $\mathrm{Ad}(g) = c(g)_*\colon T_eG\rightarrow T_e(G)$.
+
+Proof: Let $j_p\colon G\rightarrow P$ be $j_p(g) = p\cdot g$. Then $(j_p)_*(A) = \frac{d}{dt}\Big|_{t=0}j_p(e^tA) = \frac{d}{dt}\Big|_{t=0}p\cdot e^{tA} = \underline{A}_p$. 
+
+$(r_g\circ j_p)(x) = px g = pg\cdot (g^{-1}xg) = pg\cdot c(g^{-1}(x) = j_{pg}(c(g^{-1})(x))
+= \left(j_{pg}\circ c(g^{-1})\right)(x)$, so $r_g\circ j_p = j_{pg}\circ c(g^{-1})$. 
+
+By chain rule, $(r_g)_*(\underline{A}_p) = (r_g)_*(j_p)_*(A) = (j_{pg})_*(c(g^{-1}))_* (A) = (j_{pg})_*((\mathrm{Ad}g^{-1})A)
+=\underline{(Adg^{-1})A}_{pg}$. 
+
+
+
+
+\subsection{Lecture 16}
+
+Connection on a principal bundle
+
+\subsection{Lecture 17: Curvature on a principal bundle}
+
+Review of last lecture: let $G$ be a Lie group, $\pi\colon P\rightarrow M$ a principal $G$-bundle. A \emph{connection} on $P\rightarrow M$ is a $C^\infty$ right-invariant horizontal distribution, or, equivalently, it is a $\mathfrak{g}$-valued 1-form, $\omega$, on $P$, s.t. (i) for $A\in \mathfrak{g}$, $\omega_p(\underline{A}_p) = A$, and (ii) $r^*_g(\omega) = (\mathrm{Ad}g^{-1})\omega$.
+
+The \emph{Maurer--Cartan form} on $G$ is the unique left-invariant $\mathfrak{g}$-valued 1-form $\theta$ on $G$ s.t. $\theta_e(X_e) = X_e $ for $X_e \in \mathfrak{g} = T_eG$. 
+
+$\theta$ satisfies the \emph{Maurer--Cartan equation}: $d\theta + \frac{1}{2}[\theta,\theta] = 0$. 
+
+Example: $\begin{tikzcd}
+M\times G\ar{r}{\pi_2} \ar{d}{\pi_1} & G\\ M & \end{tikzcd}$. Let $\omega = \pi_2^*\theta$, a $\mathfrak{g}$-valued 1-form on $M\times G$. Claim: $\omega$ is a connection on $M\times G\rightarrow M$. We have $d\omega +\frac{1}{2}[\omega,\omega] =0$, 
+
+\begin{definition}[Curvature of a principal bundle] The $\mathfrak{g}$-valued 2-form $\Omega = d\omega + \frac{1}{2}[\omega,\omega]$ on a principal bundle $P$ is called the \emph{curvature} of the connection $\omega$.
+\end{definition}
+
+It is a measure of the deviation of $\omega$ from the Maurer--Cartan connection. 
+
+With respect to a basis $X_1,...,X_n$ of $\mathfrak{g}$, $\omega  = \sum \omega^k X_k$, $\Omega = \sum \Omega^kX_k$, where $\omega^k$ and $\Omega^k$ are $\mathbb{R}$-valued forms on $P$. 
+
+We have $\sum\Omega^kX_k = \sum(d\omega^k) X_k + \frac{1}{2}[\sum \omega^ix_i,\omega^jx_j] = \sum(d\omega^k)X_k + \frac{1}{2} \sum \omega^i\wedge \omega^j c^k_{ij} x_k$, so
+\begin{theorem*}[Second structural equation]
+$$\Omega^k = d\omega^k + \frac{1}{2} \sum_{ij}c^k_{ij} \omega^i\wedge \omega^j.$$
+\end{theorem*}
+(The 1st structural equation is for the principal bundle associated with the tangent bundle.)
+
+\begin{theorem*}[Bianchi's second identity]
+$$d\Omega = [\Omega,\omega].$$
+\end{theorem*}
+(Uses $[d\omega,\omega] = -[\omega,d\omega]$, and $[[\omega,\omega],\omega]=0$.)
+
+\begin{theorem*} The curvature $\Omega$ on $P$ satisfies (i) $\Omega$ is horizontal, i.e. $\iota_{X_p}\Omega=0$ for any vertical vector $X_p = \underline{A}_p$ for some $A\in \mathfrak{g}$. (ii) $r_g^*\Omega = (\mathrm{Ad}g^{-1}) \Omega$, (iii) $\Omega_p(X_p,Y_p) = (d\omega)_p(hX_p,hY_p)$. where $X_p = vX_p + hX_p$ is the decomposition of $X_p$ into vertical and horizontal components.
+\end{theorem*}
+(Proof can be found in Tu's book on Differential geometry.)
+
+Suppose a Lie group $G$ acts on a $C^\infty$ manifold $M$. Then $\Omega(M) = \{C^\infty\text{ forms on }M\}$ is a differential graded algebra (\textsf{dga}).
+
+On $\Omega(M)$, we can define 2 actions of $\mathfrak{g}$: (i) $\iota_A\tau := \tau_{\underline{A}}\tau$, and (ii)$\mathcal{L}_A\tau :=  \mathcal{L}_{\underline{A}}\tau$.
+
+We can also define an action of $G$: for $g\in G$, (iii) $g\cdot \tau = r^*_g\tau$, Cartan homotopy formula $\mathcal{L}_A = d\iota_A + \iota_A d$.
+
+Def A \textsf{dga} with athe action (i), (ii), (iii) satisfying (iv) is called a $G$-\textsf{dga}.
+
+Example: if $M$ is a $G$-manifold, then $\Omega(M)$ is a $G$-\textsf{dga}.
+
+The Weil algebra is
+
+$W(\mathfrak{g}) = \Lambda(\mathfrak{g}^\vee)\otimes S(\mathfrak{g}^\vee)$. 
+
+\begin{definition}[The Weil map] The \emph{Weil map} $f\colon W(\mathfrak{g}) \rightarrow \Omega(P)$ is defined as follows. Let $\alpha \in \mathfrak{g}^\vee$, $p\in P$, then
+$$T_pP\xrightarrow{\omega_p}\mathfrak{g}\xrightarrow{\alpha} \mathbb{R},$$
+then $\alpha\circ \omega_p$ is an $\mathbb{R}$-valued 1-form on $P$, as $p$ varies over $P$.
+
+This gives a map $f\circ \mathfrak{g}^\vee \rightarrow \Omega^1(P)$, $f(\alpha) = \alpha\circ \omega$. 
+
+We can extend $f\colon \Lambda(\mathfrak{g}^\vee)\rightarrow \Omega(P)$ as an algebra homomorphism, i.e. if $X_1,...,X_n$ is a basis of $\mathfrak{g}$, $\alpha^1,...,\alpha^n$ is the dual basis, then
+$\Lambda(\mathfrak{g}^\vee) = \Lambda(\alpha^1,...,\alpha^n)$, we define
+$f(\alpha^1\wedge \cdots \wedge\alpha^n)
+ = f(\alpha^1)\wedge \cdots \wedge f(\alpha^n)$. 
+
+This gives the Weil map $f\colon \Lambda(\mathfrak{g}^\vee)\rightarrow \Omega(P)$.
+\end{definition}
+
+
+
+\subsection{Lecture 18: The Weil algebra}
+
+Let $P\rightarrow M$ be a principal $G$-bundle with a connection $\omega$.
+
+where $G$ is a Lie group with Lie algebra $\mathfrak{g}$.
+
+Let $X_1,...,X_n$ be a basis for $\mathfrak{g}$, and $\alpha^1,...,\alpha^n$ the dual basis for $\mathfrak{g}^\vee$.
+
+
+\begin{definition}[Weil algebra]
+
+The \emph{Weil algebra} 
+$$W(\mathfrak{g}) = \Lambda(\mathfrak{g}^\vee)\otimes S(\mathfrak{g}^\vee)
+=
+\Lambda(\alpha^1,...,\alpha^n)\otimes \mathbb{R}[\alpha^1,...,\alpha^n],$$
+where in $\Lambda(\alpha^1,...,\alpha^n)$, $\alpha^i\wedge \alpha^j = - \alpha^j \wedge \alpha^i$, and in $\mathbb{R}[\alpha^1,...,\alpha^n]$, $\alpha^i\alpha^j = \alpha^j\alpha^i$.
+\end{definition}
+
+
+Let $\theta_i = \alpha^i\otimes 1 \in W(\mathfrak{g})$, $u_0 = 1\otimes \alpha^i \in W(\mathfrak{g})$. Then we have
+$W(\mathfrak{g}) = \Lambda(\theta_i,...,\theta_n) \otimes \mathbb{R}[u_1,...,u_n]$.
+
+We give a grading by $\mathrm{deg}\theta_i=1$, and $\mathrm{deg}u_i = 2$. 
+
+We defined the Weil map $f\colon \Lambda(g^\vee)\rightarrow \Omega(P)$.
+
+Similarly, if $\Omega$ is the curvature of $\omega$ and $p\in P$, $\alpha \in \mathfrak{g}^*$, then
+
+$$T_pP\xrightarrow{\omega_p}\mathfrak{g}\xrightarrow{\alpha} \mathbb{R}$$
+
+gives an $\mathbb{R}$-valued 2-form $\alpha\circ \Omega_p$ in $P$.
+
+Then there is a map $f\colon \mathfrak{g}^\vee\rightarrow \Omega^2(P)$.
+
+We can extend $f$ to an algebra homomorphism $f\colon S(\mathfrak{g}^\vee)
+\rightarrow \Omega(P)$,
+
+where $S(\mathfrak{g}^\vee) = \mathbb{R}[u^1,...,u^n]$ with $f(u^{ij},...,u^{kl})
+= f(u^{ij})\wedge \cdot \wedge f(u^{kl})$. 
+
+So we have a bilinear map $\widetilde{f}\colon W(\mathfrak{g}) \rightarrow \Omega(P)$,
+
+$(\alpha,\beta)\mapsto f(\alpha)\wedge f(\beta)$. 
+
+hence, there is a lienar map $f\colon W(\mathfrak{g})\rightarrow \Omega(P)$, where $W(\mathfrak{g}) = \Lambda(\mathfrak{g}^\vee)\otimes_{\mathbb{R}} S(\mathfrak{g}^\vee)$. This map is called the \emph{Weil map}.
+
+We want $f$ to be a morphism of $G$-\textsf{dga}.
+
+$$\begin{tikzcd} W(\mathfrak{g})\ar[r,"f"]  \ar[d,"d"'] & \Omega(P) \ar[d, "d"] \\
+W(\mathfrak{g}) \ar[r,"f"'] & \Omega(P)
+\end{tikzcd}
+$$
+with respect to a basis $X_1,...,X_n$ for $\mathfrak{g}$ and dual basis $\alpha^1,...,\alpha^n$ for $\mathfrak{g}^\vee$,
+
+$\omega = \sum \omega^iX_i$, $\Omega = \sum \Omega^i X_i$.
+
+$f(\theta^i) = \theta^i\circ \omega = \theta^i\cdot(\sum \omega^i X_i) = \sum_i \omega^i\theta^k(X_i) = \omega^k$, and $f(u^k) = u^k\cdot \Omega = u^k\circ (\sum \Omega^i X_i) = \Omega^k$. 
+
+
+How should $d\theta^k$ be defined in $W(\mathfrak{g})$?
+
+By the second structural equation, $\Omega^k = d \omega^k + \frac{1}{2} \sum c^k_{ij} \omega^i\wedge \omega^j$.
+
+For $f$ to preserve $d$, we must define $d\theta^k= u^k - \frac{1}{2} \sum c^k_{ij} \theta^i\wedge \theta^j$. 
+
+By Bianchi's second identity, $d\Omega^k = \sum c^k_{ij} \Omega^i\wedge \omega^j$. 
+
+So we must define $du^k = \sum c^k_{ij} u^i\theta^j$.
+
+We can extend $d$ to the Weil algebra $W(\mathfrak{g})\rightarrow W(\mathfrak{g})$ as an antiderivation of degree 1.
+
+This makes $W(\mathfrak{g})$ into a \textsf{dga}.
+
+Now define the action of Lie aigebra on the Weil algebra:
+
+Let $A \in \mathfrak{g}$, we have
+$$
+\begin{tikzcd} \theta^k\ar[r]\ar[d] & \omega^k \ar[d]\\ \iota_A(\theta^k)\ar[r] & \iota_A(\omega^k) = \tau_{\underline{A}} \omega^k = \omega^k(\underline{A})
+\end{tikzcd}
+$$
+
+
+Since $\omega(\underline{A}) = A = \sum \theta^k(A) x_k$, so $\omega^k(\underline{A}) = \text{const} \theta^k(A)$, so we must define $\iota_A(\theta^k) = \theta^k(A)$, in order to make the diagram above commute. 
+
+
+
+$$
+\begin{tikzcd} u^k\ar[r]\ar[d,"\iota_A"'] & \Omega^k  \ar[d,"\iota_A"]\\ \iota_Au^k \ar[r]& \iota_A(\Omega^k) = \tau_{\underline{A}} \Omega^k = 0
+\end{tikzcd}
+$$
+because $\Omega$ is horizontal.
+
+So we must define $\iota_Au^k =0$.
+
+We can extend $\iota_A$ to $W(\mathfrak{G})$ as an antederivation of deg $-1$.
+
+Finally, we define $\mathcal{L}_A = d\iota_A + \iota_A d$. Because both $d$ and $\tau_A$ commute with $f$, $\mathcal{L}_A$ will also. 
+
+If $g \in G$,
+
+$$
+\begin{tikzcd} \theta^k \ar[r,"f"]\ar[d,"r_g^*"'] & \omega^k  \ar[d,"r_g^*"]\\ r_g^*\theta^k \ar[r] & \left[(\mathrm{Ad}g^{-1})\omega\right]^k
+\end{tikzcd}
+$$
+Let $\theta = \sum \theta^kX_k$, $u = \sum u^k X_k$. We define $r_g^*\theta = (\mathrm{Ad}g^{-1})\theta$, so $r_g^*\theta^k = \left[ (\mathrm{Ad} g^{-1})\theta\right]^k$, and $r_g^*\theta^k = \left[(\mathrm{Ad}g^{-1})u]\right]^k$.
+
+
+Extend $r_g^*$ to $W(\mathfrak{g})\rightarrow W(\mathfrak{g})$ as an algebra homomorphism. This makes $W(\mathfrak{g})$ into a $G$-\textsf{dga}.
+
+
+
+\subsection{Lecture 19: The Weil algebra}
+
+Let $G$ be a Lie group with Lie algebra $\mathfrak{g}$.
+
+Assume $G$ connected.
+
+The a $G$-\textsf{dga} has 2 operations: $\iota_A$, $\mathcal{L}_A$, in addition to those of a \textsf{dga}.
+
+(We do not need $r^*_g$.)
+
+The Weil algebra of $G$ is, given a basis $X_1,...,X_n$ for $\mathfrak{g}$, $W(\mathfrak{g}) = \Lambda(\mathfrak{g}^\vee)\otimes S(\mathfrak{g}^\vee) = \Lambda(\theta_1,...,\theta_n)\otimes \mathbb{R}[u_1,...,u_n]$.
+
+$d\theta_k = u_k - \frac{1}{2} \sum c^k_{ij}\theta_i \theta_j$, $d u_k = \sum c^k_{ij}u_i\theta_j$, $\iota_A \theta_k = \theta_k(A)$, $\iota_A u_k=0$, 
+$\mathcal{L}_A \theta_k = d\iota_A \theta_k + \tau_A d\theta_k = 0 - \frac{1}{2} \iota_A (\sum c^k_{ij}\theta_i\theta_j)$, $\mathcal{L}_A u_k = d\iota_A u_k + \tau_u du_k = \iota_A du_k$. 
+
+Extend $d$ to $W(\mathfrak{g})$ as antiderivation
+
+Proposition: $d^2=0$ on $W(\mathfrak{g})$
+
+(Since $d$ is an derivation, $d^2$ is a derivation.)
+
+Proof: it is enough to check $d^2=0$ on a set of algebra generators of $W(\mathfrak{g})$. I.e. $\theta_1,...,\theta_n,u_1,...,u_n$, or $\theta_1,...,\theta_n,d\theta_1,...,d\theta_k$. 
+
+We have $d\theta = u - \frac{1}{2}[\theta,\theta]$. Then one can check that $d^2\theta = 0$. This says $d^2\theta^k=0$ for all $k$. This shows that $d^2 =0$ on a set of generators of $W(\mathfrak{g})$. So $d^2=0$ on $W(\mathfrak{g})$. 
+
+
+\begin{theorem*}
+$H^*(W(\mathfrak{g}),d) = \left\{\begin{array}{ll} \mathbb{R} & \text{in deg }0\\
+0 & \text{in deg}>0.\end{array}\right.$
+\end{theorem*}
+
+Proof. It is enough to find a cochain homotopy $K\colon W(\mathfrak{g}) \rightarrow W(\mathfrak{g})$ of degree $-1$ s.t. $dK + Kd = 1$ (so that $1$ is homotopic to $0$). 
+
+Recall $d\theta_k = u_k - \frac{1}{2} \sum c^k_{ij} \theta_i \theta_j:=z_k$, $du_k = \sum c^k_{ij} u_i \theta_j$. 
+
+Then $\theta_i,...,\theta_n,z_1,...,z_n$ is a set of generators for $W(\mathfrak{g})$. 
+
+Define $\bar{K}\colon W(\mathfrak{g})\rightarrow W(\mathfrak{g})$ by $\bar{K}\theta_k=0$, $\bar{K}z_k = \theta_k$, then it's easy to check $(d\bar{K}+\bar{K}d)\theta_k = \theta_k$ and $(d\bar{K}+\bar{K}d)z_k = z_k$. But $(d\bar{K}+\bar{K}d)(\theta_iz_j) = 2\theta_iz_j$. To remedy this, we define $K = \frac{1}{p+q} \bar{K}$ on $\Lambda^p(\mathfrak{g}^\vee)\otimes S^q(\mathfrak{g}^\vee)$ for $(p,q)\neq (0,0)$.  This gives $dK+Kd = 1$ on $W(\mathfrak{g}) $ except in degree 0. This shows that $H^*(W(\mathfrak{g},d)=0$ in degree $>0$. In degree 0, $H^0(W(\mathfrak{g})) = \mathbb{R}$ because $d(1) = 0$.
+
+[Below is from a correction in lecture 21:]
+
+Cohomology of the Weil algebra: Let $G$ be a Lie group with Lie algebra $\mathfrak{g}$. $W(\mathfrak{g}) = \Lambda(\mathfrak{g}^\vee)\otimes S(\mathfrak{g}^\vee)$. If $X_1,...,X_n$ is a basis for $\mathfrak{g}$ and $\theta_1,...,\theta_n$ is the dual basis for $\mathfrak{g}^\vee$ in $\Lambda(\mathfrak{G}^\vee)$, and $u_1,...,u_n$ is the dual basis for $\mathfrak{g}^\vee$ in $S(\mathfrak{G}^\vee)$, then $W(\mathfrak{g}) = \Lambda(\theta_1,...,\theta_n)\otimes \mathbb{R}[u_1,...,u_n]$.
+
+Let $z_k = d\theta_k = u_k - \frac{1}{2} \sum_{i,j}c^k_{i,j}\theta_i\wedge \theta_k$, $du_k = \sum c^k_{ij}u_i\theta_j$. Then $d\theta_k = z_k$, $dz_k = 0$.
+
+We defined an antiderivation $\bar{K}\colon W(\mathfrak{g})\rightarrow W(\mathfrak{g})$ with $\bar{K} z_k = \theta_k$,, $\bar{K}\theta_k=0$. We found $d\bar{K} + \bar{K}d = 1$ on $\theta_k$, $z_k$. We defined $K = \frac{1}{p+q}\bar{K}$ on $\bigoplus_{p+q>0} \Lambda^p(\theta_1,...,\theta_n)\otimes S^q(z_1,...,z_n)$. Then $dK + Kd = 1$. 
+
+Note that $K$ is not an antiderivation. If $\alpha \in \Lambda^p(\theta_1,...,\theta_n) \otimes S^q(z_1,...,z_n)$, then $\mathrm{deg} \alpha = p+2q$. Then $H^*(W(\mathfrak{g})) = \left\{\begin{array}{ll} 0,& \text{deg}>0\\\mathbb{R}, & \text{deg}=0\end{array}\right.$
+
+\subsection{Lecture 20: The Weil \& Cartan model}
+
+Since the Weil algebra $W(\mathfrak{g})$ has the same cohomology as a contractible space, it can be an algebraic model of $EG$. 
+
+Let $M$ be a left $G$-manifold.
+
+An algebraic model for $M$ is $\Omega(M) = \{C^\infty\text{ forms on }M\}$. 
+
+Thus, an algebraic model for $EG\times M$ is $W(\mathfrak{g})\otimes \Omega(M)$.
+
+An algeraic model for $M_G = (EG\times M)/G$
+is $\left(W(\mathfrak{g})\otimes \Omega(M)\right)_{\text{bas}}$.
+
+Def. If $\mathcal{A}$ is a $G$-$\textsf{dga}$, then $\mathcal{A}_{\text{hor}} = \{\text{horizontal elements}\} = \{\alpha \in \mathcal{A}|\iota_A\alpha = 0~ \forall A \in \mathfrak{g}\}$, 
+
+$\mathcal{A}_{\text{inv}} = \{\text{invariant elements}\}
+=\{\alpha \in \mathcal{A}|\mathcal{L}_A\alpha=0~\forall A \in \mathfrak{g}\} $ (Assuming $G$ connected),
+
+
+$\mathcal{A}_{\text{bas}} = \{\text{basic elements}\}
+=\{\alpha \in \mathcal{A}|\iota_A\alpha=0,\mathcal{L}_A\alpha=0 ~ \forall A \in \mathfrak{g}\} $.
+
+We can extend $d$ and $\iota_A$ to $W(\mathfrak{g})\otimes \Omega(M)$ as antiderivations: $d(\alpha\otimes \beta) = (d\alpha)\otimes \beta + (-1)^{\text{deg} \alpha} \alpha \otimes d\beta$, and $\mathcal{L}_A$ to $W(\mathfrak{g})\otimes \Omega(M)$ as a derivation. 
+
+This makes $W(\mathfrak{g})\otimes \Omega(M)$ into a $G$-\textsf{dga}.
+
+
+\begin{theorem*}[Equivariant de Rham theorem] For a connected Lie group $G$ and a left $G$-manifold $M$, 
+$$H^*_G(M) \simeq H^*\{\left(W(\mathfrak{g})\otimes_{\mathbb{R}} \Omega(M)\right)_{\text{bas}},d\},$$
+where RHS gives a \emph{Cartan model}.
+\end{theorem*}
+
+
+Proposition: If $\mathcal{A}$ is a $G$-\textsf{dga}, then $d\mathcal{A}_{\text{bas}} \subset \mathcal{A}_{\text{bas}}$.
+
+Prof: Suppose $\alpha \in \mathcal{A}_{\text{bas}}$ is basic. Then for $A\in \mathfrak{g}$, $\iota_A(d\alpha) = (\mathcal{A}_A - d\iota_A)\alpha = 0$ because $\alpha$ is basic.
+
+$\mathcal{L}_A(d\alpha) = d(\mathcal{A}_\alpha) = 0$. 
+
+So $d\alpha$ is basic.
+
+Example. Take $M = pt$. Then $H^*_G(pt)
+=H^*((EG\times pt)/G) = H^*(BG)$. 
+
+By the equivarinat de Rham theorem, $H^*(BG) = H^*\{W(\mathfrak{g})_{\text{bas}},d\}$ 
+
+
+$W(\mathfrak{g}) = \Lambda(\theta_1,...,\theta_n)\otimes \mathbb{R}[u_1,...,u_n]
+=\{a_0+\sum_i a_i\theta_i+\sum_{i<j}a_{ij}\theta_i\theta_j + \cdots + a_{1...n}\theta_1\cdots \theta_n|
+a_I\in \mathbb{R}[u_1,...,u_n]\}$.
+
+$\alpha \in W(\mathfrak{g})$ is horizontal iff $\iota_A\alpha = 0$ for all $A\in \mathfrak{g}$.
+
+$\iota_Aa_0 = 0$ because $\iota_A(\text{const.}) = 0$ and $\iota_Au_i = 0$. $ \iota_{X_j}(\sum_i a_i\theta_i) = \sum_i a_i \delta_{ij} = a_j=0$ if $\iota_A\alpha=0$ if $\iota_A \alpha = 0$. 
+
+$\iota_{X_1}(\sum_{i<j}a_{ij}\theta_i\theta_j)
+= \iota_{X_1}(\sum a_{1j}\theta_1\theta_j + \sum_{2\leq i<j}a_{ij}\theta_i\theta_j)
+= \sum_{1<j} a_{1j}\theta_j = 0$ if $\iota_{X_1}\alpha =0$.
+
+By induction, $\alpha$ is horizontal in $W(\mathfrak{g})$ if and only if $\alpha = a_0 \in \mathbb{R}[u_1,...,u_n]$. 
+
+Thus $W(\mathfrak{g})_{\text{hor}} = 
+\mathbb{R}[u_1,...,u_n] = S(\mathfrak{g}^{\vee})$, the symmetric algebra of the dual of $\mathfrak{g}$. 
+
+$W(\mathfrak{g})_{\text{bas}} = S(\mathfrak{g}^{\vee})^G$,
+
+By the equivariant de Rhan theorem, $H^*(BG) = H^*\{S(\mathfrak{g}^{\vee})^G,d\}$.
+
+Cartan model for a circle action:
+
+Below we take the example of $G = S^1$, $\mathfrak{g} = \mathbb{R}$. 
+
+
+Let $X$ be a nonzero element of $\mathfrak{g}$, $\theta$ its dual basis for $\mathfrak{g}^\vee$ in $\Lambda(g^\vee)$, $u$ its dual basis in $S^(\mathfrak{g}^\vee)$. 
+
+Then, for $G = S^1$, $\mathfrak{g} = \mathbb{R}$, $W(\mathfrak{g}) = \Lambda(\theta)\otimes \mathbb{R}[u] = (\mathbb{R}\oplus \mathbb{R}\theta)\otimes \mathbb{R}[u]
+= \mathbb{R}[u]\oplus \theta \mathbb{R}[u] = \{a+\theta b|a,b\in \mathbb{R}[u]\}$. 
+
+
+Let $M$ be an $S^1$-manifold, $W(\mathfrak{g})\otimes_{\mathbb{R}} \Omega(M) = (\mathbb{R}[u]\oplus \theta \mathbb{R}[u])\otimes_{\mathbb{R}}\Omega(M) = \Omega(M)[u]\oplus \theta \Omega(M)[u]
+= \{a+\theta b|a,b \in \Omega(M)[u]\}$. 
+
+$a+\theta b$ is horizontal iff $\iota_X(a+\theta b) = 0\Leftrightarrow \iota_Xa + b -\theta\iota_X b = 0 \Leftrightarrow b= -\iota_X a$, so $a+\theta b$ is horizontal iff 
+$$a+\theta b = a-\theta \iota_Xa 
+= (1-\theta \iota_X)a$$ 
+for $a \in \Omega(M)[u]$. 
+
+
+
+\subsection{Lecture 21: The Cartan model for a circle action}
+
+First: a correction to the last lecture (which has been put back to the end of Lecture 19.)
+
+Why is $W(\mathfrak{g})$ is a good model for $EG$?
+
+$EG\rightarrow BG$ is the unique (up to $G$-homotopy) $G$-bundle s.t. for every principal $G$-bundle $P\rightarrow M$, there is a commutative diagram
+$$
+\begin{tikzcd} P\ar[r]\ar[d] & EG \ar[d] \\ M\ar[r] & BG
+\end{tikzcd}
+$$
+If $EG$ were a manifold, then there would be a homomorphism $\Omega(EG)\rightarrow \Omega(P)$ for every principal $G$-bundle $P$, meaning that:
+
+Every principal $G$-bundle $P\rightarrow M$ can be given a connection.
+
+So there is a homomorphism (te Weil map) $W(\mathfrak{g})\rightarrow \Omega(P)$, $\theta_k\mapsto \omega_k$, $u_k\mapsto \Omega_k$.
+
+Moreoever, $W(\mathfrak{g})$ has the cohomology of a point. In this sense, $W(\mathfrak{g})$ is an algebraic model for $EG$. 
+
+Weil model for a $G$-manifold $M$ is $W(\mathfrak{g}0\otimes \Omega(M)$ $\left((W\mathfrak{g})\otimes \Omega(M))_{\text{bas}},d\right)$.
+
+Horizontal elements for a circle action:
+
+
+$G = S^1$, $\mathfrak{g} = i \mathbb{R}$ ($i=\sqrt{-1}$, we are putting $G$ to be the circule $|z|=1$, so $\mathfrak{g}$ is the line $z=1$, which is $i\mathbb{R}$.) Let $X\neq 0$ in $\mathfrak{g}$. $\theta$ the dual basis for $\mathfrak{g}^\vee \subset \Lambda(\mathfrak{g}^\vee)$, $u$ the dual basis for $\mathfrak{g}^\vee\subset S(\mathfrak{g}^\vee)$, then $W(\mathfrak{g}) = \Lambda(\theta)\otimes_{\mathbb{R}}\mathbb{R}[u] = (\mathbb{R}\oplus \mathbb{R}\theta)\otimes_{\mathbb{R}} \mathbb{R}[u]
+= 
+\mathbb{R}[u]\oplus \mathbb{R}[u]\theta$. 
+
+Thus, $W(\mathfrak{g})\otimes \Omega(M)
+= 
+\left(\mathbb{R}[u]\otimes \mathbb{R}[u]\theta\right)\otimes_{\mathbb{R}} \Omega(M)
+=
+\Omega(M)[u]\oplus \Omega(M)[u]\theta$.
+
+So an element of the Weil model $W(\mathfrak{g})\otimes \Omega(M)$ is of the form $a+\theta b$, where $a,b\in \Omega(M)[u]$. 
+
+$a+\theta b$ is horizontal iff $\iota_X(a+\theta b) =0 \Leftrightarrow b = -\iota_Xa$ (we showed this in the last lecture). 
+
+So $\left(W(\mathfrak{g})\otimes \Omega(M)\right)_{\text{hor}} = \{ a-\theta\iota_Xa|a\in \Omega(M)[u]\}$. 
+
+Since $G$ is connected, $a-\theta\iota_Xa$
+(see the theorems in Lcture 13 \&14) is basic iff $a-\theta\iota_Xa$ is $S^1$-invariant, i.e. iff $\mathcal{L}_X (a-\theta\iota_Xa)=0$. 
+
+$\mathcal{L}_X\theta =  (d\iota_X + \iota_Xd)  \theta = d(1)+\iota_Xu = 0$; $\mathcal{L}_X(\theta\iota_Xa) = 0 + \theta \mathcal{L}_X \iota_Xa  = \theta \iota_X\mathcal{L}_Xa$.
+
+Then, $a-\theta \iota_Xa$ is basic iff $\mathcal{L}_Xa=0$, i.e. iff $a$ is $S^1$-invariant.
+
+But $a\in \Omega(M)[u]$, so $a = a_0+a_1u+\cdots +\cdots a_ku^k$, where $a_i \in \Omega(M)$. 
+
+So $\mathcal{L}_Xu = (d\iota_X + \iota_X d) u
+=0$.
+
+Thus, $\mathcal{L}_Xa=0$ iff $\mathcal{L}_Xa_i=0$ for all $i$, i.e. iff $a_i\in \Omega(M)^{S^1} = \{S^1\text{-invariant forms on }M\}$.
+
+Finally, for $G = S^1$, and a $G$-manifold $M$, we have
+
+$$\left(W(\mathfrak{g})\otimes \Omega(M)\right)_{\text{bas}}  = \{a -\theta\iota_Xa|a \in \Omega(M)^{S^1}[u]\}.$$
+
+We have the \emph{Weil--Cartan isomorphism}:
+
+$$\left(W(\mathfrak{g})\otimes \Omega(M)\right)_{\text{bas}} 
+\xrightarrow{\sim}
+\Omega(M)^{S^1}[u],\quad
+(1-\theta\iota_X)a\leftrightarrow a.$$
+
+The Cartan differential:
+
+$$\begin{tikzcd} 
+(W(\mathfrak{g})\otimes \Omega(M))_{\text{bas}} \ar[d,"d"]  &\ar[l,"\lambda"']\Omega(M)^{S^1}[u]\ar[d,"d_X"]\\
+(W(\mathfrak{g})\otimes \Omega(M))_{\text{bas}}  \ar[r,"\varphi"] & \Omega(M)^{S^1}[u] 
+\end{tikzcd}
+$$
+
+The Cartan differential $d_X$ is the linear map corresponding to the Weil differential $d$ under the Weil--Cartan isomorphism.
+
+Let $a \in \Omega(M)^{S^1}[u]$, then $d_Xa = (\varphi\circ d\circ \lambda) (a) = (\varphi\circ d)(a-\theta\iota_X a)
+ = \varphi(da - u\iota_Xa + \theta d\iota_Xa) = \varphi((da-u\iota_X a)-\theta\iota_X da) = \varphi((da - u\iota_Xa) - \theta\iota_X(da-u\iota_X a))
+  = da-u\iota_Xa$. 
+  
+Thus we have shown that the Cartan differential is
+$$d_X = d - u\iota_X.$$
+
+\begin{definition}[Cartan model] The \emph{Cartan model} is defined as $(\Omega(M)S^1[u],d_X)$.
+\end{definition}
+
+Theorem (Equivariant de Rham theorem for $G = S^1$) We have
+$H^*_{S^1}(M) = H^*\{\Omega(M)^{S^1}[u],d_X\}$.
+
+
+
+
+
+\subsection{Lecture 22: Circle actions. Localization}
+
+Example: $S^1$ acting on $S^2$ by rotation about the $z$ axis.
+
+The volume form on $S^2$ is $\omega = x dy\wedge dz - y dx\wedge z + z dx\wedge dy$.
+
+Choose $X$, the generator of $S^1$: $\mathfrak{g} = i\mathbb{R}$, let $X = -2 \pi i$.  Then the fundamental vector field $\underline{X}$ is defined by, at point $(x,y,z)$,  $\underline{X}_{(x,y,z)} = \frac{d}{dt}\Big|_{t=0}e^{-2\pi i t}\cdot \begin{pmatrix}x\\y\\z\end{pmatrix} = \frac{d}{dt}|_{t=0} \begin{pmatrix} \cos 2\pi t & -\sin 2\pi t & 0 \\\sin2\pi t & \cos 2\pi t & 0 \\0 & 0 & 1\end{pmatrix}\begin{pmatrix}x\\y\\z\end{pmatrix} = -2\pi y \frac{\partial }{\partial x} + 2 \pi x \frac{\partial}{\partial y}$.
+
+(Exercise: check $\mathcal{L}_{\underline{X}} \omega =0 $, so that $\omega$ is $S^1$-invariant.)
+
+\begin{definition}[Equivariant differential form] A element of $\Omega(M)^{S^1}[u]$ is called an \emph{equivariant differential form.}
+\end{definition}
+
+If $\widetilde{\omega} \in \Omega(M)^{S^1}[u]$ has degree 2, then $\widetilde{\omega} = \omega_2 + fu$, where $\omega_2 \in \Omega^2(M)^{S^1}$ and $f\in \Omega^0(M)^{S^1}$. We say that $\widetilde{\omega}$ is an \emph{equivariant extension} of $\omega_2$. 
+
+$\widetilde{\omega}$ is \emph{equivariantly closed} iff $d_X\widetilde{\omega} =0 $. 
+
+An equivariantly closed extension of the volume form:
+
+Let $\widetilde{\omega} = \omega + fu$.  $d_X\widetilde{\Omega}  = d\widetilde{\omega} - u \iota_X \widetilde{\omega} = d\omega + (df)u -u\iota_X\omega - \underbrace{u\iota_X(fu)}_{=0} = d \omega + u(df-\iota_X\omega)=0$ iff $d\omega=0$ and $df = \iota_X\omega$. Since $d\omega=0$ already, so the only condition for $d_X\widetilde{\omega}=0$ is  $df = \iota_X\omega$.  We have $\iota_X\omega = \iota_{\underline{X}}\omega
+ = 2 \pi (x^2+y^2+z^2)dz - 2\pi z(xdx+ydy+zdz) = 2\pi dz = d(2\pi z)$.  Thus $\widetilde{\omega} = \omega + 2\pi z u$ is equivariantly closed; it is the equivariant extension of the volume form.
+ 
+ 
+Now, our goal is to finally obtain the coefficients $a$, $b$ in Eq.~\eqref{S1S2ab}. We need more theorems:
+
+
+[In commutative algebra, localization means introducing denominators.]
+
+\begin{definition}[Localization] Let $N$ be an $\mathbb{R}[u]$-module. ($H^*_{S^1}(pt) = H^*(BS^1) = H^*(\mathbb{C}P^\infty) = \mathbb{R}[u]$.)
+Denote $\mathbb{N} = \{0,1,2,...\}$
+ Define the \emph{localization} of $N$ as $N_u = \{\frac{x}{u^m}|x\in N,m\in \mathbb{N}\}/\sim$, where $\frac{x}{u^m}\sim \frac{y}{u^n} \Leftrightarrow \text{if }\exists k\in \mathbb{N} \text{ s.t. } u^k(u^nx - u^m y)=0$. 
+\end{definition}
+
+Example: $\mathbb{R}[u]_u = \{\frac{a_{-m}}{u^m} + \frac{a_{-m+1}}{u^{m-1}} + \cdots + \frac{a_{-1}}{u} + a_0 + a_1u+\cdots + a_k u^k|a_i \in \mathbb{R}\} = \{\text{Laurent polynimials in }u\} = \mathbb{R}[u][u^{-1}] = \mathbb{R}[u,u^{-1}]$. 
+
+$N_u$ becomes an $\mathbb{R}[u]$-module.
+
+There is a $\mathbb{R}[u]$-module homomorphism $i\colon N\rightarrow N_u$, $x\mapsto \frac{x}{1}$.  Its kernel is $\mathrm{ker}i = \{x \in N| \frac{x}{1} \sim \frac{0}{1}\}=\{x \in N| \exists k \in \mathbb{N} \text{ s.t. }u^k x = 0\} = \{u\text{-torsion elements in }N\}$.
+
+Hence, there is an exact sequence
+$0\rightarrow   \{u\text{-torsion elements in }N\} \rightarrow N\xrightarrow{i}N_u\rightarrow 0$. 
+
+
+\begin{definition}[Torsion module] $N$ is $u$-torsion if every element $x\in N$ is a $u$-torsion.
+\end{definition}
+
+[The use of localization: if localize $N$ to $N_u$ and we get zero, $N_u=0$, then we know that $N$ is $u$-torsion. This is the theorem below:]
+
+
+\begin{proposition*} 
+$N$ is $u$-torsion iff $N_u=0$. 
+\end{proposition*}
+
+(Proof: ``$\Leftarrow$'' If $N_u=0$, then the exact sequence gives that $N$ is $u$-torsion. ``$\Rightarrow$'': Suppose $N$ is $u$-torsion, let $\frac{x}{u^m}\in N_u$, there exists $k\in \mathbb{N}$ s.t. $u^kx=0$, so $\frac{x}{u^m}\sim \frac{u^kx}{u^ku^m} = \frac{0}{u^ku^m}=0$, so $N_u =0$.)
+
+
+\begin{theorem} 
+If $S^1$ acts freely on $M$, then $H^*_{S^1}(M)$ is $u$-torsion.
+\end{theorem}
+
+Proof:
+$$
+\begin{tikzcd} ES^1 \ar[d] & ES^1\times M \ar[l] \ar[r]\ar[d] & M  \ar[d]\\
+BS^1 & \ar[l] M_{S^1} \ar[r] & M/{S^1}
+\end{tikzcd}
+$$
+Since $S^1$ acts freely on $M$, by the Cartan mixing diagram above, $M_{S^1}\rightarrow M/{S^1}$ is a fiber bundle with fiber $ES^1$.
+
+By homotopy exact sequence, $M_{S^1}$ is weakly homotopic to $M/{S^1}$. By a theorem of algebraic topology (see e..g. Hatcher) that says if two spaces are weakly homotopic, then they have the same cohomology, then we have $H^*(M_{S^1}) \simeq H^*(M/{S^1})$. As $H^*_{S^1}(M) = H^*(M_{S^1})$, and $H^*(M/{S^1})$ is the cohomology of some finite dimensional manifold, this means that $H^*(M/{S^1})$ is a finite dimensional vector space over $\mathbb{R}$. 
+
+On the other hand, the equivariant cohomology $H^*_{S^1}(M)$ is a $\mathbb{R}[u]$-module ($M\rightarrow pt$ induces $H^*(pt)\rightarrow H^*_G(M)$, where $G=S^1$ so $H^*(BS^1) = H^*(\mathbb{C}P^\infty) = \mathbb{R}[u]$). We further assume $M$ is compact, so $\mathbb{R}[u]$-module is finitely generated $\mathbb{R}[u]$-module. (Next lecture we will look at non-compact case.)
+
+
+Since $\mathbb{R}[u]$ is a PID, and finitely generated modules over PID has the structure theorem which says that it has the form $\mathbb{R}[u]^r \oplus \text{torsion}$. If it contains nonzero $\mathbb{R}[u]^r$ then this would be infinite dimensional. Hence,  $H^*_{S^1}(M)$ is torsion.
+
+Next time we will further show that $H^*_{S^1}(M)$ is a $u$-torsion.
+
+
+
+
+\subsection{Lecture 23: Properties of localization}
+
+If $k>\mathrm{dim}(M/G)$, then $u^k \cdot H^*_G(M)=0$ (since its degree is larger than the dimension of $\mathrm{dim}(M/G)$.)
+
+If $M/G$ is not compact, then $H^*_G(M)$ would be infinitely dimensional, but $u^k \cdot H^*_G(M)=0$ still holds for a free action. Therefore we have the following result
+
+\begin{theorem*} If $S^1$ acts freely on $M$, then $H^*_{S^1}(M)$ is $u$-torsion.
+\end{theorem*}
+
+
+To generalize this result to non-free actions, we need further results from commutative algebra/homological algebra. Main three results we need are
+
+1. Localization preserves exactness;
+
+2. Localization commutes with quotient
+
+3. Localization commutes with cohomology.
+
+
+Theorem 1. If $A\xrightarrow{f} B\xrightarrow{g} C$ is an exact sequence of $\mathbb{R}[u]$ modules at $B$, then $A_u\xrightarrow{f_u}B_u \xrightarrow{g_u}C_u$ is exact at $B_u$. 
+
+
+(Recall that $f_u(\frac{a}{u^m}) = \frac{f(a)}{u^m}$, so $1_u = 1$, $(g\circ f)_u = g_u\circ f_u$, so $\mathrm{im}f_u \subset \mathrm{ker}g_u$; Suppose $g_u(\frac{b}{u^m}) \sim \frac{0}{1}$, i.e. $\frac{g(b)}{u^m}\sim \frac{0}{1}$, so there exists $k\in \mathbb{N}$ s.t. $u^k\cdot g(b)=0$. But $g$ is a morphism of $\mathbb{R}[u]$-modules, so $u^kg(b) = g(u^kb)=0$, so $u^kb \in \mathrm{ker} g = \mathrm{im} f$, so $u^kb = f(a)$ for some $a \in A$. so $b = \frac{f(a)}{u^k}$, and $\frac{b}{u^m} = \frac{f(a)}{u^{k+m}} = f_u(\frac{a}{u^{k+m}})$, this proves that $\mathrm{ker} g_u \subset \mathrm{im}f_u$. Therefore $A_u\rightarrow B_u\rightarrow C_u$ is exact at $B_u$. The result can them be extended to longer exact sequences.)
+
+
+
+
+
+
+
+
+
+Theorem 2. Localization commutes with quotient: If $A$ is an $\mathbb{R}[u]$-submodule of $B$, then $\left(\frac{B}{A}\right)u \simeq \frac{B_u}{A_u}$.
+
+($0\rightarrow A\rightarrow B\rightarrow B/A\rightarrow 0$ is exact. Since localization preserves exactnes, $0\rightarrow A_u\rightarrow B_u\xrightarrow{g} (B/A)_u\rightarrow 0$ is exact. This implies that (by one of the isomorphism theorems of algebra) $\frac{B_u}{\mathrm{ker} g} \simeq \mathrm{im}g$ and so $\frac{B_u}{A_u} \simeq \left(\frac{B}A{}\right)_u$.)
+
+Theorem 3. Localization commutes with cohomology: If $\mathcal{C}$ is a differential complex, $C^0\xrightarrow{d} C^1\xrightarrow{d} C^2\xrightarrow{d} \cdots$ s.t. $d^2=0$, then $\mathcal{C}_u\colon C^0_u\xrightarrow{d_u} C^1_u \xrightarrow{d_u} C^2_u\rightarrow \cdots$ is again a differential complex (because $d_u^2 = (d^2)_u = 0$), and $H^*(\mathcal{C}_u,d_u) \simeq H^*(\mathcal{C},d)_u$.
+
+($H^k(\mathcal{C}_u,d_u) = \frac{\mathrm{ker}(d_u\colon C^k_u\rightarrow C^{k+1}_u)}{\mathrm{im}d_u\colon C^{k-1}_u\rightarrow C^k_u}$. %$0\rightarrow \mathrm{ker}d_u\rightarrow C^k_u\xrightarrow{d_u} C^{k+1}_u$ is exact;
+
+We have $0\rightarrow \mathrm{ker} d \rightarrow C^k\xrightarrow{d} C^{k+1}$ is exact. Since localization preserves exactness, so  $0\rightarrow (\mathrm{ker}d)_u\rightarrow C^k_u\xrightarrow{d_u} C^{k+1}_u$ is exact, so we have $(\mathrm{ker}d)_u \cong \mathrm{ker}(d_u)$.
+
+On the other hand, $C^{k+1}\xrightarrow{d}C^k \rightarrow C^k/\mathrm{im}d \rightarrow 0$ is exact. So when localize, we get that $C^{k+1}_u\xrightarrow{d_u}C^k_u \xrightarrow{\pi} (C^k/\mathrm{im}d)_u \rightarrow 0$ is exact, and we have $(C^k/\mathrm{im} d)_u\simeq C^k_u/(\mathrm{im}d)_u$ by theorem 1; and by the isomorphism theorem we have $\mathrm{im}\pi = \frac{C^k_u}{\mathrm{ker}\pi} = \frac{C^k_u}{\mathrm{im}(d_u)}$, so $\mathrm{im}(d_u)\cong (\mathrm{im}d)_u$.
+
+Therefore $H^k(\mathcal{C}_u,d_u) = \frac{\mathrm{ker}d_u}{\mathrm{im}d_u} = \frac{(\mathrm{ker}d)_u}{(\mathrm{im}d)_u}
+ \simeq \left(\frac{\mathrm{ker}}{\mathrm{im} d}\right)_u = H^k(\mathcal{C},d)_u$.)
+
+
+
+
+
+
+Next lecture we will study locally free action:
+
+\begin{definition}[Locally free action]
+An action of a topological group $G$ on a topological space $X$ is \emph{locally free} if $\mathrm{Stab}(x)$ is discrete for any $x\in X$.
+\end{definition}
+
+
+
+Example: $S^1$ acts on $\mathbb{C}^2$ by $\lambda\cdot(z_1,z_2) = (\lambda z_1,\lambda^nz_2)$, where $n \in \mathbb{Z}^+$. 
+
+$\mathrm{Stab}(0,0) = S^1$, $\mathrm{Stab}(0,z_2) = \{n\text{-th roots of }1\}$ if $z_2\neq 0$, and $\mathrm{Stab}(z_1,z_2) = 1$ if $z_1\neq 0$. 
+
+The action of $S^1$ on $\mathbb{C}^2-\{(0,0)\}$ is locally free. 
+
+
+
+
+\subsection{Lecture 24: Cohomology of a locally free action}
+
+
+Recall the definition of locally free action in the last lecture.
+
+Proposition. If a Lie group $G$ acts smoothly and locally-freely on a manifold $M$, then for all $X\neq 0\in \mathfrak{g}$, the fundamental vector field $\underline{X}$ is nowhere vanishing on $M$.
+
+(Example: $S^1$ acts locally freely on $S^2=\{p,q\}$, where $p$ is the north pole and $q$ the south pole. )
+
+(Proof: Suppose $\underline{X}_p=0$ for some $p\in M$. Then $c(t) = p$ is an integral curve of $\underline{X}$ through $p$: $c'(t) = 0 = \underline{X}_p = \underline{X}_{c(t)}$. But $\varphi(t) = e^{-tX}\cdot p$ is also an integral curve for $\underline{X}$ through $p$. By the uniqueness of the integral curve through $p$, $e^{-tX}\cdot p = p$ for all $t \in \mathbb{R}$. So $\mathrm{Stab}(p)$ contains a curve $e^{-tX}$, so is not discrete. This contradicts the locally-free condition.)
+
+Proposition. If a compact abelian group acts locally freely on a manifold $M$, and $X\neq 0\in \mathfrak{g}$, then there exists a $G$-invariant 1-form $\varphi$ on $M$ s.t. $\varphi(\underline{X}) = 1$. 
+
+
+
+(we will use the following fact: A manifold with a compact Lie group action has an invariant Riemannian metric $\langle~,~\rangle$.)
+
+
+(Proof: Define for all $p\in M$, $\varphi_p\colon T_pM\rightarrow \mathbb{R}$ by $\varphi_p(Z_p) = \frac{\langle \underline{X}_p,Z_p\rangle}{||\underline{X}_0||^2}$, where $\langle~,~\rangle$ is a $G$-invariant Riemannian metric. Check that $\varphi_p(\underline{X}_p) = 1$. Let $g\in G$. $(l^*_g\varphi)_p(Z_p) = \varphi_{gp}(l_{g*}Z_p) = \frac{\langle \underline{X}_{gp},l_{g*}Z_p\rangle} {\langle \underline{X}_{gp},\underline{X}_{gp}\rangle}
+ = \frac{\langle l_{g*}\underline{X}_p, l_{g*}\underline{Z}_p\rangle }{\langle \langle l_{g*}\underline{X}_p,\langle l_{g*}\underline{X}_p\rangle} =\frac{\langle \underline{X}_p, \underline{Z}_p\rangle }{\langle \langle \underline{X}_p,\langle \underline{X}_p\rangle} = \varphi_p(Z_p)$, where we used $l_{g*}(\underline{X}_p) = \underline{(\mathrm{Ad}g)X}_{gp} = \underline{X}_{gp}$ because $G$ is abelian, and the fact that the metric in $G$-invariant. So we showed that $l_g^*\varphi = \varphi$. Hence $\varphi$ is $G$-invariant.)
+ 
+ 
+ 
+The Cartan model for an $S^1$-action on $M$ is $(\Omega(M)^{S^1}[u],d_X)$, where $d_X\alpha = d\alpha -u\iota_X\alpha$.
+
+(Check that 1. $d_X\colon \Omega(M)^{S^1}[u]\rightarrow \Omega(M)^{S^1}[u]$ is an antiderivation of degree $+1$. 2. $d\colon N\rightarrow N$ is an antiderivation of $\mathbb{R}[u]$-algebras, then $d_u\colon N_u\rightarrow N_u$ is an antidervation of $\mathbb{R}[u,u^{-1}]$-algebras.)
+ 
+\begin{theorem*} If $S^1$ acts locally freely on a manifold $M$, then $H^*_{S^1}(M)$ is $u$-torion.
+\end{theorem*}
+
+Proof. It suffices to show $H^*_{S^1}(M)_u=0$. By the equivariant de Rham theorem, $H^*_{S^1}(M) \cong H^*\{\Omega(M)^{S^1}[u],d_X\}$, where $X\neq 0 \in \mathrm{Lie}(S^1)$. So $H^*_{S^1}(M)_u \cong H^*\{\Omega(M)^{S^1}[u,u^{-1}],(d_X)_u\}$ (because localization commutes with the cohomology). 
+
+We have a $\varphi\in \Omega^1(M)^{S^1}$ s.t. $\varphi(\underline{X}) =1$. To show $H^*\{\Omega(M)^{S^1}[u,u^{-1}],(d_X)_u\}$ is zero, it suffices to find an $\alpha \in \Omega(M^{S^1}[u,u^{-1}]$ s.t. $(d_X)_u \alpha =1$. 
+
+Then $d_X\left(\frac{\alpha}{u^m}\right)  = (d_X)_u
+\left(\frac{\alpha}{u^m}\right)
+= \frac{d_X\alpha}{u^m}$, 
+If $d_X\alpha=1$ and $z$ is any $d_X$-cocycle, then $z = (d_X\alpha) z = d_X(\alpha z)$ (because $d_Xz=0$), meaning that any cocycle $z$ is a coboundary.
+
+To let's aim to find this $\alpha$. $d_X\varphi = d \varphi - u \iota_X \varphi
+= d\varphi - u$ (because $\iota_X\varphi = \iota_{\underline{X}}\varphi = \varphi(\underline{X}) = 1$).
+
+So $\frac{d_X\varphi}{u} = \frac{d\varphi}{u} - 1$, giving $-(1-d\varphi/u)^{-1} \frac{d_X\varphi}{u} = 1$, or $-\left(1+ \frac{d\varphi}{u} + \cdots + \frac{(d\varphi)^{n-1}}{u^{n-1}}\right)\frac{d_X\varphi}{u} = 1$, where the expansion stops because $(d\varphi)^n$ alwady has degree $2n>n$, where $n := \mathrm{dim}M\neq 0$. So $(d\varphi)^n=0$ on $M$. 
+
+
+$(d_X)_u = \frac{d_X(d\varphi)}{u} = \frac{d(d\varphi)-u\iota_Xd\varphi}{u} = d\iota_X \varphi = d(1) =0$, where we abbreviated $(d_X)_u = d_X$, and we used $\iota_Xd = \mathcal{L}_X-d\iota_X$ and $\mathcal{L}_X\varphi=0$ because $\varphi$ is an invariant form. 
+
+Thus, $1+\frac{d\varphi}{u}+\cdots + \frac{(d\varphi)^{n-1}}{u^{n-1}}$ is a $d_X$-cocycle.
+
+$d_X\varphi {u} = d_X\left(\frac{\varphi}{u}\right)$. 
+
+So $-d_X\left((1+\frac{d\varphi}{u}+\cdots + \frac{(d\varphi)^{n-1}}{u^{n-1}})\frac{\varphi}{u}\right) = 1$. Let $\alpha  = (1+\frac{d\varphi}{u}+\cdots + \frac{(d\varphi)^{n-1}}{u^{n-1}})\frac{\varphi}{u}$ we have $d_X\alpha=1$, then $H^*\{\Omega(M)^{S^1}[u,u^{-1}],(d_X)_u\}= H^*_{S^1}(M)_u=0$. 
+
+This proves the theorem.
+
+
+
+
+
+\subsection{Lecture 25: General facts about $H^*_G(M)$}
+
+[Part of the proof of the last theorem has been moved to the last subsection.]
+
+
+\begin{theorem*}[Borel localization theorem for a circle action]
+If $S^1$ acts on a manifold $M$ with compact fixed point set $F$. then
+$$H^*_{S^1}(M)_u\xrightarrow{\cong} H^*_{S^1}(F)_u$$
+is an isomorphism of algebras over $\mathbb{R}[u,u^{-1}]$. 
+\end{theorem*}
+
+(Eventually of course we want to get rid of the localization constraint. We will get there later.)
+
+
+
+Above fixed point sets, we have:
+
+Proposition: The fixed point set $F$ of a continuous group action on a Hausdorff topological space $X$ is closed in $X$.
+
+(Proof: Let $p$ be a limit point of $F$, i.e. there is a sequence $p_n\in F$ s.t. $\lim p_n = p$. Then, $\forall g \in G$, $g\circ p_n = p_n$. Because the action is continuous, then $g\circ p_n\rightarrow  g\circ p$. So $p_n\rightarrow p=g\cdot p$, therefore $p\in F$. Thus $F$ is closed.
+
+Theorem. If a compact Lie group acts smoothly on a manifold $M$, then its fixed point set $F$ is a regular submanifold of $M$. (A regular submanifold is the same as embedded submanifold; and is very different from the immersed submanifold.)
+
+Proof. Since $G$ is compact, we can put a $G$-invariant Riemannian metric on $M$. For $x\in M$, consider the exponential map 
+$\mathrm{Exp}_x\colon V\subset T_xM \xrightarrow{\sim} U\subset M$. By choosing 
+$V$ sufficiently small, $\mathrm{Exp}_x\colon V\rightarrow U$ is a diffeomorphism. We can then use $(\mathrm{Exp}_x)^{-1}$ as a coordinate map on $U$. 
+
+$T_xM$ has a given inner product. This makes $T_xM$ into a Riemannian manifold. $G$ acts on $T_xM$ by $g\cdot v = l_{g*} v \in T_xM$ since $g\cdot x = x$.
+
+We can choose $V\subset T_xM$ so that $V$ is $G$-invariant. For example, if $V = B(0,\varepsilon)$ and $v\in V$, then $||l_{g*}v||^2 = \langle l_{g*}v ,l_{g*}v\rangle = \langle v,v\rangle = ||v||^2 <\varepsilon^2$. So $l_{g*}v \in B(0,\varepsilon)$. Thus , any open ball centered at $0$ in $T_xM$ is $G$-invariant. Choose a sufficiently small open ball to be $V$. Then, from diffirential geometry, there is a commutative diagram
+$\begin{tikzcd} V \ar[r, "l_{g*}"] \ar[d,"\text{Exp}_x"] & V\ar[d,"\text{Exp}_x"] \\ U\ar[r,"l_g"] & U \end{tikzcd} $. 
+
+Because $l_g\colon U\rightarrow U$ is an isometry, $\langle l_{g*}w,l_{g*}v\rangle = \langle w,v\rangle$. Let $F$ be the fixed point set of $G$ on $M$. Then $F\cap U$ is the fixed point set of $G$ on $U$. 
+
+$\mathrm{Exp}_x^{-1}(F\cap U)$ is the fixed point set of $G$ on $V$. The subset of $V$ fixed $l_{g*}$ is $\{v \in V|l_{g*}v = v\} = V \cap E_g$, where $E_g$ is the eigenspace of $l_{g*}$ with eigenvalue 1
+
+So $\mathrm{Exp}_x^{-1}(F\cap U) = V\cap (\cap_{g \in G}E_g) = V\cap (\text{linear subspace}) \simeq F\cap U$,
+
+Hence $F$ is a regular submanifold of $M$. 
+
+This completes the proof.
+
+
+
+
+
+\subsection{Lecture 26: Equivariant tubular neighborhood and equivariant Mayer--Vietoris}
+
+\begin{definition}[Equivariant vector bundle]
+A vector bundle $\pi\colon E\rightarrow M$ is $G$-equivariant if (i) both $E$ and $M$ are left $G$-spaces, and $\pi\colon E\rightarrow M$ is $G$-equivariant. (i.e. if $x\in M$ goes to $gx$, then the fiber at $x$ goes to the fiber at $gx$.) (ii) $G$ acts on each fiber linearly, i.e. $l_g\colon E_x\rightarrow E_{gx}$ is a linear transformation for all $g\in G$, $x\in M$. (Here we introduced the notation $E_x:=\pi^{-1}(x)$.)
+\end{definition}
+
+Proposition. If $\pi\colon E\rightarrow M$ is a $G$-equivariant vector bundle with fiber $V$, then $\pi_G\colon E_G\rightarrow M_G$ is a vector bundle with fiber $V$.
+
+
+Def. (Tubular neighborhood)
+A \emph{tubular neighborhood} of a submanifold $S\subset M$ of a manifold $M$ is an open set $U$ containing $S$ s.t. $U$ has the structure of a vector bundle over $S$ with the inclusion $i\colon S\hookrightarrow U$ being the zero section.
+
+
+\begin{definition}[Equivariant tubular neighborhood]
+A \emph{$G$-equivariant tubular neighborhood} of a $G$-invariant submanifold $S\subset M$ in a $G$-manifold $M$ is a $G$-invariant open set $U$ containing $S$ s.t. $U$ has the structure of a $G$-equivariant vector bundle over $S$ with the inclusion $i\colon S\hookrightarrow U$ being the zero section.
+\end{definition}
+
+
+Theorem. (Tubular neighborhood theorem)
+If $S\subset M$ is a compact submanifold, then $S$ has a tubular neighborhood $U$ s.t. $U\rightarrow S$ is isomorphic to the normal bundle $N_{S/M}$ of $S$ in $M$.
+
+(Proof is given in Spivak's book.)
+
+
+\begin{theorem*}[Equivariant tubular neighborhood theorem]
+If $S\subset M$ is a compact $G$-invariant submanifold of a $G$-manifold $M$, then $S$ has a $G$-equivariant tubular neighborhood $U$ s.t. $U\rightarrow S$ is isomorphic to $N_{S/M}$. 
+\end{theorem*}
+
+\begin{theorem*}[Equivariant Mayer--Vietoris sequence]
+Let $M$ be a $G$-manifold, $U$, $V$ two $G$-invariant open subsets such that $M= U\cup V$. Then there is an exact sequence
+\begin{equation}\label{MVeqv}
+\cdots \rightarrow H^{k-1}_G(U\cap V)\rightarrow H^k_G(M)
+\rightarrow 
+H^k_G(U)\oplus H^k_G(V)
+\xrightarrow{r}
+H^k_G(U\cap V) \rightarrow H^{k+1}_G(M)\rightarrow \cdots 
+\end{equation}
+where the map $r$ is $r\colon (\alpha,\beta) \mapsto (i^U_{U\cap V})^*\alpha - (i^V_{U\cap V})^*\beta$.
+\end{theorem*}
+
+Lemma. If $U$, $V$ are $G$-invariant open sets that cover a $G$-manifold $M$, then $U_G$, $V_G$ are open sets that cover $M_G$. 
+
+(Proof. Since $i\colon U\rightarrow M$ is $G$-equivariant and injective, then $i_G\colon U_G\rightarrow M_G$ is injective (by the property of equivariant map). By definition, $U_G = (EG\times U)/G$. Since $EG\times U$ is open on $EG\times M$, so $U_G$ is open in $M_G$. Similarly, $V_G$ is open in $M_G$. Then, we claim that $M_G = U_G\cup V_G$: let $[e,x]:=[(e,x)]\in M_G$, where $(e,x) \in EG\times M$. So $x\in M = U\cup V$. If $x\in U$, then $[e,x]\in U_G$, and if $x\in V$, then $[e,x] \in V_G$. Therefore $[e,x] \in U_G\cup V_G$. This shows that $M_G = U_G\cup V_G$.)
+
+
+With this lemma, we can appy the ordinary Mayer--Vietoris sequence provided we have the following lemma:
+
+Lemma. $U_G\cap V_G = (U\cap V)_G$. 
+
+(Proof: $U\cap V\hookrightarrow U$ is $G$-equivariant and injective, so $(U\cap V)_G\rightarrow U_G$ is injective. Similarly, $(U\cap V)_G\rightarrow V_G$ is injective. So $(U\cap V)_G \subset U_G\cap V_G$. Let $[e,x]\in U_G\cap V_G$. Then $[e,x]\in U_G$, so $(eg,g^{-1}x) \in EG\times U$ for some $g\in G$. Since $U$ is $G$-invariant, so $x \in U$. Similarly $x\in V$. So $x \in U\cap V$. So $[e,x] \in (U\cap V)_G$, so $U_G\cap V_G\subset (U\cap V)_G$. )
+
+Now we apply the usual Mayer--Vietoris sequence to the open cover $\{U_G,V_G\}$ of $M_G$, we get 
+
+$$\cdots \rightarrow H^{k-1}(U_G\cap V_G) \rightarrow H^k(M_G)\rightarrow H^k(U_G)\oplus H^k(V_G)\rightarrow H^k(U_G\cap V_G)\rightarrow H^{k+1}(M_G)\rightarrow \cdots$$
+which is 
+Eq.~\eqref{MVeqv} using the fact that $H^*_G(U\cap V) = H^*(U_G\cap V_G)$, $H^k(M_G) = H^k_G(M)$ and so on.
+
+
+Theorem. If $S^1$ acts on $M$ with no fixed points, then the action is locally free.
+
+Proof: Since there are no fixed points for any $x\in M$, $\mathrm{Stab}(x)$ is a proper subgroup of $S^1$. Note that $\mathrm{Stab}(x)$ is a closed subgroup
+(because if $g$ is a limit of $\mathrm{Stab}(x)$ then $\exists g_n\in \mathrm{Stab}(x)$ s.t. $g_n\rightarrow g$, because the action is continuous, $g_n\cdot x \rightarrow g\cdot x$, which is $x\rightarrow x$ as $g_n \in \mathrm{Stab}(x)$. By the uniqueness of limit, $g\cdot x=x$, so $g\in \mathrm{Stab}(x)$.). As a closed subgroup of the Lie group $S^1$, $\mathrm{Stab}(x)$ is a regular submanifold. If $\mathrm{dim}\mathrm{Stab}(x) = 1$, so $\mathrm{Stab}(x)$ is open in $S^1$. But $\mathrm{Stab}(x)$ is closed, and $S^1$ is connected, so $\mathrm{Stab}(x)$ is either $\emptyset$ or $S^1$ itself, both impossible. Then we must have $\mathrm{dim}\mathrm{Stab}(x) = 0$, then $\mathrm{Stab}(x)$ is discrete, hence the $S^1$ action is locally free.
+
+
+
+
+\subsection{Lecture 27: Borel localization for circle action}
+
+\textbf{The Borel localization theorem} (given at the beginning of Lecture 25): Suppose $S^1$ acts on a manifold $M$ with complact fixed point set $F$. Then the restriction map is a ring isomorphism: $H^*_{S^1}(M)_u\xrightarrow{\sim} H^*_{S^1}(F)_u$.
+
+\noindent \textbf{Proof.} Denote $G = S^1$ in this proof. Since $F$ is a closed subset of a compact manifold $M$, it is compact. From last lecture, $F$ is a compact submanifold. Since $F$ is $G$-invariant, it has an equivariant tubular neighborhood $N_F$, which is isomorphic to the normal bundle $N_{F/M}$. $M-F$ is a $G$-invariant open subset, s.t. $\{N_F,M-F\}$ is an open cover of $M$ by $G$-invariant open sets.
+
+By the equivariant Mayer--Vietoris sequence, we have a long exact sequence
+
+$$\cdots \rightarrow  H^{k-1}_G(N_F\cap (M-F))\rightarrow H^k_G(M)\rightarrow H^k_G(N_F)\oplus H^k_G(M-F)\rightarrow 
+H^k_G(N_F\cap (M-F))\rightarrow \cdots$$
+
+[Since localization preserves exactness, we are tempted to write down
+$$\cdots \rightarrow  H^{k-1}_G(N_F\cap (M-F))_u\rightarrow H^k_G(M)_u\rightarrow H^k_G(N_F)_u\oplus H^k_G(M-F)_u\rightarrow 
+H^k_G(N_F\cap (M-F))_u\rightarrow \cdots,$$
+but this actually is an exact sequence of $\mathbb{R}$-modules, not of $\mathbb{R}[u]$ modules. This shows we cannot localize each term with respect to $u$.]
+
+The equivariant Mayer--Vietoris sequence can be written in the form
+
+$$\begin{tikzcd}
+H^*_{S^1}(M)=\bigoplus_k H^k_{S^1}(M)
+\ar[rr, "i^*"]
+&&H^*_{S^1}(N_F)\oplus H^*_{S^1}(M-F) \ar[dl,"j^*"] \\ & H^*(N_F\cap (M-F)) \ar[ul, "\delta "] & 
+\end{tikzcd}
+$$
+where all three terms are $\mathbb{R}[u]$-modules, and $i^*$, $j^*$, $\delta$ are $\mathbb{R}[u]$-homomorphisms; $i^*$ and $j^*$ are of degree 0, $\delta$ is of degree 1.
+
+This triangule is exact in the sense that the kernel of any map is the image of the prceding map.
+
+[This is an example of exact couple -- see Lecture 21 of Bott--Tu.]
+
+Since each term is an $\mathbb{R}[u]$-module, we can localize with respect to $u$: as localization preserves exactness we have the exact triangle
+$$\begin{tikzcd}
+H^*_{S^1}(M)_u
+\ar[rr, "i^*"]
+&&H^*_{S^1}(N_F)_u\oplus H^*_{S^1}(M-F) \ar[dl,"j^*"] \\ & H^*(N_F\cap (M-F))_u \ar[ul, "\delta "] & 
+\end{tikzcd}
+$$
+
+
+As $S^1$ acts on $M-F$ with no fixed points, so the action is locally free, so we have $H^*_G(M-F)_u=0$ and $H^*_G(N_F\cap(M-F))=0$. Therefore the restriction map $i^*\colon H^k_{S^1}(M)_u \rightarrow H^k_{S^1}(N_F)_u$ is an isomorphism. But $H^k_{S^1}(N_F) = H^k((N_F)_{S^1})$; Next we'd like to show that $H^k((N_F)_{S^1})\simeq H^*(F_G)$.
+
+Since $N_F$ is an equivariant tubular neighborhood of $F$, $N_F\rightarrow F$ is $G$-equivariant vector bundle, Hence $(N_F)_G\rightarrow F_G$ is a vector bundle, in which $F_G\hookrightarrow (N_F)_G$ is the zeroth section.
+
+For any vector bundle $E\rightarrow M$, there is a deformation retraction from $E$ to the zero section. So $H^*((N_F)_G) \simeq H^*(F_G)$, 
+
+Therefore we have an isomorphism
+
+$$H^k_G(M)_u \rightarrow H^k_G(N_F)_u = H^k_{S^1}(F)_u.$$
+We have proved the Borel localization theorem.
+
+Remark: the Borel localization theorem holds for a noncompact manifold $M$ as long as the fixed point set $F$ is compact.
+
+
+
+
+In general, the inclusion $i\colon F\hookrightarrow M$ induces the restriction $i^*$ that fits into an exact sequence
+
+$$0\rightarrow \mathrm{ker}i^*\rightarrow H^*_{S^1}(M)\xrightarrow{i^*} H^*_{S^1}(F)\rightarrow \mathrm{coker}i^*\rightarrow 0,$$
+where $\mathrm{coker}i^* = H^*_{S^1}(F)/\mathrm{im}i^*$. 
+
+Then we have the exact sequence for the localization
+
+$$0\rightarrow \mathrm{ker}i^*_u\rightarrow H^*_{S^1}(M)_u\xrightarrow{i^*} H^*_{S^1}(F)_u\rightarrow \mathrm{coker}i^*_u\rightarrow 0.$$
+
+The Borel localization theorem tells us that
+
+Corollary. Suppose $S^1$ acts on a manifold $M$ with compact fixed point set $F$. Then 
+
+(i) $\mathrm{ker}i^*\colon H^*_{S^1}(M)\rightarrow H^*_{S^1}(F)$ and $\mathrm{coker}i^*$ are $u$-torsion.
+
+(ii) if in addition, $H^*_{S^1}(M)$ is a free finitely generated $\mathbb{R}[u]$-module, then $\mathrm{ker}i^*=0$.
+
+(Proof of (ii): $H^*_{S^1}(M)$ is a free finitely generated $\mathbb{R}[u]$-module over $\mathbb{R}[u]$ which is a PID, so it is free; but it is also a $u$-torsion by (i), so we have $\mathrm{ker}i^*=0$. )
+
+Remark: (ii) can be replaced by ``if in addition, $H^*_{S^1}(M)$ is torsion-free, then $\mathrm{ker}i^*=0$.''
+
+
+
+\subsection{Lecture 28: Borel localization and ring structure}
+
+[First, a correction to the proof of the Borel localization theorem. This part has been incorporated in the proof in the last lecture.]
+
+
+The ring structure of $H^*_{S^1}(S^2)$, where $S^1$ aicts on $S^2$ by rotation about the $z$ axis.
+
+From the spectral sequence of $\begin{tikzcd}[column sep = small, row sep = small] S^2 \ar[r] & (S^2)_{S^1} \ar[d] \\ & BS^1 = \mathbb{C}P^\infty \end{tikzcd}$, which degenerates at $E_2$, we have $H^*_{S^1}(S^2)  = E_\infty = E_2 \cong H^*(\mathbb{C}P^\infty)\otimes H^*(S^2)
+=\mathbb{R}[u]\otimes (\mathbb{R}\oplus \mathbb{R}\omega) = \mathbb{R}[u]\oplus \mathbb{R}[u]\widetilde{\omega}$, where $\omega$ is the volumne form on $S^2$.  
+
+We have $d\omega=0$ but $d_X\omega = d\omega -u\iota_X\omega \neq 0$, so $\omega$ is not an equivariantly closed form in $H^*_{S^1}(S^2)$. But we found that an equivariant closed form extension of $\omega$ is $\widetilde{\omega} = \omega + (2\pi z)u$. This is why we had to use $\widetilde{\omega}$ as the basis. 
+
+Let $a = \frac{\widetilde{\omega}}{2\pi} = \frac{\omega}{2\pi} + zu$.  So we have 
+$H^*_{S^1}(S^2)  = \mathbb{R}[u] \oplus \mathbb{R}[u]a = \mathbb{R}[u,a]/(a^2 -u( c_1 u+c_2 a))$. 
+
+$H^*_{S^1}(S^2)$ is generated as a ring over $\mathbb{R}$ by $u$ and $a$; We need to determine $a^2 = c_1u^2 + c_2 ua$. 
+
+Below we use the Borel localization theorem.
+
+The fixed point set $F = \{p,q\}$ (north and south poles), we have an exact sequence
+
+$$0\rightarrow \mathrm{ker}i^* \rightarrow H^*_{S^1}(S^2) \xrightarrow{i^*}H^*_{S^1}(F),$$
+
+By borel localization, $(\mathrm{ker}i^*)_u=0$, so $\mathrm{ker}i^*$ is torsion.
+
+Since $H^*_{S^1}(S^2)$ is torsion-free, so $\mathrm{ker}i^*$ (as a submodule) is torsion-free. 
+
+So $\mathrm{ker}i^*=0$, and $H^*_{S^1}(S^2) \hookrightarrow H^*_{S^1}(F)$.
+
+But $H^*_{S^1}(F) = H^*_{S^1}(\{p,q\}) = H^*(p_{S^1}\amalg q_{S^1}) = H^*(p_{S^1})\oplus H^*(q_{S^1})= H^*(BS^1)\oplus H^*(BS^1) = \mathbb{R}[u_p]\oplus \mathbb{R}[u_q]$.
+
+We have $i^*u = (i^*_pu , i^*_qu)=(u_p,u_q)$, $i^*a = (i_p^*a,i_q^*a) = (u_p,-u_q)$ (using the expression of $a$, and the fact that the restriction of the 2-form $\omega$, $i^*\omega=0$ on a single point).
+
+
+
+Hence $i^*(a^2) = (u_p^2,u_q^2)$, $u^*(u^2) = (u_p^2,u_q^2)$, so $i^*(a^2-u^2) = (0,0)$; Since $i^*\colon H^*_{S^1}(S^2)\rightarrow H^*_{S^1}(F)$ is injective, we have $a^2-u^2=0$ in $H^*_{S^1}(S^2)$. 
+
+
+\subsection{Lecture 29: Ring structure continued; Local data at a fixed point}
+
+$H^*_{S^1}(S^2)$ is generated as a polynomial ring over $\mathbb{R}$ y $u$, $a$, with relation $a^2-u^2=0$ and maybe other relations.
+
+So there is a ring homomorphism
+
+\begin{equation}\label{freemodulees}
+0\rightarrow \mathrm{ker}\alpha \rightarrow \frac{\mathbb{R}[u,a]}{(a^2-u^2)}\xrightarrow{\alpha} H^*_{S^1}(S^2)\rightarrow 0.
+\end{equation}
+
+Now, $\mathbb{R}[u]$ is a PID, and as an $\mathbb{R}[u]$-module, $\frac{\mathbb{R}[u,a]}{(a^2-u^2)} = \mathbb{R}[u]\oplus \mathbb{R}[u]a$ is a free module.
+
+Theorem. A submodule $S$ of a free module $M$ (not necessarily finitely generated) over a PID is free, and $\mathrm{rk}S \leq \mathrm{rk}M$. (see e.g. Rotman)
+
+
+Therefore, $\mathrm{ker} \alpha$ is free and of $\mathrm{rk}\leq 2$. 
+
+But $H^*_{S^1}(S^2)$ is also a free $\mathbb{R}[u]$-module of rank 2. As Eq.~\eqref{freemodulees} is an exact sequence of free modules, the middle module is the direct sum of the left and right. This shows that $\mathrm{ker}\alpha$ has rank $0$, so $\mathrm{ker}\alpha=0$. 
+
+Therefore 
+$$\frac{\mathbb{R}[u,a]}{(a^2-u^2)}\xrightarrow{\alpha} H^*_{S^1}(S^2)$$ 
+is a ring isomorphism.
+
+
+
+Suppose a Lie group $G$ ats on a manifold $M$ smoothly on the left. Then for any $g\in G$, $l_g\colon M\rightarrow M$ is a diffeomorphism. So there is an isomorphism $l_{g*}\colon T_xM\rightarrow T_{gx}M$. If $x$ is a fixed point of the action, then $l_{g*}\colon T_xM\rightarrow T_xM$. This gives a map $\rho\colon G\rightarrow \mathrm{GL}(T_xM)= \{\text{non-singular linear automorphisms of }T_xM\rightarrow T_xM\}$, that sends $g\mapsto l_{g*}$.
+
+Moreoever, $\rho(gh) = (l_g\circ l_h)_* = l_{g*}\circ l_{h*} = \rho(g)\circ \rho(h)$. 
+
+Thus $\rho\colon G\rightarrow \mathrm{GL}(T_xM)$ is a group homomorphism.
+
+Def. A \emph{representation} of $G$ is a group homomoprhism $\rho\colon G\rightarrow \mathrm{GL}(V)$ for some vector space $V$.
+
+Def. If $\rho_1\colon G\rightarrow \mathrm{GL}(V_1)$ and $\rho_2\colon G\rightarrow \mathrm{GL}(V_2)$ are representations, then $\rho_1\oplus \rho_2\colon G\rightarrow \mathrm{GL}(V_1\oplus V_2)$ is defined by $(\rho_1\oplus \rho_2)(g) \begin{pmatrix} v_1\\v_2 \end{pmatrix}
+=
+\begin{pmatrix} \rho_1(g)v_1 \\ \rho_2(g)v_2 \end{pmatrix}
+=
+\begin{pmatrix} \rho_1(g) & 0 \\0&\rho_2(g)\end{pmatrix} \begin{pmatrix}v_1 \\ v_2 \end{pmatrix}$.
+
+Def. $W$ is an \emph{invariant subspace} of $V$ if $\rho(g)(W) \subset W$. 
+
+Def. If $0$ and $V$ are the only invariant subspaces, then $\rho\colon G\rightarrow \mathrm{GL}(V)$ is \emph{irreducible}. Otherwise, $\rho$ is \emph{reducible}. $\rho$ is \emph{completely reducible} if $\rho$ is the direct sum of irreducible representations.
+
+(Q: is every reducible representation completely reducible?)
+
+
+Example: $\rho\colon \mathbb{R}\rightarrow \mathrm{GL}(\mathbb{R}^2)$ by $t\mapsto \begin{pmatrix} 1 & t \\ 0 & 1\end{pmatrix}$ is reducible, because $x$-axis is an invariant subspace. But it is not completely reducible, as the matrix is not diagonalizable.
+
+
+Theorem. Every finite dimensional representation of a complact Lie group is completely reducible.
+
+
+
+Def. Two representations $\rho_V\colon G\rightarrow \mathrm{GL}(V)$ and $\rho_W\colon G\rightarrow \mathrm{GL}(W)$ are \emph{equivalent} if there exists an isomorphism $f\colon V\rightarrow W$ s.t. $\forall g \in G$, 
+$$\begin{tikzcd} V\ar[r,"\rho_V(g)"] \ar[d,"f","\simeq "'] & V \ar[d, "f","\simeq "'] \\
+W \ar[r,"\rho_W(g)"] & W \end{tikzcd}
+$$
+is commutative.
+
+Theorem. The nonequivalent irreducible representations of $S^1$ are (1) the trivial rep $1\colon S^1\rightarrow \{1\}\subset \mathrm{GL}(\mathbb{R}) = \mathbb{R}^\times$ of dimension 1;
+(2) rotation $L^m\colon S^1\rightarrow \mathrm{GL}(\mathbb{R}^2)$, $L^m(e^it)
+=\begin{pmatrix} \cos mt & -\sin mt \\ \sin mt & \cos mt \end{pmatrix}$, $m \in \mathbb{Z}^+$.  (In general, $L^m$ is equivalent to $L^{-m}$.)
+
+
+Isolated fixed points of a circle action
+
+
+At a fixed point $x$ of a circle action on $M$, We have $\rho\colon S^1\rightarrow \mathrm{GL}(T_xM)$, so $\rho$ can be written as a direct sum of irreducible representations of $S^1$:
+
+$\rho = L^{m_1}\oplus L^{m_2}\oplus \cdots \oplus L^{m_k}\oplus 1\oplus \cdots \oplus 1$. 
+
+Theorem. If $x$ is an isolated fixed point of a circle action, then $\rho$ does not contain any trivial representation as summands.
+
+Proof. Since $S^1$ is compact, there exists an $S^1$-invariant Riemannian metric on $M$. Then $l_g\colon M\rightarrow M$ is an isometry, $\langle l_{g*}v,l_{g*}w\rangle = \langle v,w\rangle$ for all $g\in G$. 
+
+
+At a fixed point $x \in M$, choose $V$ to be a small open ball about $0\in T_xM$, 
+
+Then there exists a commutative diagram
+$$
+\begin{tikzcd} 
+V\ar[r,"l_{g*}"] \ar[d,"\mathrm{Exp}_x"'] & V \ar[d, "\mathrm{Exp}_x"] \\
+U \ar[r,"l_{g*}"] & U 
+\end{tikzcd}
+$$
+where $\mathrm{Exp}_x$ is a diffeomorphism.
+
+So $l_g(\mathrm{Exp}_xv) = \mathrm{Exp}_x(l_{g*}v)$, if $l_{g*}v = v$ for all $g\in G$, then $\mathrm{Exp}_xv$ is a fixed point of $G$.
+
+Under the diffeomorphism, Fixed points in $V \xrightarrow{\sim} F\cap U$, 
+
+But Fixed points in $V=V\cap (\text{linear subspace of }T_xM)$
+
+If $F\cap U$ is isolated, then $\cap_{g \in G} (\text{eigenspaces of }l_{g*}\text{ with eigenvalue }1) = \{0\}$, therefore $\rho$ cannot contain a trivial representation of dimension 1.
+
+
+
+
+
+\subsection{Lecture 30: Localization formula for a circle action}
+
+
+For a circle action, $\int_M \phi = \sum_{p \in F}\iota_p$ for an equivariantly closed form $\phi$. 
+
+
+
+Manifolds with boundary
+
+Def. If $M$ is a manifold with boundary $\partial M$, and $p \in \partial M$, then locally at $p$, there exists a neighborhood $U$ s.t. $U$ is homeomorphic to open subset of $\mathbb{H}^n = \{(x^1,...,x^n) \in \mathbb{R}^n|x^n\geq 0\}$.  
+
+$T_pM = \{\text{derivatives on germs of }C^\infty \text{ functions at }p\} = \mathbb{R}\{\frac{\partial}{\partial x^1}|_p,\cdots,\frac{\partial}{\partial x^n}|_p\}$.  $T^*_pM = \mathbb{R}\{dx^1|_p,..., dx^n|_p\}$. 
+
+Everything that we have done so far generalizes to a manifold with boundary.
+
+Integration of an equivariantform:
+
+Def. If $\omega \in \Omega(M)^{S^1}[u]$ is an equivariant form of degree $k$, then 
+
+$\omega = \omega_k+ \omega_{k-2} u + \omega_{k-4}u^2 + \cdots$, and we define
+
+$$\int_M\omega = \int_M \omega_k + \left(\int_M \omega_{k-2}\right) u +  
+\left(\int_M \omega_{k-4}\right) u^2+\cdots $$
+
+If $k$ and $n = \mathrm{dim}M$ have different parity: then $\int_M\omega=0$.
+
+If $k$ and $n = \mathrm{dim}M$ have the same parity, say $k = n+2m$, $\int_M\omega
+=
+\left\{\begin{array}{ll}
+\left(\int_M\omega_n\right) u^m & \text{ for }k\geq n,\\
+0, & \text{ for }k<n.
+\end{array}\right.$
+
+
+
+\begin{theorem*}[Stoke's theorem for equivariant forms]
+Suppose $S^1$ acts smoothly on a compact orientable manifold $M$ with boundary $\partial M$. ($S^1$ will act on the $\partial M$.) If $\omega \in \Omega(M)^{S^1}[u]$ of degree $k$, then 
+$$\int_M d_X\omega
+= \int_{\partial M} \omega.$$
+($k$ is independent of $n= \mathrm{dim} M$.)
+\end{theorem*}
+
+Proof. Suppose $k+1$ and $n$ have different parity, then both sides are zero for degree reasons. Now assume $k+1 = n+2m$. Then $\int_M d_X\omega = \int_M d\omega - u \iota_X\omega = \left(\int_M d\omega_{n-1}\right)u^m  - u^\# \int_M \iota_X \omega_{n+1} = \left(\int_M d\omega_{n-1}\right)u^m  = \left(\int_{\partial M} \omega_{n-1}\right) u^m = \int_{\partial M} \omega$.  (we have used that $\omega_{n+1}$ is automatically zero on a manifold $M$ with dimension $n$.)
+
+
+
+
+Rationale for a localization theorem
+
+Suppose $S^1$ acts on $M$ with only isolated fixed points. Let $F = \{\text{fixed points}\}$. 
+
+Then $T_pM$ has no trivial $1$-dimensional irreducible representations. So $T_pM = L^{m_1}\oplus \cdots \oplus L^{m_n}$, where $L$ is the standard 2-dimensional representation of $S^1$. Hence, $\mathrm{dim}M = 2n$. 
+
+
+We can put an $S^1$-invariant Riemannian metric on $M$. Then $S^1$ acts by isometries on $M$.
+
+Around each point $p$, let $B(p,\varepsilon)$ be an open ball of radius $\varepsilon$.  $S^1$ acts on $M-\cup_{p\in F} B(p,\varepsilon)$ without fixed points, and therefore the action is locally free. Let $X = 2\pi i \in \mathrm{Lie}(S^1)$.  For a locally free action, we found an $S^1$-invariant 1-form $\theta \in \Omega^1(M)^{S^1}$, s.t. $\theta(\underline{X}) = 1$. And $\alpha \in \Omega(M)^{S^1}[u,u^{-1}]$ s.t. $d_X\alpha = 1$. In fact, $\alpha = - \frac{\theta}{u} \left(1 + \frac{d\theta}{u} + \cdots + \left(\frac{d \theta}{u}\right)^{n-1}\right)$, $\alpha$ has degree $-1$.
+
+With this $\alpha$, we can define a cochain homotopy $K\colon \Omega(N)^{S^1}[u,u^{-1}]
+\rightarrow \Omega(N)^{S^1}[u,u^{-1}]
+$ by $K\omega = \alpha \omega$. Check: $Kd_X + d_XK = 1$.
+
+Now replace $M$ by $M = \cup_{p\in F} B(p,\varepsilon)$, if $\phi$ is equivariantly closed on $M$, then $\phi = (Kd_X+d_XK)\phi = d_X K\phi $ on $M - \cup B(p,\varepsilon)$,  so $\int_{M-\cup B(p,\varepsilon)} \phi
+= \int_{M-\cup B(p,\varepsilon)} d_XK\phi
+ = -\int _{\partial(M-\cup B(p,\varepsilon))} K\phi = \sum_{p \in F} \int_{S^{2n-1}_p (\varepsilon)} K \phi$. (To be continued in the next lecture.)
+
+
+
+
+\subsection{Lecture 31: the ABBV localization formula for a cicle action}
+
+Then, we have $\int_M \phi = \lim\limits_{\varepsilon\rightarrow 0} \int_{M-\cup B(p,\varepsilon),p\in F} \phi
+=\sum\limits_{p \in F} c_p$.
+
+At an isolated fixed point $p$, $T_pM = L^{m_1}\oplus \cdots \oplus L^{m_n}$, the numbers $m_1,...,m_n$ are the \emph{exponents} of the fixed point, defined up to sign. But with the requirement that the orientations on the two sides agree.
+
+
+\begin{theorem*}[Atiyah--Bott 1984, Berline--Vergne 1982]
+If $S^1$ acts on a compact oriented manifold $M$ of dimension $2n$, with only isolated fixed point set $F$, and $\phi = \phi_{2n} + \phi_{2n-2}u + \cdots + f u^n \in \Omega(M)^{S^1}[u]$, $\mathrm{deg}\phi = 2n$, $\phi$ is equivariantly closed, then
+$$\int_M\phi_{2n} = \int_M \phi = \sum\limits_{p\ in F} \frac{f(p)}{m_1\cdots m_n(p)}.$$
+\end{theorem*}
+
+
+Conditions for $\phi$ to be equivarinatly closed:
+
+$d_X\phi = d\phi - u \iota_X\phi=0$ $\Leftrightarrow$ $d_X\phi
+=d\phi_{2n}+(d\phi_{2n-2})u+\cdots -\iota_X \phi_{2n})u - (\iota_X\phi_{2n-2})u^2 -\cdots = 0$ $\Leftrightarrow$ $d\phi_{2n}=0$, $d\phi_{2n-2} = \iota_X\phi_{2n}$, $d\phi_{2n-4} = \iota_X\phi_{2n-2},..., df = \iota_X\phi_2$.
+
+
+\noindent \textbf{Example.} Surface area of unit sphere $S^2$. 
+
+Let $S^1$ act on $S^2$ by rotation about $z$ axis. Let $X = 2\pi i \in \mathrm{Lie}(S^1)$. The volume form on $S^2$ is $\omega = x dy \wedge dz- ydx\wedge dz +z dx \wedge dy \in \Omega^2(S^2)^{S^1}$. 
+
+$\mathrm{Area}(S^2) = \int_M\omega$. 
+
+We need an equivariantly closed form $\widetilde{\omega} = \omega + fu$. $d_X\widetilde{\omega} = 0\Leftrightarrow d\omega = 0$ and $\iota_X \omega = df$. 
+
+
+We found before that $f = 2\pi z$.
+
+We orient $S^2$ using $\omega$ in the sense that if $v_1,v_2$ is a positive basis for $T_pM$, then $\omega_p(v_1,v_2)>0$. So the orientation of $S^2$ at $P = (0,0,1)$ is given by $dx\wedge dy$. Hence the orientation for $T_PS^2$ is $(\frac{\partial}{\partial x},\frac{\partial}{\partial y})$. Hence $T_PS^2 = L$ so $m(P) = 1$. 
+
+At the south pole $Q=(0,0,-1)$, $\omega_Q = -dx \wedge dy$, so $T_Q(S^2)$ is oriented by $(\frac{\partial}{\partial y},\frac{\partial}{\partial x})$. 
+
+Hence $m(Q)=-1$. 
+
+By the ABBV formula, $\text{Area}(S^2) = \int_{S^2}\omega = \int_{S^2} \widetilde{\omega}
+ = \frac{f(P)}{m(P)} + \frac{f(Q)}{m(Q)} =  \frac{2\pi\cdot 1}{1} + \frac{2\pi \cdot(-1)}{-1} = 4\pi$. 
+
+
+Blow-ups (a way to avoid taking limits)
+
+\begin{definition}[Blow-up] The \emph{blow-up} of a manifold $M$ at a point $p\in M$ is $(\widetilde{M},\sigma\colon \widetilde{M}\rightarrow M)$ where $\widetilde{M}$ is manifold with boundary and $\sigma \colon \widetilde{M}-\partial \widetilde{M} \rightarrow M-\{p\}$ is a diffeomorphism, and $\sigma^{-1}(p) = \partial \widetilde{M}$ is in one-to-one correspondence with the unit sphere in $T_pM$. 
+\end{definition}
+
+Let $B$ be open subset of $\mathbb{R}^2$ with $0\in B$. Define $\widetilde{B} = \{(x,v) \in B\times S^{2n-1}|x\text{ is in the ray of }v\}$. Then define $\sigma\colon \widetilde{B}\rightarrow B$, $\sigma(x,v) = x$.  Then $\sigma^{-1}(0) = \{(0,v)|v\in S^1\}=S^1$. If $x\neq 0$, then $\sigma^{-1}(x) = (x, \frac{x}{|x|})$, so $\sigma$ is a diffeomorphism on $\widetilde{B}-\sigma^{-1}(0)$ and maps $S^1$ to $0$. 
+
+
+
+
+
+
+
+
+
+
+\subsection{Lecture 32: Proof of the localization formula, continued}
+
+Real blow-up:
+
+If $\sigma \colon \widetilde{M}\rightarrow M$ is the real blow-up of $M$ at $p\in M$. Locally relative to a charge $(U,x^1,...,x^n)$ at $p$, $\sigma\colon \widetilde{U}\rightarrow U$ is given by $\widetilde{U} = \{(x,v) \in U\times S^{n-1}| x = tv \text{ for some }t \in \mathbb{R}^{\geq 0},v\in S^{n-1}\text{ is a unit vector}\}$. If $x \neq 0$, then it determines a unique inverse image $(x,\frac{x}{||x||})$; If $x=0$, then $\sigma^{-1}(0) = \{(0,v)|v\in S^{n-1}\}$. 
+
+If $f\colon M\rightarrow M$ has $p$ as a fixed point, then $f$ induces a map $\widetilde{f}\colon \widetilde{M}\rightarrow \widetilde{M}$: on $\widetilde{M} - \sigma^{-1}(p)$, $\sigma$ is a diffeomorphism, so $\widetilde{f} = \sigma^{-1}\circ f \circ \sigma$; on $\sigma^{-1}(p) = S^{n-1} = \{\text{all tangent directions at }p\}$, by continuity, $\widetilde{f}(v) = \frac{f_*(v)}{||f_*(v)||}$. 
+
+
+Suppose $S^1$ acts on $M$ with isolated fixed points. Put an $S^1$-invariant metric on $M$, $\text{dim}M = 2n$. Then $S^1$ acts on $M$ by isometries.
+
+At a fixed point $p$, $T_pM$ is a representation of $S^1$, so $T_pM = L^{m_1}\oplus \cdots \oplus L^{m_n} \neq 0 $. Where $L$ is the standard representation of $S^1$ on $\mathbb{R}^2$. ($e^{it}$ acts on $(x,y)$ through the usual rotation matrix $\text{rot}(t)$.)
+
+The action of $S^1$ on $M$ induces an action on $\widetilde{M}$ that takes $S^{2n-1}_p$ to $S^{2n-1}_p \subset T_pM$. If $w = (u_1,v_1,u_2,v_2,...,u_n,v_n)\in T_pM$,  then $e^{it\cdot w} = 
+\mathrm{diag}(\text{rot}(m_1t),\text{rot}(m_2t),...,\text{rot}(m_nt))w$.
+
+Let $X = -2 \pi i \in \mathrm{Lie}(S^1)$, then $\underline{X}_w = \frac{d}{dt}\Big|_{t=0} e^{2\pi i t} \cdot w = \frac{d}{dt}\Big|_{t=0} \mathrm{diag}(\text{rot}(2\pi m_1t),...,\text{rot}(2\pi m_nt))w
+=
+\text{diag} ( 2\pi m_1 J,...,2\pi m_n J)w$, where we defined $J = \begin{pmatrix} 0&-1\\1&0\end{pmatrix}$.  So $\underline{X}_w = 2\pi \sum_{j=1}^n  m_j\left(- v_j \frac{\partial}{\partial u_j} + u_v \frac{\partial}{\partial v_j}\right)$ on $T_pM$.  
+
+A 1-form $\theta$ on $T_pM$ s.t. $\theta(\underline{X})=1$ is $\theta = \left(\frac{1}{2\pi} \sum \frac{1}{m_j}(-v_j du_j+u_jd v_j)\right) \frac{1}{\sum_{j=1}^n (u_j^2+v_j^2)}$. 
+
+
+On $S^{2n-1}_p$, $\underline{X} = 2\pi \sum m_j \left(- v_j \frac{\partial}{\partial u_j} + u_v \frac{\partial}{\partial v_j}\right)$, $\theta = \frac{1}{2\pi}\sum \frac{1}{m_j} (-v_j du_j + u_j dv_j)$.
+
+
+Volume form on a sphere:
+
+$S^{n-1}\in \mathbb{R}^n$ is the boundary of the $n$-ball $D^n$. $D^n$ can be the same orientation as $\mathbb{R}^n$. $\mathrm{vol}_{D^n} = dx^1 \wedge \cdots \wedge dx^n$, we give $S^{n-1}$ the boundary orientation of $D^n$. The radial vector is $\vec{r} = \sum x^i \frac{\partial}{\partial x^i}$. Its volume form is $\mathrm{vol}_{S^1} = \iota_{\vec{r}}\mathrm{vol}_{D^n} = \iota_{\sum x^i \partial_{x^i}} (dx^1\wedge \cdots \wedge dx^n) = \sum_{i=1}^n (-1)^{i-1} dx^1 \wedge \cdot \wedge \hat{d x^i} \wedge \cdot \wedge x^n$.
+
+Surface area of $S^{2n-1}$: $\mathrm{vol}(S^{2n-1}) = \int_{S^{2n-1}} \mathrm{vol}_{S^{2n-1}} = \frac{2\pi^n}{(n-1)!}$. 
+
+
+Proof of the localization formula
+
+Suppose $S^1$ acts on $M$ with isolated fixed point set $F$. Let $\sigma \colon \widetilde{M}\rightarrow M$ be the blow-up at all the fixed points. Choose $X \neq 0 \in \mathrm{Lie}(S^1)$. Let $\phi \in \Omega(M)^{S^1}[u]$.
+
+Lemma: $d_X \sigma^* = \sigma^*d_X$ on $\Omega(M)^{S^1}[u]$.
+
+(Proof: $d_X\sigma^*\phi = d\sigma^*\phi - u\iota_X \sigma^* \phi = \sigma^* d\phi - u \iota_X \sigma^*\phi$; $(\iota_X \sigma^*\phi)(...) = \sigma^*\phi(\underline{X}_{\widetilde{M}},...) = \phi(\sigma_* \underline{X}_{\widetilde{M}},\sigma_*...)
+=\phi(\underline{X}_M,\sigma_*...)
+= (\iota_X\phi)(\sigma_*,...)
+= (\sigma^*\iota_X\phi)(...)$. Therefore, $d_X\sigma^*\phi = \sigma^*d\phi - u\sigma^*\iota_X\phi = \sigma^* d_X\phi$.)
+
+
+Assume $\phi$ equivariantly closed. We have found $K\colon \Omega(\widetilde{M})^{S^1}[u,u^{-1}]\rightarrow \Omega(\widetilde{M})^{S^1}[u,u^{-1}]$ s.t. $K\omega = \alpha \omega$, where we defined 
+$\alpha = - \frac{\theta}{u}\left(1+ \frac{d\theta}{u} + \cdots + \left(\frac{d\theta}{u}\right)^{n-1}\right)$, and $d_XK+Kd_X=1$. So $d_XK\phi = \phi$.
+ 
+ 
+\subsection{Lecture 33: Completing the proof of the localization formula }
+
+
+$\int_M\phi = \int_{M-F} \phi$ (because $F$ has measure 0) 
+$ = \int_{\widetilde{M}-\partial M} \sigma^*\phi$ (because $\sigma\colon \widetilde{M}-\partial \widetilde{M}\rightarrow M-F$ is a diffeomorphism) $=\int_{\widetilde{M}} \sigma^*\phi$ (because $\partial \widetilde{M}$ has measure zero) $= \int_{\widetilde{M}} d_X K\sigma^*\phi$ (since $\sigma^*\phi$ is equivarinatly closed) $=\int_{\partial \widetilde{M}} K\sigma^*\phi$ (Stoke's theorem) $= \int_{\cup_{p\in F} - S_p^{2n-1}}
+ K\sigma^*\phi
+ = \sum_{p\in F} \int_{S^{2n-1}_p} \frac{\theta}{u}\left(1+ \frac{d \theta}{u} + \cdots + \left(\frac{d \theta}{u} \right)^{n-1}\right) \sigma^*\phi$.
+
+Assume $\mathrm{deg}\phi=2n$, then $\phi = \phi_{2n}+\phi_{2n-2}u + \cdots + fu^n\in \Omega(M)^{S^1}[u]$, $\int_M\phi = \int_M \phi_{2n}$. 
+
+In the integral $\int_{S^{2n-1}_p} K\sigma^*\phi = \int_{S^{2n-1}_p} i^*(\alpha\sigma^*\phi) = \int_{S^{2n-1}_p} (i^*\alpha)i^*\sigma^*\phi$, $\sigma^*\phi$ is restricted to $S^{2n-1}_p$, so 
+$\begin{tikzcd} S^{2n-1}_p \ar[r,"i"]\ar[d,"\sigma"'] 
+& \widetilde{M} \ar[d,"\sigma"] \\
+\{p\} \ar[r,"i"] & M
+\end{tikzcd}$, so $i^*\sigma^*\phi = \sigma^*i^* \phi = \sigma^*(f(p)u^n)
+ = f(p)u^n$, 
+ 
+So $\int_M \phi
+=
+\sum_{p\in F} \int_{S^{2n-1}_p} \frac{\theta}{u}\left(1+ \frac{d \theta}{u} + \cdots + \left(\frac{d \theta}{u} \right)^{n-1}\right) f(p)u^n
+= \sum_{p\in F} \int_{S^{2n-1}_p} \theta (d\theta)^{n-1} f(p) = \sum_{p\in F} f(p) \int_{S^{2n-1}_p} \theta(d\theta)^{n-1}$.
+ 
+
+Recall that $\theta = \frac{1}{2\pi} \sum_{j=1}^n \frac{1}{m_j}(-g_j du_j + u_j dv_j)$ on $S^{2n-1}_p$, $d\theta = \frac{1}{\pi} \sum \frac{1}{m_j} du_j \wedge dv_j$, 
+
+$(d\theta)^{n-1} = \frac{(n-1)!}{\pi^{n-1}}  \sum_{j=1}^n \frac{du_1dv_1...\hat{du_j}\hat{dv_j}...du_ndv_n}{m_1...\hat{m_j}...m_n}$, 
+
+$\theta(d\theta)^{n-2} = \frac{1}{2\pi^n} \sum
+\frac{1}{m_1...m_n} (v_j du_1dv_1...du_j \hat{dv_j}...du_ndv_n
++u_j du_1dv_1 ...\hat{du_j} dv_j ...du_n dv_n = \frac{(n-1)!}{2\pi^nm_1...,m_n(p)} \text{vol}_{S^{2n-1}_p}$.
+
+Hence $\int_{S^{2n-1}_p} \theta (d\theta)^{n-1} = \frac{(n-1)!}{2\pi^n} \frac{1}{m_1...m_n(p)} \frac{2\pi^n}{(n-1)!} = \frac{1}{m_1...m_n(p)}$. 
+
+
+Finally, $\int_M\phi = \sum\limits_{p\in F} \frac{f(p)}{m_1...m_n(p)}$, which is the localization fomula. 
+
+Note that $\int_M\phi_{2n} = \int_M\phi$. So this gives a way to calculate the ordinary dfferential form.
+
+
+Later part of the lecture introduces ``the Cartan model in general'' which we put to next lecture.
+
+
+
+
+
+
+
+
+\subsection{Lecture 34: The Cartan model in general}
+
+
+
+Let $G$ be a connected Lie group acting on a manifold $M$ on the left.
+
+Choose a basis $X_1,...,X_n$ for $\mathfrak{g} = \mathrm{Lie}(G)$. Let $\theta_1,...,\theta_n$ be the dual basis for $\mathfrak{g}^\vee$  in $\Lambda(g^\vee)$. Let $u_1,...,u_n$ be a dual basis for $\mathfrak{g}^\vee$ in $S(\mathfrak{g}^\vee)$, where $\mathrm{deg}\theta_i=1$ and $\mathrm{deg}u_i=2$. 
+
+For $X \in \mathfrak{g}$, $\iota_X \theta_i = \theta_i(X)$, $\iota_X u_i = 0$, $d\theta_k = - \frac{1}{2} \sum c^k_{ij}\theta_i\wedge \theta_j + u_k$, $du_k = \sum c_{ij}^k u_i \theta_j$. 
+
+$\mathcal{L}_X = d\iota_X+\iota_Xd$. 
+
+
+
+
+Introduce the shorthand: $\iota_i = \iota_{X_i}$, $\mathcal{L}_i = \mathcal{L}_{X_i}$, $a_I = a_{i_1...i_m}$, and $\theta_I = \theta_{i_1}\wedge \cdots \theta_{i_m} = \theta_{i_1,,,i_m}$.
+
+ 
+ 
+The \emph{Weil algebra} is $W(\mathfrak{g}) = \Lambda(\mathfrak{g}^\vee)\otimes_{\mathbb{R}} S(\mathfrak{g}^\vee) = \Lambda(\theta_1,...,\theta_n)\otimes \mathbb{R}[u_1,...,u_n]$.
+
+
+An algebraic model for $EG\times M$ is $W(\mathfrak{g})\otimes \Omega(M)$, with 
+$\iota_X\theta_i = \theta_i(X)$, $\iota_X u_i=0$.
+
+
+
+
+An element of $W(\mathfrak{g})\otimes \Omega(M) = \Lambda(\mathfrak{g}^\vee)\otimes S(\mathfrak{g}^\vee)\otimes \Omega(M)$ can be written as
+$$a = a_0 + \sum_i \theta_ia_i  + \sum_{i<j}\theta_i\wedge \theta_j
+a_{ij}+\cdots + \theta_1\wedge \cdots \wedge \theta_n a_{1...n},$$
+where $a_I\in S(\mathfrak{g}^\vee)\otimes \Omega(M)$, 
+
+An element $a \in W(\mathfrak{g})\otimes \Omega(M)$ is \emph{horizontal} if $\iota_Xa=0$ for all $X \in \mathfrak{g}$, and is \emph{invariant} if $\mathcal{L}_X a = 0$ for all $X \in \mathfrak{g}$, and is \emph{basic} if it is both horizontal and invariant.
+
+Because $\iota_X$ and $\mathcal{L}_X$ are $\mathbb{R}$-linear in $X$, $a$ is horizontal $\Leftrightarrow \iota_{X_i}a=0$ for $i=1,...,n$, and $a$ is invariant $\Leftrightarrow \mathcal{L}_{X_i} a=0$ for $i=1,...,n$. 
+
+
+
+
+$\iota_X,d$ extend to $W(\mathfrak{g}\otimes \Omega(M)$ as antiderivations, $\mathcal{L}_X$ extend to $W(\mathfrak{g}\otimes \Omega(M)$ as a derivataion.
+
+ 
+Theorem: there is an algebra isomorphism: 
+$$
+\left(W(\mathfrak{g})\otimes \Omega(m)\right)_{\text{hor}} \cong
+S(\mathfrak{g}^\vee) \otimes \Omega(M),
+$$ where $a = a_0 + \sum a_I \theta_I\mapsto a_0$. 
+
+(I.e. the horizontal elements are precisely those who do not have $\theta$'s.)
+
+(Proof: $a_0 = \sum u_{i_1}\cdots u_{i_m}\omega_I$, $\iota_X a_0 = \sum u_{i_1}\cdots u_{i_m} \iota_X \omega_I=0$, as $\iota_X\omega=0$ for $\omega \in \Omega(M)$. For simplicity we show the case of $n=2$: $a= a_0+\theta_1a_1+\theta_2a_2+\theta_1\wedge \theta_2 a_{12}$, $0=\iota_{X_1}a = \iota_1 a_0 + a_i-\theta_1\iota_1a_1 -\theta_2\iota_1a_2
++\theta_2a_{12}+\theta_1\theta_2\iota_1a_{12}$, $0=\iota_{X_2}a = \iota_2a_0 -\theta_1\iota_2a_1 +a_2 - \theta_2\iota_2a_2 - \theta_1 a_{12}
++\theta_1\theta_2\iota_2a_{12}$. $a$ is horizontal $\Leftrightarrow$ $a_1 = -\iota_1a_0$ and $a_2 = -\iota_2 a_0$ and $a_{12} = \iota_1 a_2 = - \iota_2a_1$, $\Leftrightarrow$ $a_0=-\iota_1a_0$ and $a_2 = -\iota_2 a_0$ and $a_{12} = \iota_2\iota_1 a_0$ $\Leftrightarrow$ $a = a_0 - \theta_1\iota_1a_0-\theta_2\iota_2a_0 + \theta_1\theta_2\iota_2\iota_1a_0 
+=(1-\theta_1\iota_1)(1-\theta_2\iota_2)a_0$. (In the case $n>2$, there will just be more factors.) $\phi$ has an inverse $a_0\mapsto (1-\theta_1\iota_1)(1-\theta_2\iota_2)a_0$, so $\phi$ is an algebra homomorphism, and therefore an algebra isomorphism.)
+
+
+The above theorem implies that
+
+$$\underbrace{\left(W(\mathfrak{g})\otimes \Omega(m)\right)_{\text{bas}}}_{\text{Weil Model}} \cong 
+\underbrace{\left(S(\mathfrak{g}^\vee) \otimes \Omega(M)\right)^G}_{\text{Cartan Model}}.$$
+
+
+The Weil model has a differential $d_W$. The isomorphism above induces a differential (the ``Cartan differential'') for the Cartan model.
+ 
+ 
+ 
+ 
+
+ 
+ 
+\subsection{Lecture 35: Applications of equivariant cohomology}
+
+
+
+
+The equivairant de Rham theorem is for any compact Lie group, but the localization theorems are for torus action.
+
+
+(There's a localization theorem for a compact non-abelian group, by Lisa Jeffrey, Frances Kirwan. For noncompact non-abelian group, much is kunnown.)
+
+
+\begin{theorem*}[Localization theorem for a torus action]
+Suppose a torus $T$ of dimensional $l$ acts smoothly on a compact closed manifold $M$ with fixed point set $F$ (not necessarily isolated or $0$-dimensional). If $\phi$ is equivariantly closed on $M$ of any degree, then 
+$$\int_M\phi = \int_F  \frac{i^*\phi}{e^T(\nu)},$$
+where $i\colon F\hookrightarrow M$ is the inclusion, $\nu$ is the normal bundle of $F$ in $M$, $e^T(-)$ is the equivariant Euler class in $H^{2\text{dim}F}_T(F) = \mathbb{R}[u_1,...,u_n]$. 
+\end{theorem*}
+
+A priori, the RHS is a rational function in $u_1,...,u_l$. But because the LHS is a polynomial in $u_1,...,u_l$, the rational function is actually a polynomial. 
+
+Application 1. Integral of invariant forms:
+
+(see the example in previous lectures on the calculation of $\int_{S^2}\text{vol}_{S^2}$.)
+
+Application 2. Computation of topological invariants
+
+Suppose $G$ is a compact Lie group, and $T$ is a maximal torus in $G$. E.g. $G = U(n)$, then $T = U(1)\times \cdots \times U_1 = S^1\times \cdots \times S^1$. Then $G/T = \text{complete flag manifold of }\mathbb{C}^n = \{0\subset \Lambda_1\subset \Lambda_2\subset \cdots \subset \Lambda_n = \mathbb{C}^n,\text{ where }\Lambda_i \simeq \mathbb{C}^i\}$. 
+
+$U(n)/U(1)\times \cdots U(1)$ has Chern numbers, $T$ acts on $G/T$ by $t\cdot (gT) = (tg)T$. $gT$ is a fixed point of the action $\Leftrightarrow$ $tgT=gT$ forall $t\in T$, $\Leftrightarrow$ $g^{-1}tgT = T$, $\Leftrightarrow$ $g^{-1}tg \in T$, $\Leftrightarrow$ $g^{-1}Tg = T$, $\Leftrightarrow$ $g\in N_G(T)$, $\Leftrightarrow$ $gT = N_G(T)/T:=W_G(T)$, the \emph{Weyl group} of $T$ in $G$.
+
+For Lie group $G$, the Weyl group $W_G(T)$ is a finite reflection group.
+
+Chern number of $G/T$ is
+$\int_{G/T} c_1(-)^{i_1}\cdots c_r(-)^{i_r}$, where the Chern classes are defined for the tangent bundle. The localization formula can be used to calculate this integral. We get
+$\int_{G/T} c_1(-)^{i_1}\cdots c_r(-)^{i_r} = \sum\limits_{w \in W_G(T)} \cdots$. 
+
+This can be generalized to a closed subgroup $H$ of $G$ of maximal rank, e.g. $\mathbb{C}P^n = \frac{U(n)}{U(1)\times U(n-1)}$, $G(k,\mathbb{C}^n) = \frac{U(n)}{U(k)\times U(n-k)}$. 
+
+(Rank of $H$ is the dimension of the maximal torus of $H$. The rank of $U(n)$ is $n$.)
+
+For example,
+
+$$\int_{G(k,\mathbb{C}^n)} c_1(S)^{m_1}\cdots c_k(S)^{m_k}
+=
+\sum\limits_{I = (i_1,...,i_k)} \frac{\prod_{r=1}^k \sigma_r(u_{i_1},...,u_{i_k})^{m_r}}{\prod_{i\in I} \prod_{j\in J}(u_i-u_j)},$$
+
+where the Weyl group of $G(k,\mathbb{C}^n)$ is permutations, indexed by $I = (i_1,...,i_k)$; and $J = \text{the complement of }I \text{ in }(1,...,n)$, ad $\sigma_r$ is the $r$-th elementary symmetric function.
+
+The RHS in fact is an integer as the LHS suggests.
+
+(For more results, see L. Tu, Computing characteristic number using fixed points, \url{https://arxiv.org/abs/math/0102013}.)
+
+Application 3. Identities. E.g.
+$\mathbb{C}P^2 = G(1,\mathbb{C}^3)$. 
+$1 = \int_{\mathbb{C}P^2} (-h)^2 = \int_{\mathbb{C}P^2} c_1(S)^2 = \sum_{i\neq  j=1}^3 \frac{u_i^2}{\prod_{i<j}(u_i-u_j)}$. 
+
+
+Application 4. Pappus's theorem:
+
+Use three parallel planes to intersept the sphere. If the two vertical distances are equal, then the surface areas are equal.
+
+Let $\omega = \text{vol}_{S^2}$. Calculate Let $\widetilde{\omega}=\omega + fu$ be the equivariant extension. We have
+
+$\int^{z=b}_{z=a}\omega = \int^{z=b}_{z=a}\widetilde{\omega} = \text{localization formula}
+= 2\pi(b-a).$
+
+Application 5. Symplectice geometry: 
+
+$M$ is \emph{symplectic} if it has a closed nondegenerate 2-form $\omega$ on it, and $G$ acts symplectically on $M$ if $l_g^*\omega = \omega$ for any $g\in G$. If $G$ is connected, this is equivalent to the condition that $\mathcal{L}_X\omega=0$. Then $d\iota_X\omega = (\mathcal{L}_X-\iota_X d)\omega = 0$, Hence $\iota_X\omega$ is closed.
+
+If $\iota_X\omega$ is exact, say $\iota_X\omega = df$, then the action is said to be \emph{Hamiltonian}.
+
+Then $\widetilde{\omega} = \omega + fu$ is equivariantly closed. This Hamiltonian action is the Hamiltonian in classical mechanics. So we have the correspondence
+$\text{Classical mechanics} \Leftrightarrow 
+\text{Symplectic geometry} \Leftrightarrow \text{equivariant cohomology}.$
+
+6. Application in physics: $\int_M e^{it f}\tau = \text{localization theorem} = \sum \cdots$
+
+
+
+
+
+
+
+\subsection{Lecture 36: The equivariant de Rham theorem}
+
+Recall that:
+
+The Cartan model for a connected Lie group: $\left((S(\mathfrak{g}^\vee)\otimes \Omega(M))^G,D\right)$.
+
+Let $X_1,...,X_n$ be a basis for $\mathfrak{g} = \text{Lieb}(G)$, $u_1,...,u_n$ be the dual basis for $\mathfrak{g}^\vee$, then $S(\mathfrak{g}^\vee) = \mathbb{R}[u_1,...,u_n]$. The Cartan differential $D$ is given by 
+$D\alpha = d\alpha - \sum u_i\iota_{X_i} \alpha$, where we define $d$ s.t. $du_i=0$. 
+
+
+Equivariant de Rham theorem: there is an algebra isomorphism
+$H^*_G(M;\mathbb{R})\xrightarrow{\sim}
+H^*\{(S(\mathfrak{g}^\vee)\otimes \Omega(M))^G,D\}$. 
+
+(Cartan proves this theorem for a free action in 1950.)
+
+$G$ acts on $S(\mathfrak{g}^\vee)$ by the coadjoint representation, and $G$ acts on $\Omega(M)$ by pulling back.
+
+Corollary of the equivariant de Rham theorem. Take $M = pt$.
+
+Then $H^*_G(pt) = H^*(BG;\mathbb{R}) \simeq H^*\{(S(\mathfrak{g}^\vee)\otimes)_{\mathbb{R}} \Omega(pt))^G,D\}
+= H^*\{S(\mathfrak{g}^\vee)^G,D\}$ by equivariant de Rham theorem; we have $D=0$ on $S(\mathfrak{g}^\vee)^G$, so we have
+$
+H^*_G(pt) = H^*(BG;\mathbb{R})  \simeq S(\mathfrak{g}^\vee)^G \simeq S(\mathfrak{t}^\vee)^W$,  where $\mathfrak{t}$ is the Lie algebra of the maximal torus $T$ in $G$, and $W = N_G(T)/T$ is the Weykl group of $T$.  (the step $S(\mathfrak{g}^\vee)^G \simeq S(\mathfrak{t}^\vee)^W$ is an easy theorem which can be found in L. Tu's 2010 paper).
+
+To summarize, we have
+
+$$H^*(BG) \simeq S(\mathfrak{g}^\vee)^G \simeq S(\mathfrak{t}^\vee)^W.$$
+
+Example: Let $G = U(n)$, $T = U(1)\times \cdots \times U(1) = \{\text{diag}(t_1,...,t_n)|t_i \in U(1) = S^1\}$, then $\mathfrak{t} = \{\text{diag}(*,...,*)|*\in i\mathbb{R}\}$. Then $W = N_G(T)/T = \frac{
+\{\text{group generated by }T\text{ and }E_{ij}\}}{T} = S_n$ (Where we defined $E_{ij}$, the $n\times n$ matrix for transposition $(ij)$, and $S_n$ is the symmetric group on $n$ letters. )
+
+So 
+$$H^*(BU(n))  = S(\mathfrak{g}^\vee)^W = \mathbb{R}[u_1,...,u_n]^{S_n},$$
+the symmetric polynomials in $u_1,...,u_n$. 
+
+Cartan's theorem on the cohomology of base of a principal bundle:
+
+\begin{theorem*}If $P\rightarrow N$ is a principal $G$-bundle, then $H^*(N) = H^*\{(W(\mathfrak{g})\otimes \Omega(P))_{\text{bas}}\}$.
+\end{theorem*}
+
+Assuming this theorem, one can prove equivariant de Rham theorem:
+
+First, assume free actions: 
+
+Fact: If $G$ is a compact Lie group acting freely on the right on a manifold $M$, then $M/G$ is a manifold, and $M\rightarrow M/G$ is a principal $G$ bundle. (For proof, see e.g. Lee's book on Manifolds.)
+
+
+By Cartan's theorem above, $H^*(M/G) = 
+H^*\{(W(\mathfrak{g})\otimes \Omega(M))_{\text{bas}}\}
+= H^*\{(S(\mathfrak{g}^\vee)\otimes \Omega(M))^G,D\}$, where the last one used the Weil--Cartan isomorphism. On the oter hand, when $G$ acts freely, $M_G$ and $M/G$ are weakly homotopy equivalent, hene 
+$H^*_G(M) = H^*(M_G) = H^*(M/G)$ (theorem in algebraic topology), so we have
+$$H^*_G(M) = H^*\{(S(\mathfrak{g}^\vee)\otimes \Omega(M))^G,D\},$$
+Proving the equivarianat de Rham theorem for a free $G$-action.
+
+Equivariant de Rham theorem for an arbitrary action: $M_G  = (EG\times M)/G$, where $G$ acts freely on $EG\times M$. By Cartan,
+$H^*(M_G) = H^*\{(W(\mathfrak{g})\otimes \Omega(EG\times M))_{\text{bas}}\}$, this doesn't work because $EG$ is not a manifold (it is infinite dimensional).
+
+
+Then, in the more general case (not necesarily free action):
+
+For a compact Lie group $G$, $EG = $infinite Stiefel variety $V(k,\infty)$, which can be apprximated by $V(k,n)$ for $n$ sufficiently large, s.t. for any $i$, $H^i(V(k,n),\mathbb{R}) = H^i(V(k,\infty),\mathbb{R}) = 0$ for $n$ sufficiently large. 
+
+$M_G = (EG\times M)/G$ can be approximated by $(EG(n)\times M)/G:= M_G(n)$, so Cartan's theorem applies, and this gives the equivariant de Rham theorem in general.
+
+Now let's go back to prove Cartan's theorem:
+
+$0\rightarrow \underbrace{\Omega(P)}_{=B} \hookrightarrow \underbrace{W(\mathfrak{g})\otimes \Omega(P)_{\text{bas}}}_{=\bar{B}}\rightarrow \bar{B}/B\rightarrow 0$
+induces
+$\cdots \rightarrow H^*(\Omega(P)_{\text{bas}}) \rightarrow H^*(\bar{B}) \rightarrow H^*(\bar{B}/B)\rightarrow \cdots$,
+where $H^*(\Omega(P)_{\text{bas}}) = H^*(\Omega(N)) = H^*(N)$; $H^*(\bar{B}) = H^*(\text{Weil model})$. It turns out we can prove $H^*(\bar{B}/B)=0$ (Cartan writes down a cochain homotopy between $id$ and $0$ to prove $H^*(\bar{B}/B)=0$.)
+
+
+
+
+
+
+
+
+
+
+\end{document}
