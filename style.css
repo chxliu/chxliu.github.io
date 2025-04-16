@@ -169,8 +169,8 @@ p {
   font-size: 0.8em;        /* as requested */
   font-weight: 300;
   line-height: 1.5;
-  padding-left: 8px;
-  padding-right: 8px;
+  margin-left: 1.5em;   /* Indentation for list items */
+  margin-bottom: 1em;   /* Space below the list */
   margin: 0.8em 0 0 0;     /* small gap above the paragraph */
 }
 
