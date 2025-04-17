@@ -178,8 +178,8 @@ p {
   list-style: none;
   font-family: 'Zen Maru Gothic', serif;
   font-weight: 600;
-  font-size: 1.1rem;            /* slightly smaller than main topics */
-  margin-bottom: 0.5em;
+  font-size: 1.rem;            /* slightly smaller than main topics */
+  margin-bottom: 0.3em;
 }
 
 .subtopic-list li p {
