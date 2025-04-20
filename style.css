@@ -122,8 +122,9 @@ p {
 .year-event-list .year {
   font-family: 'Zen Maru Gothic';/*'Crimson Pro', serif;*/
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-right: 0.5rem;
+  color: #333;
   /* Optional: adjust width if you want a fixed column effect */
   /* width: 80px; */
 }
