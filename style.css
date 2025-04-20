@@ -109,7 +109,7 @@ p {
 .year-event-list {
   list-style: circle;
   margin-top: 20px;
-  padding-left: 0;
+  padding-left: 20px;
 }
 
 .year-event-list li {
