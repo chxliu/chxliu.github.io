@@ -107,7 +107,7 @@ p {
 
 /* Timeline list styling */
 .year-event-list {
-  list-style: none;
+  list-style: circle;
   margin-top: 20px;
   padding-left: 0;
 }
@@ -115,7 +115,7 @@ p {
 .year-event-list li {
   margin-bottom: 10px;
   padding-left: 10px;
-  border-left: 3px solid #333;
+  border-left: 3px; /*solid #333;*/
 }
 
 /* Styling for the year portion */
