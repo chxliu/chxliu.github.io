@@ -181,6 +181,7 @@ p {
   font-weight: 600;
   font-size: 0.9em;            /* slightly smaller than main topics */
   margin-bottom: 0.2em;
+  margin-top: 0.0em;
 }
 
 .subtopic-list li p {
@@ -191,7 +192,6 @@ p {
   padding-left: 16px;
   padding-right: 16px;
   margin: 0.7em 0 0 0;     /* small gap above the paragraph */
-  margin-top: 0.0em;
 }
 
 
