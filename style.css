@@ -172,15 +172,13 @@ p {
 .subtopic-list {
   list-stylee: none;     /* a different bullet shape */
   margin: 0.5em 0 0 1.5em;      /* indent and small top margin */
-  font-size: 1em;
   padding: 0;
 }
 
 .subtopic-list li {
   list-style: none;
   font-family: 'Zen Maru Gothic', sans-serif;
-  font-weight: 600;
-  font-size: 0.9em;            /* slightly smaller than main topics */
+  font-weight: 500;
 }
 
 .subtopic-list li p {
