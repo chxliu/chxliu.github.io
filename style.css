@@ -154,7 +154,7 @@ p {
 .research-list li {
   font-family: 'EB Garamond', serif;
   font-weight: 600;
-  font-size: 1.rem;       /* a bit smaller than your Research heading */
+  font-size: 1.2rem;       /* a bit smaller than your Research heading */
   margin-bottom: 0.5em;
 }
 
@@ -179,8 +179,8 @@ p {
   list-style: none;
   font-family: 'Zen Maru Gothic', serif;
   font-weight: 600;
-  font-size: 1.1rem;            /* slightly smaller than main topics */
-  margin-bottom: 0.6em;
+  font-size: 1.rem;            /* slightly smaller than main topics */
+  margin-bottom: 0.2em;
 }
 
 .subtopic-list li p {
@@ -190,7 +190,7 @@ p {
   line-height: 1.5;
   padding-left: 16px;
   padding-right: 16px;
-  margin: 0.8em 0 0 0;     /* small gap above the paragraph */
+  margin: 0.7em 0 0 0;     /* small gap above the paragraph */
 }
 
 
