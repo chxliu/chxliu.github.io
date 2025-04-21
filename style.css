@@ -191,6 +191,7 @@ p {
   padding-left: 16px;
   padding-right: 16px;
   margin: 0.7em 0 0 0;     /* small gap above the paragraph */
+  margin-top: 0.0em;
 }
 
 
