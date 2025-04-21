@@ -154,8 +154,8 @@ p {
 .research-list li {
   font-family: 'EB Garamond', serif;
   font-weight: 600;
-  font-size: 1.2rem;       /* a bit smaller than your Research heading */
-  margin-bottom: 1em;
+  font-size: 1.rem;       /* a bit smaller than your Research heading */
+  margin-bottom: 0.5em;
 }
 
 /* The explanatory paragraph under each topic */
