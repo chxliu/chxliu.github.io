@@ -177,7 +177,7 @@ p {
 
 .subtopic-list li {
   list-style: none;
-  font-family: 'Zen Maru Gothic', serif;
+  font-family: 'Zen Maru Gothic', sans-serif;
   font-weight: 600;
   font-size: 1em;            /* slightly smaller than main topics */
   margin-bottom: 0.2em;
@@ -185,7 +185,7 @@ p {
 
 .subtopic-list li p {
   font-family: 'Zen Kaku Gothic New', sans-serif;
-  font-size: 0.9em;        /* as requested */
+  font-size: 0.8em;        /* as requested */
   font-weight: 300;
   line-height: 1.5;
   padding-left: 16px;
